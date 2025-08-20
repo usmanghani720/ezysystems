@@ -1,0 +1,55 @@
+
+
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+
+
+<div class="content-wrapper tables-data-page">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      New Customer
+    </h1>
+    <ol class="breadcrumb">
+      <li><%= link_to root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <div class="box box-primary" data-aos="fade-up">
+          <div class="box-header with-border">
+            <%= form_with url: create_customer_path, method: :post, local: true do |form| %>
+                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email"/>
+								<br />
+                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name"/>
+								<br />
+                <input id="phone" name="phone" class="form-control" style="width: 100%" placeholder="Phone"/>
+								<br />
+								<%= hidden_field_tag "user_id", current_user.try(:id) %>
+                <%= submit_tag 'Create Customer',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<script>
+  // Check if the page has already been reloaded
+  if (!sessionStorage.getItem('reloaded')) {
+    sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
+    location.reload(); // Reload the page
+  } else {
+    sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
+  }
+</script>
+
+
+
+
+

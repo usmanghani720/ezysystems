@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Appointmentssetter</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .left-section {
+            flex: 1;
+            background-color: #46403B;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .left-section img {
+            margin-bottom: 20px;
+        }
+
+				.company-image{
+					width: 300px;
+				}
+
+        .left-section h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+				.left-section p{
+					font-weight: 600;
+				}
+
+        .right-section {
+					flex: 1; /* Occupies more space compared to other sections */
+					justify-content: center;
+					align-items: center;
+					background-color: #f5f5f5;
+					padding: 20px;
+        }
+
+        .checkout-container {
+            background-color: #fff;
+            color: #333;
+						width: 60%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+						height: auto;
+						min-height:200px;
+        }
+
+        .checkout-container img {
+            width: 100px;
+            margin: 10px 0;
+        }
+
+        .checkout-container h1 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="tel"],
+				input[type="number"]
+				 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .card-inputs {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .card-inputs input {
+            flex: 1;
+        }
+
+        button {
+            background-color: #0074D4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #588c42;
+        }
+
+				.submit-button{
+					background-color: #0074D4;
+					width: 100%;
+					color: #fff;
+					font-weight: 500;
+				}
+
+				.divider {
+					display: flex;
+					align-items: center;
+					text-align: center;
+					color: #808080; /* Gray color for text */
+					font-size: 14px; /* Adjust font size as needed */
+					margin: 20px 0; /* Add spacing around the divider */
+			}
+			
+			.divider::before,
+			.divider::after {
+					content: "";
+					flex: 1; /* Fills the space equally on both sides */
+					border-bottom: 1px solid #d3d3d3; /* Light gray line */
+					margin: 0 10px; /* Spacing between the text and the lines */
+			}
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .left-section {
+                flex: none;
+                height: auto;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .right-section {
+                flex: none;
+                height: auto;
+                padding: 10px;
+            }
+
+            .checkout-container {
+                width: 100%;
+            }
+						.company-image{
+							width: 100px;
+						}
+        }
+    </style>
+</head>
+<body>
+    <div class="left-section">
+    </div>
+    <div class="right-section">
+        <div class="checkout-container">
+					<div id="express-checkout-element"></div>
+					<br />
+					<form id="payment-form">
+            <button id="submit" type="submit" class="submit-button">Add Payment Method</button>
+					</form>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script>
+	async function callAutomaticPaymentMethods() {
+		const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
+		const expressCheckoutOptions = {
+		}
+		const elements = stripe.elements({
+			mode: 'setup',
+			currency: "usd"
+		})
+		const expressCheckoutElement = elements.create('expressCheckout', expressCheckoutOptions)
+		expressCheckoutElement.mount('#express-checkout-element')
+		expressCheckoutElement.on('click', (event) => {
+			const options = {
+				emailRequired: true,
+			};
+			event.resolve(options);
+		});
+
+		const expressCheckoutDiv = document.getElementById('express-checkout-element');
+		if (expressCheckoutDiv){
+			expressCheckoutDiv.style.visibility = 'hidden';
+		}
+
+		expressCheckoutElement.on('ready', ({availablePaymentMethods}) => {
+			console.log(availablePaymentMethods)
+			if (!availablePaymentMethods) {
+			} else {
+				if (expressCheckoutDiv){
+					expressCheckoutDiv.style.visibility = 'initial';
+				}
+			}
+		});
+
+		expressCheckoutElement.on('confirm', async (event) => {
+			const {error: submitError} = await elements.submit();
+			if (submitError) {
+				handleError(submitError);
+				return;
+			}
+
+			const {error} = await stripe.confirmPayment({
+				elements,
+				clientSecret: cs,
+				confirmParams: {
+					return_url: "<%= ENV['REDIRECT_URL'] %>",
+				},
+			});
+		
+			if (error) {
+				$('#submit-button').prop('disabled', false)
+				window.location.href = "<%= ENV['REDIRECT_URL'] %>"
+			} else {}
+		});
+
+		expressCheckoutElement.on('confirm', async (event) => {
+			const response = await fetch('/handle_payment_methods', {
+				method: 'POST',
+				headers: {
+				'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					customer_id: "<%= @customer.try(:id) %>"
+				})
+			});
+			const data = await response.json();
+			const cs = data.clientSecret
+			const {error} = await stripe.confirmPayment({
+				elements,
+				clientSecret: cs,
+				confirmParams: {
+					return_url: "<%= ENV['REDIRECT_URL'] %>",
+				},
+				redirect: 'always',
+			});
+		
+			if (error) {
+				$('#submit-button').prop('disabled', false)
+				window.location.href = "<%= ENV['REDIRECT_URL'] %>"
+			} else {}
+		});
+	}
+	document.addEventListener("DOMContentLoaded", async function() {
+		callAutomaticPaymentMethods()
+	});
+
+</script>

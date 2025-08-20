@@ -1,0 +1,41 @@
+<body class="text-center">
+  <div class="form-signin">
+    <%#= image_tag "logo.jpeg", width: 72, height: 72, class: "mb-4" %>
+    <h2>Sign up below</h2>
+  </div>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <div class="field">
+            <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "Full Name", class: "form-control", style: 'width:100%;'%>
+          </div>
+          <div class="field">
+            <%= f.email_field :email, autocomplete: "email", placeholder: "Email", class: "form-control", style: 'width:100%;'%>
+          </div>
+
+          <div class="field">
+            <% if @minimum_password_length %>
+            <% end %>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: "New password", class: "form-control", style: 'width:100%;'%>
+          </div>
+
+          <div class="field">
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Re-type new password", class: "form-control", style: 'width:100%;'%>
+          </div>
+          <div class="field">
+            <%= f.select :country, stripe_supported_countries, {}, class: "form-control", style: "width:100%;" %>
+          </div>
+          <br />
+
+          <div class="actions">
+            <%= f.submit "Sign up", class: "btn btn-danger btn-block" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div style="margin-bottom: 1rem;"></div>
+  <%= render "devise/shared/links" %>
+</body>

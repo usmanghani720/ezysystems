@@ -1,0 +1,9 @@
+<p>Hello </p>
+
+<p>Your customer account has been created by the vendor. You can add your payment method by using the link below</p>
+
+<% if Rails.env.development? %>
+    <a href="http://localhost:3000/charge/<%= @customer.id %>" target="_blank">Click here</a>
+<% else %>
+    <a href="https://byc-staging.uc.r.appspot.com/charge/<%= @customer.id %>" target="_blank">Click here</a>
+<% end %>

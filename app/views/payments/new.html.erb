@@ -1,0 +1,62 @@
+<div class="content-wrapper tables-data-page">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-signin" style="text-align: center; margin-top: 10rem;">
+        <%= render "/layouts/alerts" %>
+        <h2>Dashboard</h2>
+        <% if current_user.stripe_user_id.blank? %>
+          <p>If you don't have a stripe account please click below</p>
+          <td><%= link_to 'Connect New Account', create_express_account_path, method: :get %></td>
+        <% else %>
+          <p>You have already connected to stripe. Your account id is <span style="font-weight: 600;"><%= current_user.stripe_user_id %></span></p>
+          <% if @individual_details.present? %>
+            <h2>Individual Details</h2>
+            <p><%= @individual_details["email"] %></p>
+            <p><%= @individual_details["first_name"] %> <%= @individual_details["last_name"] %></p>
+            <% if @individual_details["address"].present? %>
+              <p>
+                <%= @individual_details["address"]["city"] %> 
+                <%= @individual_details["address"]["country"] %> 
+                <%= @individual_details["address"]["line1"] %>
+                <%= @individual_details["address"]["postal_code"] %>
+                <%= @individual_details["address"]["state"] %>
+              </p>
+            <% end %>
+          <% end %>
+          
+          <% if @company_details.present? %>
+            <h2>Company Details</h2>
+            <p><%= @company_details["phone"] %></p>
+            <% if @company_details["address"].present? %>
+              <p>
+                <%= @company_details["address"]["city"] %> 
+                <%= @company_details["address"]["country"] %> 
+                <%= @company_details["address"]["line1"] %>
+                <%= @company_details["address"]["postal_code"] %>
+                <%= @company_details["address"]["state"] %>
+              </p>
+            <% end %>
+          <% end %>
+
+          <% if @account["business_profile"] && @account["business_profile"]["url"] %>
+            <p><%= @account["business_profile"]["url"] %></p>
+          <% end %>
+          
+          <% if current_user.account_type == "standard" %>
+            <p>You can login to your stripe account to check payments</p>
+          <% else %>
+            <% if @login_link.present? %>
+              <a href = "<%= @login_link.url %>">View your stripe dashboard by clicking here</a>
+            <% else %>
+            <% end %>
+            <% if @onboarding_url.present? %>
+              <a href = "<%= @onboarding_url %>">Please finish your onboarding process in order to create invoices</a>
+            <% else %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+ 

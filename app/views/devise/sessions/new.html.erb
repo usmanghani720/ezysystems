@@ -1,0 +1,35 @@
+<body class="text-center">
+  <div class="form-signin">
+    <%#= image_tag "logo.jpeg", width: 72, height: 72, class: "mb-4" %>
+    <h2>Please sign in</h2>
+  </div>
+  <%= render "/layouts/alerts" %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <div class="field">
+            <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "form-control", style: 'width:100%;' %>
+          </div>
+
+          <div class="field">
+            <%= f.password_field :password, placeholder: "Password", class: "form-control", style: 'width:100%;' %>
+          </div>
+          <br />
+          <% if devise_mapping.rememberable? %>
+            <div class="field">
+              <%= f.check_box :remember_me %>
+              <%= f.label :remember_me %>
+            </div>
+          <% end %>
+
+          <div class="actions">
+            <%= f.submit "Log in", class: "btn btn-danger btn-block" %>
+          </div>
+        </div>
+    </div>
+  </div>
+  <% end %>
+  <div style="margin-bottom: 1rem;"></div>
+  <%= render "devise/shared/links" %>
+</body>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BayouDigital</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,600' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= javascript_include_tag "application" %>
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  </head>
+
+  <body class="skin-deep-blue sidebar-image misty-mountains">
+    <div id="shadow"></div>
+    <div id="shadow2"></div>
+    <% if user_signed_in? && params[:action] != "success" && params[:action] != "cancel" %>
+        <% if params[:controller] == "payments" %>
+          <%= render "shared/header" %>
+          <%= render "shared/sidebar" %>
+          <div class="page-loader">
+            <div class="preloader-lg"></div>
+          </div>
+          <div class="content-wrapper-transition">
+            <div class="content-wrapper-inner">
+              <%= yield %>
+            </div>
+          </div>
+        <% else %>
+          <%= yield %>
+        <% end %>
+
+        <%= render "shared/customization_modal" %>
+    <% else %>
+      <div class="content-wrapper-transition" style="display: flex;top: 10rem; justify-content: center;text-align: center;">
+        <div class="content-wrapper-inner" style="width: 100%; max-width: 400px;">
+          <%= yield %>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

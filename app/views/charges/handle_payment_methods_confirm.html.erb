@@ -1,0 +1,23 @@
+<section class="content" style="margin-top: 10rem;">
+  <div class="row">
+    <div class="col-xs-12">
+      <% if @success %>
+        <div class="alert alert-success">Payment Successful</div>
+      <% else %>
+        <%= render "/layouts/alerts" %>
+      <% end %>
+      <% if @verification_url.present? %>
+        <div style="text-align: center;">
+          <p>Verification Required</p>
+          <a href="<%= @verification_url %>"><%= @verification_url %></a>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<script>
+  setTimeout(function() {
+      window.close();
+  }, 10000);
+</script>

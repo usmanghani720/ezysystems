@@ -1,0 +1,162 @@
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+
+
+<div class="content-wrapper tables-data-page">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+    Users
+    </h1>
+    <ol class="breadcrumb">
+      <li><%= link_to root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <div class="box box-primary" data-aos="fade-up">
+          <div class="box-header with-border" style="text-align: right;">
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render "/layouts/alerts" %>
+        <div class="box">
+          <div class="box-body">
+            <table id="users" class="table table-bordered table-striped" style="width: 100 !important;">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Stripe Email</th>
+                  <th>Role</th>
+                  <th>Approved</th>
+                  <th>Account Type</th>
+                  <th>Stripe Account</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @users.each do |user| %>
+                  <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.stripe_email %></td>
+                    <td><%= user.role %> </td>
+                    <td><%= user.try(:approved) ? "Approved" : "Not Approved" %></td>
+                    <td><%= user.account_type %> </td>
+                    <td>
+                      <% if user.try(:stripe_user_id).present? %>
+                          <%= user.try(:stripe_user_id) %>
+                        <br/>
+                        Transfer: <%= user.try(:transfer) ? "Enabled" : "Not Enabled" %>
+                        <br />
+                        Payout: <%= user.try(:payout) ? "Enabled" : "Not Enabled" %>
+                        <br />
+                        Charges: <%= user.try(:charges) ? "Enabled" : "Not Enabled" %>
+                      <% end %>
+                    </td>
+                    <td>
+                    <% if !user.try(:approved) %>
+                      <i class="fa fa-thumbs-up approve-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
+                    <% else %>
+                      <i class="fa fa-thumbs-down disapprove-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
+                    <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+
+<script>
+  $("#users").DataTable({
+    responsive: true,
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "aaSorting": [[1, "asc"]],
+  });
+
+    $(document).on('click', '.approve-icon', function (e) {
+      e.preventDefault();
+      const id = $(this)[0].id;
+      $.ajax({
+        url: "/payment/update_user_status",
+        type: 'POST',
+        dataType: 'json',
+        data: { id: id },
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          window.location.reload()
+        },
+        error: function () {
+          window.location.reload()
+        }
+      });
+    });
+
+    $(document).on('click', '.disapprove-icon', function (e) {
+      e.preventDefault();
+      const id = $(this)[0].id;
+      $.ajax({
+        url: "/payment/update_user_status",
+        type: 'POST',
+        dataType: 'json',
+        data: { id: id },
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          window.location.reload()
+        },
+        error: function () {
+          window.location.reload()
+        }
+      });
+    });
+</script>
+
+<style>
+.approve-icon{
+  font-size: 2rem;
+  background: green;
+  color: #fff;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.disapprove-icon{
+  font-size: 2rem;
+  background: red;
+  color: #fff;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+</style>
+
+

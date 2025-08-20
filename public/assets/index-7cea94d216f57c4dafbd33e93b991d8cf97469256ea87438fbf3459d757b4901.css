@@ -1,0 +1,10 @@
+/* line 1, app/assets/stylesheets/index.scss */
+.cover-container {
+  margin-top: 110px;
+}
+
+/* line 5, app/assets/stylesheets/index.scss */
+.lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+}

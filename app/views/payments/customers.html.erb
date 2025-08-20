@@ -1,0 +1,84 @@
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+
+
+<div class="content-wrapper tables-data-page">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+    Customers
+    </h1>
+    <ol class="breadcrumb">
+      <li><%= link_to root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <div class="box box-primary" data-aos="fade-up">
+          <div class="box-header with-border" style="text-align: right;">
+            <%= link_to 'New', new_customer_path,:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render "/layouts/alerts" %>
+        <div class="box">
+          <div class="box-body">
+            <table id="customers" class="table table-bordered table-striped" style="width: 100 !important;">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>ID</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @customers.each do |customer| %>
+                  <tr>
+                    <td><%= customer.name %></td>
+                    <td><%= customer.email %></td>
+                    <td><%= customer.phone %></td>
+                    <td><%= customer.customer_id %> </td>
+                    <td><%= link_to 'Create Payment', create_payment_path(id: customer.id),:class=>"btn btn-block btn-info",:style=>"display:inline;" %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+
+<script>
+  $("#customers").DataTable({
+    responsive: true,
+    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    "aaSorting": [[1, "asc"]],
+  });
+
+</script>
+
+<style>
+
+</style>
+
+

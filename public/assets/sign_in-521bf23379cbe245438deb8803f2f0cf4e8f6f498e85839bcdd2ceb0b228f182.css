@@ -1,0 +1,9 @@
+/* line 1, app/assets/stylesheets/sign_in.scss */
+.form-signin {
+  margin: 50px 0px 30px 0px;
+}
+
+/* line 5, app/assets/stylesheets/sign_in.scss */
+.actions {
+  margin: 25px 0px 25px 0px;
+}

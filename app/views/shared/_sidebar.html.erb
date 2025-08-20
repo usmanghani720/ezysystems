@@ -1,0 +1,43 @@
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <div class="user-panel">
+    </div>
+    <% if current_user.role == "admin" %>
+      <ul class="sidebar-menu">
+        <li class="treeview">
+          <%= link_to users_path do %>
+            USERS
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
+      <ul class="sidebar-menu">
+        <li class="treeview">
+          <%= link_to root_path do %>
+            DASHBOARD
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
+          <%= link_to customers_path do %>
+            CUSTOMERS
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
+          <%= link_to invoice_path do %>
+            INVOICE
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
+          <%= link_to payouts_path do %>
+            PAYOUTS
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+      </ul>       
+  </section>
+  <!-- /.sidebar -->
+</aside>

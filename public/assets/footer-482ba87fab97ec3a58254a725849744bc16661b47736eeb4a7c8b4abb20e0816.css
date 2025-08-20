@@ -1,0 +1,111 @@
+/* Footer */
+/* line 3, app/assets/stylesheets/footer.scss */
+.footer-dark {
+  padding: 50px 0;
+  margin-top: 150px;
+  color: #FFFFFF;
+  background-color: #FF0000;
+}
+
+/* line 10, app/assets/stylesheets/footer.scss */
+.footer-dark h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* line 17, app/assets/stylesheets/footer.scss */
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* line 25, app/assets/stylesheets/footer.scss */
+.footer-dark ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* line 31, app/assets/stylesheets/footer.scss */
+.footer-dark ul a:hover {
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  /* line 36, app/assets/stylesheets/footer.scss */
+  .footer-dark .item:not(.social) {
+    text-align: center;
+    padding-bottom: 20px;
+  }
+}
+
+/* line 42, app/assets/stylesheets/footer.scss */
+.footer-dark .item.text {
+  margin-bottom: 36px;
+}
+
+@media (max-width: 767px) {
+  /* line 47, app/assets/stylesheets/footer.scss */
+  .footer-dark .item.text {
+    margin-bottom: 0;
+  }
+}
+
+/* line 52, app/assets/stylesheets/footer.scss */
+.footer-dark .item.text p {
+  margin-bottom: 0;
+  opacity: 0.8;
+}
+
+/* line 57, app/assets/stylesheets/footer.scss */
+.footer-dark .item.social {
+  text-align: center;
+}
+
+@media (max-width: 991px) {
+  /* line 62, app/assets/stylesheets/footer.scss */
+  .footer-dark .item.social {
+    text-align: center;
+    margin-top: 20px;
+  }
+}
+
+/* line 68, app/assets/stylesheets/footer.scss */
+.footer-dark .item.social > a {
+  background-color: #FFFFFF;
+  font-size: 20px;
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  margin: 0 8px;
+  padding: 0 10px;
+  color: #FF0000;
+}
+
+/* line 84, app/assets/stylesheets/footer.scss */
+.footer-dark .item.social > a:hover {
+  background-color: #FF0000;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+}
+
+/* line 90, app/assets/stylesheets/footer.scss */
+.footer-dark .copyright {
+  text-align: center;
+  padding-top: 24px;
+  font-size: 13px;
+  margin-bottom: 0;
+  opacity: 0.8;
+}
+
+/* End of Footer */

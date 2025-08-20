@@ -1,0 +1,13 @@
+<br/><br/>
+<h2>Enter the OTP Code</h2>
+<br/><br/>
+<%= form_with url: verify_otp_verification_path, method: :post do |f| %>
+  <div class="field">
+    <%= f.label :otp_code %><br />
+    <%= f.text_field :otp_code %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Verify" %>
+  </div>
+<% end %>

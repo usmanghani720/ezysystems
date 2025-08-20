@@ -1,0 +1,19 @@
+/* line 1, app/assets/stylesheets/signin.scss */
+.form-signin {
+  margin: 50px 0px 30px 0px;
+}
+
+/* line 5, app/assets/stylesheets/signin.scss */
+.actions {
+  margin: 25px 0px 25px 0px;
+}
+
+/* line 9, app/assets/stylesheets/signin.scss */
+.card-fields {
+  width: 100% !important;
+}
+
+/* line 13, app/assets/stylesheets/signin.scss */
+.card-fields-date {
+  width: unset !important;
+}

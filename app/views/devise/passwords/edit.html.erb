@@ -1,0 +1,31 @@
+<body class="text-center">
+  <div class="form-signin">
+    <%#= image_tag "logo.jpeg", width: 72, height: 72, class: "mb-4" %>
+    <h2>Change your password</h2>
+  </div>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= f.hidden_field :reset_password_token %>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+          <div class="field">
+            <% if @minimum_password_length %>
+              <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+            <% end %>
+            <%= f.password_field :password, placeholder: "Password", class: "form-control", style: 'width:100%;' %>
+          </div>
+          <div class="field">
+            <%= f.password_field :password_confirmation, placeholder: "Confirm new password", class: "form-control", style: 'width:100%;' %>
+          </div>
+          <br />
+          <div class="actions">
+            <%= f.submit "Change my password", class: "btn btn-danger btn-block" %>
+          </div>
+        </div>
+    </div>
+  </div>
+  <% end %>
+  <div style="margin-bottom: 1rem;"></div>
+  <%= render "devise/shared/links" %>
+</body>

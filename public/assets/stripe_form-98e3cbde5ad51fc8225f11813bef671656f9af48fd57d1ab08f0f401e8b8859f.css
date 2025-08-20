@@ -1,0 +1,243 @@
+/* line 1, app/assets/stylesheets/stripe_form.scss */
+.example.example2 {
+  background-color: #fff;
+}
+
+/* line 5, app/assets/stylesheets/stripe_form.scss */
+.example.example2 * {
+  font-family: Source Code Pro, Consolas, Menlo, monospace;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* line 11, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .row {
+  display: flex;
+  margin: 0 5px 10px;
+}
+
+/* line 17, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .field {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 0 10px;
+}
+
+/* line 24, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .field.half-width {
+  width: 50%;
+}
+
+/* line 28, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .field.quarter-width {
+  width: calc(25% - 10px);
+}
+
+/* line 32, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .baseline {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  left: 0;
+  bottom: 0;
+  background-color: #cfd7df;
+  transition: background-color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* line 42, app/assets/stylesheets/stripe_form.scss */
+.example.example2 label {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 8px;
+  color: #cfd7df;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+  cursor: text;
+  pointer-events: none;
+  transition-property: color, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* line 59, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding-bottom: 7px;
+  color: #32325d;
+  background-color: transparent;
+}
+
+/* line 69, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input::-webkit-input-placeholder {
+  color: transparent;
+  -webkit-transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* line 74, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input::-moz-placeholder {
+  color: transparent;
+  -moz-transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* line 79, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input:-ms-input-placeholder {
+  color: transparent;
+  -ms-transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: color 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* line 84, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.StripeElement {
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  will-change: opacity;
+}
+
+/* line 90, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused,
+.example.example2 .input:not(.empty) {
+  opacity: 1;
+}
+
+/* line 95, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused::-webkit-input-placeholder,
+.example.example2 .input:not(.empty)::-webkit-input-placeholder {
+  color: #cfd7df;
+}
+
+/* line 100, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused::-moz-placeholder,
+.example.example2 .input:not(.empty)::-moz-placeholder {
+  color: #cfd7df;
+}
+
+/* line 105, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused:-ms-input-placeholder,
+.example.example2 .input:not(.empty):-ms-input-placeholder {
+  color: #cfd7df;
+}
+
+/* line 110, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused + label,
+.example.example2 .input:not(.empty) + label {
+  color: #aab7c4;
+  transform: scale(0.85) translateY(-25px);
+  cursor: default;
+}
+
+/* line 117, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused + label {
+  color: #24b47e;
+}
+
+/* line 121, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.invalid + label {
+  color: #ffa27b;
+}
+
+/* line 125, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused + label + .baseline {
+  background-color: #24b47e;
+}
+
+/* line 129, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .input.focused.invalid + label + .baseline {
+  background-color: #e25950;
+}
+
+/* line 133, app/assets/stylesheets/stripe_form.scss */
+.example.example2 input, .example.example2 button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  border-style: none;
+}
+
+/* line 141, app/assets/stylesheets/stripe_form.scss */
+.example.example2 input:-webkit-autofill {
+  -webkit-text-fill-color: #e39f48;
+  -webkit-transition: background-color 100000000s;
+  transition: background-color 100000000s;
+  -webkit-animation: 1ms void-animation-out;
+}
+
+/* line 147, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .StripeElement--webkit-autofill {
+  background: transparent !important;
+}
+
+/* line 151, app/assets/stylesheets/stripe_form.scss */
+.example.example2 input, .example.example2 button {
+  -webkit-animation: 1ms void-animation-out;
+}
+
+/* line 155, app/assets/stylesheets/stripe_form.scss */
+.example.example2 button {
+  display: block;
+  width: calc(100% - 30px);
+  height: 40px;
+  margin: 40px 15px 0;
+  background-color: #24b47e;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* line 168, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .error svg {
+  margin-top: 0 !important;
+}
+
+/* line 172, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .error svg .base {
+  fill: #e25950;
+}
+
+/* line 176, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .error svg .glyph {
+  fill: #fff;
+}
+
+/* line 180, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .error .message {
+  color: #e25950;
+}
+
+/* line 184, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .success .icon .border {
+  stroke: #abe9d2;
+}
+
+/* line 188, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .success .icon .checkmark {
+  stroke: #24b47e;
+}
+
+/* line 192, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .success .title {
+  color: #32325d;
+  font-size: 16px !important;
+}
+
+/* line 197, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .success .message {
+  color: #8898aa;
+  font-size: 13px !important;
+}
+
+/* line 202, app/assets/stylesheets/stripe_form.scss */
+.example.example2 .success .reset path {
+  fill: #24b47e;
+}

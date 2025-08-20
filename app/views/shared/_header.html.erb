@@ -1,0 +1,18 @@
+<header class="main-header">
+  <%= link_to root_path,:class=>"logo" do %>
+    <%#= image_tag "logo.jpeg",:height=>"50px;" %>
+  <% end %>
+  <nav class="navbar navbar-static-top" role="navigation">
+    <a href="#" class="sidebar-toggle border-right border-left" data-toggle="offcanvas" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+
+        <li class="dropdown user user-menu">
+          <%= link_to 'Logout', destroy_user_session_path, method: :delete, :class=>"btn btn-default btn-flat"  %>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
