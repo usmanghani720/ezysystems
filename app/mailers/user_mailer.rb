@@ -19,26 +19,6 @@ class UserMailer < ApplicationMailer
       mail(to: @email, subject: "Invoice " + @unique_id + " " + @user.try(:name))
     end
 
-    def send_payment_successful_email_to_freelancer(invoice, pdf_content)
-      @user = User.find_by(id: invoice.try(:user_id))
-      @email = @user.try(:email)
-      @name = @user.try(:name)
-      attachments["receipt"] = { mime_type: 'application/pdf', content: pdf_content }
-      mail(to: @email, subject: "Onderwerp: ✅ Je factuur is betaald!")
-    end
-
-    def send_payment_successful_email_to_client(invoice)
-      @email = invoice.try(:email)
-      @name = invoice.try(:name)
-      mail(to: @email, subject: "Betaling ontvangen – dit is wat je kunt verwachten")
-    end
-
-    def send_onboarding_url(email, onboarding_url)
-      @email = email
-      @onboarding_url = onboarding_url
-      mail(to: email, subject: "Maak uw onboarding compleet")
-    end
-
     def send_new_user_email_to_admin()
       @user = User.find_by(role: "admin")
       if @user.present?
