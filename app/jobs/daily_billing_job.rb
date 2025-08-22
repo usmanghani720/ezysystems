@@ -3,6 +3,32 @@ class DailyBillingJob < ApplicationJob
     Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
     def perform
+      User.where.not(stripe_user_id: nil).each do |user|
+        begin
+          charge = Stripe::Charge.create(
+            {
+              amount: 9900,
+              currency: ENV["CURRENCY"],
+              source: user.try(:stripe_user_id)
+            },
+          )
+        rescue Stripe::CardError => e
+          puts e.message
+        rescue Stripe::InvalidRequestError => e
+          puts e.message
+        rescue Stripe::RateLimitError => e
+          puts e.message
+        rescue Stripe::AuthenticationError => e
+          puts e.message
+        rescue Stripe::APIConnectionError => e
+          puts e.message
+        rescue Stripe::StripeError => e
+          puts e.message
+        rescue => e
+          puts "System Error"
+        end
+      end
+
       begin
         @accounts = Stripe::Account.list({limit: 200})
         User.all.each do |user|
