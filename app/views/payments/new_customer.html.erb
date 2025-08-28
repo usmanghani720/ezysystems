@@ -24,13 +24,25 @@
         <div class="box box-primary" data-aos="fade-up">
           <div class="box-header with-border">
             <%= form_with url: create_customer_path, method: :post, local: true do |form| %>
-                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email"/>
+                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email" required/>
 								<br />
-                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name"/>
+                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name" required/>
 								<br />
                 <input id="phone" name="phone" class="form-control" style="width: 100%" placeholder="Phone"/>
 								<br />
+                <input id="line1" name="line1" class="form-control" style="width: 100%" placeholder="Address Line 1"/>
+								<br />
+                <input id="line2" name="line2" class="form-control" style="width: 100%" placeholder="Address Line 2"/>
+								<br />
+                <input id="city" name="city" class="form-control" style="width: 100%" placeholder="City"/>
+								<br />
+                <input id="state" name="state" class="form-control" style="width: 100%" placeholder="State"/>
+								<br />
+                <input id="postal_code" name="postal_code" class="form-control" style="width: 100%" placeholder="Postal Code"/>
+								<br />
 								<%= hidden_field_tag "user_id", current_user.try(:id) %>
+                <%= form.select :country, stripe_supported_countries, {}, class: "form-control", style: "width:100%;" %>
+                <br/>
                 <%= submit_tag 'Create Customer',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
           </div>

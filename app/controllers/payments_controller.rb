@@ -116,27 +116,145 @@ class PaymentsController < ApplicationController
 
   end
 
+  def customer_creation_success 
+    @customer = Customer.find_by(id: params[:id])
+    connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
+    begin
+      customer = Stripe::Customer.retrieve(
+        @customer.customer_id,
+        { stripe_account: connected_acct_id } # opts: target the connected account
+      )
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue Stripe::RateLimitError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue Stripe::APIConnectionError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to cancel_path
+    rescue => e
+      flash[:error] = "System Error"
+      redirect_to cancel_path
+    end
+    if @customer.payment_method.blank?
+      begin
+        cards = Stripe::PaymentMethod.list(
+          { customer: @customer.customer_id, type: "card" },
+          { stripe_account: connected_acct_id }
+        ).data
+        if cards.present?
+          @customer.update(payment_method: cards.first["id"])
+          Stripe::Customer.update(
+            @customer.customer_id,
+            { invoice_settings: { default_payment_method: cards.first["id"] } },
+            { stripe_account: connected_acct_id }
+          )
+          @payment_method = cards.first["id"]  
+        else    
+        end
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue Stripe::APIConnectionError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to cancel_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to cancel_path
+      end
+    end
+    redirect_to success_path
+  end
+
   def make_payment
     @customer = Customer.find_by(id: params[:id])
     connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
-    customer = Stripe::Customer.retrieve(
-      @customer.customer_id,
-      { stripe_account: connected_acct_id } # opts: target the connected account
-    )
+    begin
+      customer = Stripe::Customer.retrieve(
+        @customer.customer_id,
+        { stripe_account: connected_acct_id } # opts: target the connected account
+      )
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue Stripe::RateLimitError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue Stripe::APIConnectionError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to customers_path
+    rescue => e
+      flash[:error] = "System Error"
+      redirect_to customers_path
+    end
     if @customer.payment_method.blank?
-      cards = Stripe::PaymentMethod.list(
-        { customer: @customer.customer_id, type: "card" },
-        { stripe_account: connected_acct_id }
-      ).data
-      if cards.present?
-        @customer.update(payment_method: cards.first["id"])
-        Stripe::Customer.update(
-          @customer.customer_id,
-          { invoice_settings: { default_payment_method: cards.first["id"] } },
+      begin
+        cards = Stripe::PaymentMethod.list(
+          { customer: @customer.customer_id, type: "card" },
           { stripe_account: connected_acct_id }
-        )
-        @payment_method = cards.first["id"]  
-      else    
+        ).data
+        if cards.present?
+          @customer.update(payment_method: cards.first["id"])
+          Stripe::Customer.update(
+            @customer.customer_id,
+            { invoice_settings: { default_payment_method: cards.first["id"] } },
+            { stripe_account: connected_acct_id }
+          )
+          @payment_method = cards.first["id"]  
+        else    
+        end
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::APIConnectionError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to customers_path
       end
     else   
       @payment_method = @customer.payment_method
@@ -180,13 +298,42 @@ class PaymentsController < ApplicationController
   end
 
   def create_customer
-    @customer = Customer.create(email: params[:email], name: params[:name], phone: params[:phone], user_id: current_user.try(:id))
+    @customer = Customer.create(email: params[:email], 
+      name: params[:name], 
+      phone: params[:phone], 
+      line1: params[:line1], 
+      line2: params[:line2], 
+      city: params[:city], 
+      state: params[:state], 
+      postal_code: params[:postal_code], 
+      country: params[:country], 
+      user_id: current_user.try(:id))
     begin  
       customer = Stripe::Customer.create(
         {
           name:  params[:name],
           email: params[:email],
           phone: params[:phone],
+          address: {
+            line1:       params[:line1].presence,
+            line2:       params[:line2].presence,
+            city:        params[:city].presence,
+            state:       params[:state].presence,
+            postal_code: params[:postal_code].presence,
+            country:     params[:country].presence
+          },
+          shipping: {
+            phone: params[:phone],
+            name: params[:name],
+          address: {
+            line1:       params[:line1].presence,
+            line2:       params[:line2].presence,
+            city:        params[:city].presence,
+            state:       params[:state].presence,
+            postal_code: params[:postal_code].presence,
+            country:     params[:country].presence,
+          },
+          }
         },
         { stripe_account: current_user.try(:stripe_user_id) }
       )
@@ -225,8 +372,27 @@ class PaymentsController < ApplicationController
       flash[:error] = "System Error"
     end
     flash[:success] = "Customer created"
-    UserMailer.sent_customer_creation_email(@customer).deliver_now
-    redirect_to customers_path
+    if @customer.present?
+      connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
+      customer_id = @customer.customer_id
+    end
+
+    session = Stripe::Checkout::Session.create(
+      {
+        mode: "setup",
+        customer: customer_id,
+        payment_method_types: ["card"],
+        customer_update: { address: "auto", shipping: "auto" },
+        shipping_address_collection: {
+          allowed_countries: ["AC", "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CV", "CW", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MK", "ML", "MM", "MN", "MO", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SZ", "TA", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VN", "VU", "WF", "WS", "XK", "YE", "YT", "ZA", "ZM", "ZW", "ZZ"],
+        },
+        success_url: ENV['CUSTOMER_CREATION_SUCCESS'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
+        cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
+      },
+      { stripe_account: connected_acct_id }
+    )
+    cookies[:session_url] = session.url
+    redirect_to success_path
   end
 
   def all_users
@@ -318,6 +484,10 @@ class PaymentsController < ApplicationController
   end
 
   def success
+    if cookies[:session_url].present? 
+      @session_url = cookies[:session_url]
+      cookies.delete :session_url
+    end
   end
 
   def cancel 

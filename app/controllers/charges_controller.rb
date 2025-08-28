@@ -15,7 +15,7 @@ class ChargesController < ApplicationController
             mode: "setup",
             customer: customer_id,
             payment_method_types: ["card"],
-            success_url: ENV['SUCCESS_URL'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
+            success_url: ENV['CUSTOMER_CREATION_SUCCESS'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
             cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
           },
           { stripe_account: connected_acct_id }

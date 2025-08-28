@@ -89,8 +89,14 @@
 
 </script>
 
-<style>
-
-</style>
+  <script>
+  // Check if the page has already been reloaded
+  if (!sessionStorage.getItem('reloaded')) {
+    sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
+    location.reload(); // Reload the page
+  } else {
+    sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
+  }
+</script>
 
 

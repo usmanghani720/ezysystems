@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   post 'payment/create_payout', to: 'payments#create_payout', as: 'create_payout' 
   get 'payment/payouts', to: 'payments#payouts', as: 'payouts' 
   get 'payout', to: 'payments#payout', as: 'payout'
+  get 'customer_creation_success', to: 'payments#customer_creation_success', as: 'customer_creation_success'
   post 'payment/create_small_payout', to: 'payments#create_small_payout', as: 'create_small_payout' 
   post 'payment/update_user_status', to: 'payments#update_user_status', as: 'update_user_status' 
   resources :charges, only: [:create]
