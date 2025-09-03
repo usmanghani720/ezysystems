@@ -45,11 +45,7 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>Amount</th>
-                  <th>Status</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Tax Information</th>
-                  <th>Invoice Receipt</th>
+                  <th>Link</th>
                 </tr>
               </thead>
               <tbody>
@@ -62,15 +58,7 @@
                         <%= money_symbols[invoice.currency] %><%= number_with_precision((invoice.amount/100), precision: 2) %>
                       <% end %>
                     </td>
-                    <td><%= invoice.status %></td>
-                    <td><%= invoice.city %> <%= invoice.state %> <%= invoice.line1 %> <%= invoice.line2 %> <%= invoice.country %> <%= invoice.postal_code %></td>
-                    <td><%= invoice.phone %> </td>
-                    <td><%= invoice.tax_type %> <%= invoice.tax_value %></td>
-                    <td>
-                      <% if invoice.try(:payment_intent_id).present? %>
-                        <%= link_to "Invoice", connected_receipt_url(id: invoice.try(:payment_intent_id)), target: "_blank" %>
-                      <% end %>
-                    </td>
+                    <td style="word-break: break-all;white-space: normal;"><%= invoice.invoice_url %></td>
                   </tr>
                 <% end %>
               </tbody>
