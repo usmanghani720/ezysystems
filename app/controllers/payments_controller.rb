@@ -1,4 +1,5 @@
 class PaymentsController < ApplicationController
+  Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
   require "stripe"
   include ApplicationHelper
   before_action :authenticate_user!, except: [:success, :cancel]
@@ -81,6 +82,11 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def authenticate
+    @client_secret = params[:client_secret]
+    @acct          = params[:acct] # optional, if you want to display which account
+  end
+
   def create_express_account
     account_link = stripe_express_button_link(current_user)
     redirect_to account_link
@@ -116,76 +122,43 @@ class PaymentsController < ApplicationController
 
   end
 
-  def customer_creation_success 
-    @customer = Customer.find_by(id: params[:id])
-    connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
+  def customer_creation_success
+    @customer = Customer.find(params[:id])
+    connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+  
     begin
-      customer = Stripe::Customer.retrieve(
-        @customer.customer_id,
-        { stripe_account: connected_acct_id } # opts: target the connected account
+      # 1) Get the Checkout Session that just finished
+      checkout_session = Stripe::Checkout::Session.retrieve(
+        params[:session_id],
+        { stripe_account: connected_acct_id }
       )
-    rescue Stripe::CardError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue Stripe::InvalidRequestError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue Stripe::RateLimitError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue Stripe::AuthenticationError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue Stripe::APIConnectionError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue Stripe::StripeError => e
-      flash[:error] = e.message
-      redirect_to cancel_path
-    rescue => e
-      flash[:error] = "System Error"
-      redirect_to cancel_path
-    end
-    if @customer.payment_method.blank?
-      begin
-        cards = Stripe::PaymentMethod.list(
-          { customer: @customer.customer_id, type: "card" },
+  
+      # 2) It will have a setup_intent; fetch it
+      if checkout_session.setup_intent.present?
+        si = Stripe::SetupIntent.retrieve(
+          checkout_session.setup_intent,
           { stripe_account: connected_acct_id }
-        ).data
-        if cards.present?
-          @customer.update(payment_method: cards.first["id"])
+        )
+  
+        # 3) Pull the exact payment method saved during Checkout
+        pm_id = si.payment_method
+        if pm_id.present?
+          # 4) Save it locally and make it default for the customer
+          @customer.update!(payment_method: pm_id)
+  
           Stripe::Customer.update(
             @customer.customer_id,
-            { invoice_settings: { default_payment_method: cards.first["id"] } },
+            { invoice_settings: { default_payment_method: pm_id } },
             { stripe_account: connected_acct_id }
           )
-          @payment_method = cards.first["id"]  
-        else    
         end
-      rescue Stripe::CardError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue Stripe::InvalidRequestError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue Stripe::RateLimitError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue Stripe::AuthenticationError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue Stripe::APIConnectionError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue Stripe::StripeError => e
-        flash[:error] = e.message
-        redirect_to cancel_path
-      rescue => e
-        flash[:error] = "System Error"
-        redirect_to cancel_path
       end
+  
+      redirect_to success_path
+    rescue => e
+      flash[:error] = e.message.presence || "System Error"
+      redirect_to cancel_path
     end
-    redirect_to success_path
   end
 
   def make_payment
@@ -382,7 +355,6 @@ class PaymentsController < ApplicationController
         mode: "setup",
         customer: customer_id,
         payment_method_types: ["card"],
-        customer_update: { address: "auto", shipping: "auto" },
         shipping_address_collection: {
           allowed_countries: ["AC", "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CV", "CW", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MK", "ML", "MM", "MN", "MO", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SZ", "TA", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VN", "VU", "WF", "WS", "XK", "YE", "YT", "ZA", "ZM", "ZW", "ZZ"],
         },

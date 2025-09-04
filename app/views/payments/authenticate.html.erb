@@ -1,0 +1,15 @@
+<script src="https://js.stripe.com/v3"></script>
+<div id="msg">Authenticating…</div>
+<script>
+(async () => {
+  const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
+  const clientSecret = "<%= @client_secret %>";
+
+  const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret);
+  if (!error && paymentIntent.status === "succeeded") {
+    document.getElementById('msg').innerText = "Payment succeeded. You may close this page.";
+  } else {
+    document.getElementById('msg').innerText = (error && error.message) || "Payment could not be completed.";
+  }
+})();
+</script>

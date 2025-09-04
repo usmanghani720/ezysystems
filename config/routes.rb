@@ -26,10 +26,21 @@ Rails.application.routes.draw do
   get 'customer_creation_success', to: 'payments#customer_creation_success', as: 'customer_creation_success'
   post 'payment/create_small_payout', to: 'payments#create_small_payout', as: 'create_small_payout' 
   post 'payment/update_user_status', to: 'payments#update_user_status', as: 'update_user_status' 
+  # Amount form + charge
+  get  "/create_payment/:id", to: "customers#create_payment_form",  as: :create_payment_form
+  post "/create_payment/:id", to: "customers#create_payment",       as: :create_payment
+
+  # SCA auth page (you'll email/share this link with the customer when needed)
+  get  "/payments/authenticate", to: "payments#authenticate",       as: :authenticate_payment
+
+  # Update/Add card via Checkout (mode: setup)
+  get  "/payment_methods/new",     to: "payment_methods#new",       as: :new_payment_method
+  get  "/payment_methods/success", to: "payment_methods#success",   as: :payment_method_success
+
   resources :charges, only: [:create]
 
-  get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
-  post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
+  # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
+  # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
   
   resources :charges, only: [:new, :create]
   resources :stripe, only: [:new]
