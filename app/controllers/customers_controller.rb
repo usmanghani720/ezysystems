@@ -50,7 +50,6 @@ class CustomersController < ApplicationController
         redirect_to new_payment_method_path(customer_id: @customer.id)
       end
     rescue => e
-        debugger
       redirect_to create_payment_form_path(@customer), alert: e.message
     end
   end
