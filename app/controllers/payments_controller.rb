@@ -153,7 +153,7 @@ class PaymentsController < ApplicationController
           )
         end
       end
-  
+      @customer.update(customer_card_url: nil)
       redirect_to success_path
     rescue => e
       flash[:error] = e.message.presence || "System Error"
@@ -364,6 +364,7 @@ class PaymentsController < ApplicationController
       { stripe_account: connected_acct_id }
     )
     cookies[:session_url] = session.url
+    @customer.update(customer_card_url: session.url)
     redirect_to success_path
   end
 

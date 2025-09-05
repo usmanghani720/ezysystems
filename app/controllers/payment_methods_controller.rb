@@ -14,7 +14,7 @@ class PaymentMethodsController < ApplicationController
         },
         { stripe_account: connected_acct_id }
       )
-  
+      @customer.update(customer_card_url: session.url)
       redirect_to session.url, allow_other_host: true
     end
   
@@ -36,7 +36,7 @@ class PaymentMethodsController < ApplicationController
           )
         end
       end
-  
+      @customer.update(customer_card_url: nil)
       redirect_to customers_path, notice: "Card updated."
     rescue => e
       redirect_to customers_path, alert: e.message

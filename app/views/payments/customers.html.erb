@@ -46,6 +46,7 @@
                   <th>ID</th>
                   <th>Payment Method</th>
                   <th></th>
+                  <th>Url</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,6 +68,7 @@
                         <%= link_to 'Create Payment', create_payment_path(id: customer.id),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
                       <% end %>
                     </td>
+                    <td style="word-break: break-all;white-space: normal;"><%= customer.customer_card_url %> </td>
                   </tr>
                 <% end %>
               </tbody>
