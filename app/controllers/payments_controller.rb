@@ -82,6 +82,34 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def capture_ui
+    @pi_id      = params[:pi_id]
+    @customer   = Customer.find(params[:customer_id])
+    @acct_id    = User.find(@customer.user_id).try(:stripe_user_id)
+    # Fetch latest PI to show amount_capturable
+    @pi = Stripe::PaymentIntent.retrieve(@pi_id, { stripe_account: @acct_id })
+  end
+
+  def capture
+    customer   = Customer.find(params[:customer_id])
+    acct_id    = User.find(customer.user_id).try(:stripe_user_id)
+    pi_id      = params[:pi_id]
+    amount_cents = params[:amount].present? ? (BigDecimal(params[:amount]) * 100).to_i : nil
+
+    res = Payments::CapturePaymentIntent.call(
+      payment_intent_id: pi_id,
+      stripe_account:    acct_id,
+      idempotency_key:   "capture-#{pi_id}-#{SecureRandom.uuid}",
+      amount_to_capture_cents: amount_cents # nil => full amount
+    )
+
+    if res.ok
+      redirect_to customers_path, notice: "Capture submitted. Status: #{res.status}."
+    else
+      redirect_to capture_ui_path(pi_id: pi_id, customer_id: customer.id), alert: res.message || "Capture failed."
+    end
+  end
+
   def authenticate
     @client_secret = params[:client_secret]
     @acct          = params[:acct] # optional, if you want to display which account

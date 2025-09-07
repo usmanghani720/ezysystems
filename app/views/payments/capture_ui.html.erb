@@ -1,5 +1,3 @@
-
-
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap.min.css">
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
@@ -10,7 +8,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Create Payment
+      Capture Authorization
     </h1>
     <ol class="breadcrumb">
       <li><%= link_to root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
@@ -23,13 +21,16 @@
       <div class="col-md-12">
         <div class="box box-primary" data-aos="fade-up">
           <div class="box-header with-border">
-            <%= form_with url: make_payment_path, method: :post, local: true do |form| %>
-                <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
+						<p>PaymentIntent: <code><%= @pi_id %></code></p>
+						<p>Status: <%= @pi.status %></p>
+						<p>Amount capturable: <%= number_to_currency(@pi.amount_capturable.to_i / 100.0) %></p>
+            <%= form_with url: capture_payment_intent_path, method: :post do %>
+						<label>Capture amount (leave blank to capture full):</label>
+                <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd"/>
 								<br/>
-                <%= form.hidden_field :authorize_only, value: true %>
-                <br />
-								<%= form.hidden_field :id, value: params[:id] %>
-                <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+								<%= hidden_field_tag :pi_id, @pi_id %>
+								<%= hidden_field_tag :customer_id, @customer.id %>
+                <%= submit_tag 'Capture now',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
           </div>
         </div>

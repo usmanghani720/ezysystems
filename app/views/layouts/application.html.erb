@@ -18,7 +18,7 @@
   <body class="skin-deep-blue sidebar-image misty-mountains">
     <div id="shadow"></div>
     <div id="shadow2"></div>
-    <% if user_signed_in? && params[:action] != "success" && params[:action] != "cancel" %>
+    <% if user_signed_in? && params[:action] != "success" && params[:action] != "cancel" && params[:action] != "authenticate" %>
         <% if params[:controller] == "payments" ||  params[:controller] == "customers" %>
           <%= render "shared/header" %>
           <%= render "shared/sidebar" %>

@@ -37,6 +37,9 @@ Rails.application.routes.draw do
   get  "/payment_methods/new",     to: "payment_methods#new",       as: :new_payment_method
   get  "/payment_methods/success", to: "payment_methods#success",   as: :payment_method_success
 
+  get  "/capture_ui",          to: "payments#capture_ui",  as: :capture_ui
+  post "/capture_payment_intent", to: "payments#capture",  as: :capture_payment_intent
+
   resources :charges, only: [:create]
 
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'

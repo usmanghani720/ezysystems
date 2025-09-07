@@ -1,5 +1,9 @@
 <script src="https://js.stripe.com/v3"></script>
-<div id="msg">Authenticating…</div>
+<body class="text-center" style="text-align: center; margin-top: 10rem;">
+  <div class="form-signin">
+    <div id="msg">Authenticating…</div>
+  </div>
+</div>
 <script>
 (async () => {
   const stripe = Stripe("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
