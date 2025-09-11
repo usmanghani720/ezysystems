@@ -49,6 +49,9 @@ module Payments
             refund_params,
             { idempotency_key: idem_key, stripe_account: connected_acct_id }
           )
+					
+					UserMailer.send_early_fraud_warning_email_to_admin(connected_acct_id).deliver_now
+
         rescue Stripe::InvalidRequestError => e
           # If parameters like reverse_transfer/refund_application_fee are invalid for your flow,
           # create a plain refund without them (we're already not including them by default).

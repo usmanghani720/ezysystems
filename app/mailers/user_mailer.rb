@@ -26,6 +26,14 @@ class UserMailer < ApplicationMailer
       end
     end
 
+    def send_early_fraud_warning_email_to_admin(id)
+      @vendor = User.find_by(stripe_user_id: id)
+      @user = User.find_by(role: "admin")
+      if @user.present?
+        mail(to: @user.email, subject: 'Early Fraud Warning')
+      end
+    end
+
     def send_approve_email_to_vendor(user)
       @user = user
       mail(to: @user.email, subject: 'Your account has been approved by the admin')
