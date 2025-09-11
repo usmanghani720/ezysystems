@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Payments
   class OffSessionAuthorize
+    require "stripe"
+    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
     Result = Struct.new(:ok, :status, :payment_intent_id, :client_secret, :message, keyword_init: true)
 
     # Creates an off-session authorization (no funds captured yet).

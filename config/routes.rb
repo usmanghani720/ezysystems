@@ -40,6 +40,8 @@ Rails.application.routes.draw do
   get  "/capture_ui",          to: "payments#capture_ui",  as: :capture_ui
   post "/capture_payment_intent", to: "payments#capture",  as: :capture_payment_intent
 
+  post "/stripe/webhooks", to: "stripe_webhooks#receive"
+
   resources :charges, only: [:create]
 
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 module Payments
     class CapturePaymentIntent
+      require "stripe"
+      Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+      
       Result = Struct.new(:ok, :status, :message, keyword_init: true)
   
       # Capture some or all of the authorized amount.

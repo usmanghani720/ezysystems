@@ -1,4 +1,7 @@
 class PaymentMethodsController < ApplicationController
+  require "stripe"
+  Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+  
     def new
       @customer = Customer.find(params[:customer_id])
       connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
