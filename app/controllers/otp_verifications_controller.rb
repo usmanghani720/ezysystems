@@ -12,10 +12,10 @@ class OtpVerificationsController < ApplicationController
         sign_in(@user)
         session.delete(:otp_user_id)
         session.delete(:otp_valid) 
-        redirect_to root_path, notice: 'Logged in successfully'
+        redirect_to authenticated_root_path, notice: 'Logged in successfully'
       else
         sign_out(current_user)
-        redirect_to root_path, notice: 'Invalid code, please try again'
+        redirect_to unauthenticated_root_path, notice: 'Invalid code, please try again'
       end
     end
   end

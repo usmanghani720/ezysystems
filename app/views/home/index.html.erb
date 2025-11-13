@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ezysystem — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <%= image_tag "ezysystem_logo.png", alt: "Ezysystem", class: "logo" %>
+      </div>
+      <!-- Mobile hamburger -->
+      <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="main-nav">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#industries">Industries</a>
+        <a href="#news">News & Updates</a>
+        <a href="#help">Help</a>
+      </nav>
+      <div class="auth">
+        <a class="btn btn-outline" href="/users/sign_in">Sign In</a>
+        <a class="btn btn-primary1" href="users/sign_up">Sign Up</a>
+      </div>
+    </div>
+    <!-- Mobile menu drawer -->
+    <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
+      <div class="backdrop" data-close></div>
+      <div class="panel">
+        <div class="panel-header">
+          <%= image_tag "logo.jpg", alt: "Ezysystem", class: "logo small" %>
+          <button class="close" aria-label="Close menu" data-close>&times;</button>
+        </div>
+        <a href="#features" data-close>Features</a>
+        <a href="#pricing" data-close>Pricing</a>
+        <a href="#industries" data-close>Industries</a>
+        <a href="#news" data-close>News & Updates</a>
+        <a href="#help" data-close>Help</a>
+        <div class="panel-actions">
+          <a class="btn btn-outline" href="#signin">Sign In</a>
+          <a class="btn btn-primary" href="#signup">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1><span class="the">The</span> <span class="accent">Leading</span><br>
+          <span class="job">Job Management</span><br>
+          <span class="platform">Platform</span> <span class="for">For</span><br>
+          <span class="service">Service Providers</span></h1>
+          <p class="lead">One system that makes every day more productive and profitable.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary large" href="#trial">Start A Free Trial</a>
+            <a class="btn btn-ghost large" href="#which-plan">Which Plan?</a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="device-mock">
+            <%= image_tag "hero.webp", alt: "App mock" %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-features container">
+      <div class=" stats-features-grid">
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-content">
+              <%= image_tag "100m.svg", alt: "stat-icon" %>        
+              <h3>100m+</h3>
+            </div>
+            <p>Hundreds of millions of jobs invoiced using Ezysystem</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-content">
+              <%= image_tag "1m.svg", alt: "feature" %>               
+              <h3>1m+</h3>
+            </div>
+            <p>Millions of payments made through Ezysystem every month</p>
+          </div>
+        </div>
+        <div class="features-icons">
+          <div class="feature-icon-item green">
+              <%= image_tag "scheduling.svg", alt: "feature" %>
+            <span>Scheduling</span>
+          </div>
+          <p class="feature-description">Schedule recurring jobs and easily view your entire workload</p>
+          <!-- <div class="feature-icon-group"> -->
+                <div class="feature-icon-item cyan">
+                  <%= image_tag "payments.svg", alt: "feature" %>           
+                  <span>Payments</span>
+                </div>
+                <div class="feature-icon-item coral">
+                  <%= image_tag "invoice.svg", alt: "feature" %>   
+                  <span>Invoicing</span>
+                </div>
+                <div class="feature-icon-item purple">
+                  <%= image_tag "mutliuser.svg", alt: "feature" %>   
+                  <span>Multi User</span>
+                </div>
+                <div class="feature-icon-item purple2">
+									<%= image_tag "mesage.svg", alt: "feature" %>   
+                  <span>Messaging</span>
+                </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container features-grid">
+        <div class="features-phone">
+          <div class="phone-slider">
+            <div class="phone-mockup active">
+							<%= image_tag "hero.webp", alt: "App screenshot 1" %>  
+            </div>
+            <div class="phone-mockup">
+							<%= image_tag "mobile2.webp", alt: "App screenshot 2" %>
+            </div>
+            <div class="phone-mockup">
+							<%= image_tag "mobile3.webp", alt: "App screenshot 3" %>
+            </div>
+            <div class="slider-dots">
+              <span class="dot active" data-slide="0"></span>
+              <span class="dot" data-slide="1"></span>
+              <span class="dot" data-slide="2"></span>
+            </div>
+          </div>
+        </div>
+        <div class="features-content">
+          <h2>Let's explain the features</h2>
+          <p class="features-subtitle">Ezysystem is designed to automate processes keeping admin time to a minimum. It's easy for workers to use on any mobile device with real time updates so administrators can keep on top of the daily transactions.</p>
+          
+          <div class="feature-list-detailed">
+            <article class="feature-item">
+							<%= image_tag "invoice.svg", alt: "Invoicing" %>  
+             
+              <div class="feature-text">
+                <h3>Invoicing</h3>
+                <p>Generating an invoice couldn't be simpler with Ezysystem. Invoices can be created and sent automatically in seconds.</p>
+                <a href="#" class="feature-link">Invoicing →</a>
+              </div>
+            </article>
+            
+            <article class="feature-item">
+							<%= image_tag "payments.svg", alt: "Payments" %>  
+             
+              <div class="feature-text">
+                <h3>Payments</h3>
+                <p>Set up automatic payment methods and record in person transactions easily</p>
+                <a href="#" class="feature-link">Payments →</a>
+              </div>
+            </article>
+            
+            <article class="feature-item">
+							<%= image_tag "scheduling.svg", alt: "Scheduling" %>  
+            
+              <div class="feature-text">
+                <h3>Scheduling</h3>
+                <p>Schedule recurring jobs and easily view your entire workload</p>
+                <a href="#" class="feature-link">Scheduling →</a>
+              </div>
+            </article>
+            
+            <article class="feature-item">
+							<%= image_tag "mesage.svg", alt: "Messaging" %>  
+              
+              <div class="feature-text">
+                <h3>Messaging</h3>
+                <p>Send and receive messages from customers within Ezysystem and configure push notifications for required alert types.</p>
+                <a href="#" class="feature-link">Messaging →</a>
+              </div>
+            </article>
+            
+            <article class="feature-item">
+							<%= image_tag "mutliuser.svg", alt: "Multi User" %>  
+              
+              <div class="feature-text">
+                <h3>Multi User</h3>
+                <p>The ability to add unlimited number of users for flexible workers</p>
+                <a href="#" class="feature-link">Multi User →</a>
+              </div>
+            </article>
+          </div>
+          
+          <a href="#" class="view-all-link">View all features →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="purple-cta">
+      <div class="purple-grid">
+        <div class="purple-left">
+          <h2>Used Worldwide By Thousands of Businesses</h2>
+          <p class="muted">Ezysystem is used worldwide by thousands of businesses. With our advanced mapping and routing features no matter where you are you can optimise your routes, saving you countless hours of travel time. Our cloud based infrastructure allows Ezysystem services to be distributed around the globe, resulting in a fast and reliable service.</p>
+        </div>
+        <div class="purple-right">
+          <div class="globe"></div>
+        </div>
+      </div>
+      <div class="mini-stats">
+        <div class="mini"> 
+          <strong>100m+</strong>
+          <span>Hundreds of millions of jobs invoiced using Ezysystem</span>
+        </div>
+        <div class="mini">
+          <strong>130+</strong>
+          <span>Ezysystem has users registered in over 130 countries</span>
+        </div>
+        <div class="mini">
+          <strong>1m+</strong>
+          <span>Our infrastructure processes millions of jobs every year in real time</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="integrations container">
+      <div class=" integrations-grid">
+        <div class="logos">
+					<%= image_tag "9048db12e7da2b5872765f7638e4dae3.svg", alt: "stripe" %>  
+					<%= image_tag "66e35ba379a83313a4df7d31063e6727.svg", alt: "gocardless" %>  
+					<%= image_tag "8739003745d2bbf6f130a45551c058fd.svg", alt: "onesignal" %>  
+					<%= image_tag "c63d75a16e770c35259c676c42c401f7.svg", alt: "twilio", class: "logo-center" %>  
+        </div>
+        <div class="integrations-content">
+          <h2>Integrations</h2>
+          <p>Ezysystem integrates with many other third party systems to help keep your workflow in one place which, in turn simplifies and reduces your admin cost.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials container">
+      <div class="">
+        <h2>What our customers say</h2>
+        <p class="testimonials-subtitle">See what a few of our many valuable customers think about Ezysystem</p>
+        <div class="cards">
+          <figure class="card">
+            <h3>Ezysystem has evolved into an absolute powerhouse.</h3>
+            <blockquote>From customer service to planning and replanning, quotes and invoicing, billing and payments - it does it all. Any device, any time, one app and one subscription. It's absolutely essential for any appointment-based business. I wouldn't be without it. Thank you!</blockquote>
+            <div class="testimonial-author">
+							<%= image_tag "C_Rose_Cleaning_Services_23_bff930deb3.webp", alt: "Chris Rose", class: "author-avatar" %>
+              <div>
+                <div class="author-name">Chris Rose</div>
+                <div class="author-company">C Rose Cleaning Services</div>
+              </div>
+            </div>
+          </figure>
+          <figure class="card">
+            <h3>Has single handedly brought my business into the 21st century.</h3>
+            <blockquote>Before Ezysystem I used to leave paper invoices and spend hours through the week checking payments online and marking them off on my spreadsheet. Now with just one swipe on my phone I can mark a job as done and either set up Direct Debit or send the invoice by text or email. Not only has the automation that Ezysystem offers reduced my admin by around 90% but it's also greatly improved my cashflow. Amazing</blockquote>
+            <div class="testimonial-author">
+							<%= image_tag "DOT_W_Indow_Cleaning_b9cfac26b2.webp", alt: "Liam Askew", class: "author-avatar" %>
+              <div>
+                <div class="author-name">Liam Askew</div>
+                <div class="author-company">Dot Window Cleaning</div>
+              </div>
+            </div>
+          </figure>
+          <figure class="card">
+            <h3>Ezysystem is always adding new features to help us deliver an even better customer experience</h3>
+            <blockquote>We have been using the Ezysystem quoting system for a couple of months now and its transformed how we create, track and then convert quotes. Having a list of all quotes and their status from sent, pending, accepted, declined and then converted is fantastic. We can track our conversion rate and also pick up if customers have not opened their quote email.</blockquote>
+            <div class="testimonial-author">
+							<%= image_tag "C_Rose_Cleaning_Services_24_290a7223d9.webp", alt: "Emma Canning", class: "author-avatar" %>
+              <div>
+                <div class="author-name">Emma Canning</div>
+                <div class="author-company">Cannins The Exterior Cleaning Company</div>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <!-- Newsletter -->
+     <div class="container newsletter-section">
+        <div class=" newsletter-block">
+          <h3>Newsletter</h3>
+          <form class="newsletter-form large" action="#" method="post">
+            <input type="email" placeholder="Email *" aria-label="Email" required>
+          </form>
+          <button type="submit" id="btn-primary" class="btn btn-primary">Subscribe</button>
+        </div>
+     </div>
+
+    <!-- Footer links -->
+    <div class="container footer-links">
+      <div class="col">
+        <h5>Legal</h5>
+        <a href="#">Privacy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="col">
+        <h5>Information</h5>
+        <a href="#">Releases</a>
+        <a href="#">Testimonials</a>
+      </div>
+      <div class="col">
+        <h5>Help</h5>
+        <a href="#">Which device?</a>
+        <a href="#">How to use Ezysystem</a>
+        <a href="#">Frequently Asked Questions</a>
+      </div>
+      <div class="col">
+        <h5>Contact</h5>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Support</a>
+      </div>
+      
+    </div>
+    <a href="#" class="trust-btn">Review us on <span class="star">★</span> Trustpilot</a>
+
+    <!-- Extras / badges row -->
+    <div class="container footer-extras">
+      <div class="store-badges">
+        <div class="up-class">
+          <%= image_tag "663d1b4f3239ac354cacc7ab57a61a21 (1).svg", alt: "Download on the App Store" %>
+					<%= image_tag "a7edc648-8343-47c4-a4a5-9f937eb6933d.svg", alt: "Android", class: "up" %>
+        </div>
+				<%= image_tag "1614188ea601eac42d91899ff3fa3654.webp", alt: "Get it on Google Play" %>
+				<%= image_tag "d7543b974097eaafb969c3422dcd1f36.svg", alt: "Android" %>
+      </div>
+      <div class="status-widgets">       
+      </div>
+    </div>
+
+    
+  </footer>
+
+  <script>
+    // Phone Slider Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu toggle
+      const toggle = document.querySelector('.mobile-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      function closeMenu(){
+        document.body.classList.remove('menu-open');
+        if(toggle) toggle.setAttribute('aria-expanded','false');
+        if(mobileMenu) mobileMenu.setAttribute('aria-hidden','true');
+      }
+      if(toggle && mobileMenu){
+        toggle.addEventListener('click', () => {
+          const isOpen = document.body.classList.toggle('menu-open');
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        });
+        mobileMenu.querySelectorAll('[data-close]').forEach(el => {
+          el.addEventListener('click', closeMenu);
+        });
+        document.addEventListener('keydown', (e)=>{
+          if(e.key === 'Escape') closeMenu();
+        });
+      }
+
+      const slides = document.querySelectorAll('.phone-mockup');
+      const dots = document.querySelectorAll('.slider-dots .dot');
+      let currentSlide = 0;
+      const slideInterval = 3000; // Change slide every 3 seconds
+
+      function showSlide(index) {
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Add active class to current slide and dot
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+      }
+
+      // Auto-advance slides
+      let autoSlide = setInterval(nextSlide, slideInterval);
+
+      // Click on dots to change slides
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+          currentSlide = index;
+          showSlide(currentSlide);
+          // Reset auto-advance timer
+          clearInterval(autoSlide);
+          autoSlide = setInterval(nextSlide, slideInterval);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

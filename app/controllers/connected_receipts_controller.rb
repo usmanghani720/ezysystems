@@ -16,25 +16,25 @@ class ConnectedReceiptsController < ApplicationController
         @transfer_amount = (@payment_intent.amount - @payment_intent.application_fee_amount) / 100.0
       rescue Stripe::CardError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue Stripe::InvalidRequestError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue Stripe::RateLimitError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue Stripe::AuthenticationError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue Stripe::APIConnectionError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue Stripe::StripeError => e
         flash[:error] = e.message
-        redirect_to root_path
+        redirect_to authenticated_root_path
       rescue => e
         flash[:error] = "System Error"
-        redirect_to root_path
+        redirect_to authenticated_root_path
       end
   
       # Render HTML view

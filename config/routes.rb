@@ -50,5 +50,12 @@ Rails.application.routes.draw do
   resources :charges, only: [:new, :create]
   resources :stripe, only: [:new]
   get "stripe/connect", to: "stripe#connect", as: :stripe_connect
-  root to: 'payments#new'
+
+  authenticated :user do
+    root to: "payments#new", as: :authenticated_root
+  end
+
+  unauthenticated do
+    root to: "home#index", as: :unauthenticated_root
+  end
 end

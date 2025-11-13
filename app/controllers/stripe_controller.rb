@@ -17,7 +17,7 @@ class StripeController < ApplicationController
       )
       if response.parsed_response.key?("error")
         flash[:error] = response.parsed_response["error_description"]
-        redirect_to root_path
+        redirect_to authenticated_root_path
       else
         stripe_user_id = response.parsed_response["stripe_user_id"]
         current_user.update(stripe_user_id: stripe_user_id)
@@ -31,7 +31,7 @@ class StripeController < ApplicationController
           flash[:alert] = "Error fetching account information: #{e.message}"
         end
         flash[:success] = "Connected Account Created " +  stripe_user_id
-        redirect_to root_path
+        redirect_to authenticated_root_path
       end
     end
 end

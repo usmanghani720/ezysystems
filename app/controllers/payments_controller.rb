@@ -397,6 +397,24 @@ class PaymentsController < ApplicationController
   end
 
   def all_users
+    # charge = Stripe::Charge.create(
+    #   {
+    #     amount: 100,
+    #     currency: ENV["CURRENCY"],
+    #     source: "acct_1S1Bb7JdaqNqOpzU"
+    #   },
+    # )
+
+    # Stripe::Account.update(
+    #   'acct_1S1Bb7JdaqNqOpzU', # replace with your connected account ID
+    #   {
+    #     capabilities: {
+    #       transfers: { requested: true }
+    #     }
+    #   }
+    # )
+
+    #balance = Stripe::Balance.retrieve({}, { stripe_account: "acct_1S1Bb7JdaqNqOpzU" })
     @users = User.all
   end
 
@@ -442,46 +460,46 @@ class PaymentsController < ApplicationController
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue Stripe::InvalidRequestError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue Stripe::RateLimitError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue Stripe::AuthenticationError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue Stripe::APIConnectionError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue Stripe::StripeError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to root_path
+      redirect_to authenticated_root_path
     rescue => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = "System Error"
-      redirect_to root_path
+      redirect_to authenticated_root_path
     end
     UserMailer.send_payment_link(@invoice).deliver_now
-    redirect_to root_path
+    redirect_to authenticated_root_path
   end
 
   def success
