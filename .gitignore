@@ -18,7 +18,6 @@
 !/log/.keep
 !/tmp/.keep
 /log/development.log
-/config/database.yml
 /config/secrets.yml
 /data/*
 
