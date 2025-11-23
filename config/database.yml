@@ -25,7 +25,7 @@ default: &default
 
 production:
   <<: *default
-  database: bayoudigital_production
+  url: <%= ENV['DATABASE_URL'] %>
 
 development: 
    <<: *default
