@@ -63,8 +63,8 @@ module ApplicationHelper
       user.update(stripe_user_id: connected_account.id)
       account_link = Stripe::AccountLink.create({
         account: connected_account.id,
-        refresh_url: root_url,  # URL to redirect when the user needs to refresh
-        return_url: "#{root_url}?id=#{connected_account.id}",
+        refresh_url: authenticated_root_url,  # URL to redirect when the user needs to refresh
+        return_url: "#{authenticated_root_url}?id=#{connected_account.id}",
         type: 'account_onboarding',  # Type of link (could also be 'account_update' if updating)
       })
 
