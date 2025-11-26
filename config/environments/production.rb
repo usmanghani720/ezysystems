@@ -67,7 +67,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp-relay.brevo.com',
     authentication: :plain,
-    domain: 'https://bayoudigital-stripe-117efe7f6d81.herokuapp.com',
+    domain: 'https://www.ezysystems.net',
     enable_starttls_auto: true,
     password: ENV["SENDGRID_KEY"],
     port: "587",
@@ -75,7 +75,7 @@ Rails.application.configure do
   }
   # ActionMailer Config
   config.action_mailer.default_url_options = {
-    host: 'bayoudigital-stripe-117efe7f6d81.herokuapp.com',
+    host: 'https://www.ezysystems.net',
     protocol: 'https://'
   }
   config.action_mailer.delivery_method = :smtp
