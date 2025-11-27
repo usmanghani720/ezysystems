@@ -150,9 +150,46 @@ class PaymentsController < ApplicationController
 
   end
 
+  def remove_customer
+    @customer = Customer.find_by(id: params[:format])
+    if @customer.present? 
+      connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+      customer_id = @customer.try(:customer_id)
+      begin
+        Stripe::Customer.delete(customer_id, {}, { stripe_account: connected_acct_id})
+        @customer.delete
+        redirect_to customers_path
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::APIConnectionError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to customers_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to customers_path
+      end
+    end
+  end
+
   def customer_creation_success
     @customer = Customer.find(params[:id])
     connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+
+    @stripe_customer = Stripe::Customer.retrieve(@customer.customer_id,{stripe_account: connected_acct_id})
+
   
     begin
       # 1) Get the Checkout Session that just finished
@@ -173,7 +210,10 @@ class PaymentsController < ApplicationController
         if pm_id.present?
           # 4) Save it locally and make it default for the customer
           @customer.update!(payment_method: pm_id)
-  
+          pm = Stripe::PaymentMethod.retrieve(pm_id, {stripe_account: connected_acct_id})
+          if pm.present? && pm["card"].present?
+            @customer.update(last4: pm["card"]["last4"], brand: pm["card"]["brand"])
+          end
           Stripe::Customer.update(
             @customer.customer_id,
             { invoice_settings: { default_payment_method: pm_id } },
@@ -397,24 +437,6 @@ class PaymentsController < ApplicationController
   end
 
   def all_users
-    # charge = Stripe::Charge.create(
-    #   {
-    #     amount: 100,
-    #     currency: ENV["CURRENCY"],
-    #     source: "acct_1S1Bb7JdaqNqOpzU"
-    #   },
-    # )
-
-    # Stripe::Account.update(
-    #   'acct_1S1Bb7JdaqNqOpzU', # replace with your connected account ID
-    #   {
-    #     capabilities: {
-    #       transfers: { requested: true }
-    #     }
-    #   }
-    # )
-
-    #balance = Stripe::Balance.retrieve({}, { stripe_account: "acct_1S1Bb7JdaqNqOpzU" })
     @users = User.all
   end
 

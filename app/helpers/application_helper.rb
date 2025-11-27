@@ -1,5 +1,22 @@
 module ApplicationHelper
 
+  Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+  require "stripe"
+
+  def last_successful_payment_intent(customer_id, connected_account_id)
+    intents = Stripe::PaymentIntent.list(
+      {
+        customer: customer_id,
+        limit: 10 # small buffer, in case some are not succeeded
+      },
+      {
+        stripe_account: connected_account_id
+      }
+    )
+    # Pick the most recent with status == 'succeeded'
+    intents.data.find { |pi| pi.status == 'succeeded' }
+  end
+
   def format_amount(amount, currency)
     "#{(amount / 100.0).round(2)} #{currency.upcase}"
   end

@@ -46,6 +46,8 @@
                   <th>ID</th>
                   <th>Payment Method</th>
                   <th></th>
+                  <th></th>
+                  <th></th>
                   <th>Url</th>
                 </tr>
               </thead>
@@ -58,7 +60,8 @@
                     <td><%= customer.customer_id %> </td>
                     <td>
                       <% if !customer.payment_method.blank? %> 
-                        <p>Available</p>
+                        <p><%= customer.brand %></p>
+                        <p><%= customer.last4 %></p>
                       <% else %>
                         <p>Not Available</p>
                       <% end %>
@@ -67,6 +70,15 @@
                       <% if !customer.payment_method.blank? %> 
                         <%= link_to 'Create Payment', create_payment_path(id: customer.id),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
                       <% end %>
+                    </td>
+                    <td>
+                      <%= link_to(ActionController::Base.helpers.image_tag("destroy.png",:class=>"index_img",:title=>"Destroy"), remove_customer_path(customer), method: :post, data: { confirm: 'Are you sure?' }, :class=>"btn bg-maroon m-r-5") %>
+                    </td>
+                    <td>
+                      <p><%= "#{customer.last_payment_id}" %></p>
+                      <p><%= "#{customer.last_payment_amount}" %></p>
+                      <p><%= "#{customer.last_payment_currency}" %></p>
+                      <p><%= "#{customer.last_payment_date}" %></p>
                     </td>
                     <td style="word-break: break-all;white-space: normal;"><%= customer.customer_card_url %> </td>
                   </tr>
@@ -92,13 +104,15 @@
 </script>
 
   <script>
-  // Check if the page has already been reloaded
-  if (!sessionStorage.getItem('reloaded')) {
-    sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
-    location.reload(); // Reload the page
-  } else {
-    sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    // Check if the page has already been reloaded
+    if (!sessionStorage.getItem('reloaded')) {
+      sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
+      location.reload(); // Reload the page
+    } else {
+      sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
+    }
+  })
 </script>
 
 

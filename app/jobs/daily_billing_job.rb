@@ -1,6 +1,8 @@
 class DailyBillingJob < ApplicationJob
     queue_as :default
     Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+    require 'date'
+    include ApplicationHelper
 
     def perform
       today = Time.now.to_date
@@ -101,6 +103,18 @@ class DailyBillingJob < ApplicationJob
         puts e.message
       rescue => e
         puts "System Error"
+      end
+
+      Customer.where.not(payment_method: nil).each do |customer|
+        begin
+          connected_acct_id = User.find(customer.user_id).try(:stripe_user_id)
+          pi = last_successful_payment_intent(customer.customer_id, connected_acct_id)
+          if pi.present?
+            customer.update(last_payment_id: pi["id"], last_payment_amount: pi["amount"]/100, last_payment_currency: pi["currency"], last_payment_date: Time.at(pi["created"]).to_date)
+          end
+        rescue => e
+          puts "System Error"
+        end
       end
     end
   end

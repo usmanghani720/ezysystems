@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_05_062216) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_27_123201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_05_062216) do
     t.string "postal_code"
     t.string "country"
     t.string "customer_card_url"
+    t.string "last4"
+    t.string "brand"
+    t.string "last_payment_id"
+    t.float "last_payment_amount"
+    t.string "last_payment_currency"
+    t.string "last_payment_date"
   end
 
   create_table "intents", force: :cascade do |t|
