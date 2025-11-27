@@ -2,8 +2,4 @@
 
 <p>Your account has been approved by the admin. You will now be able to sign in to the platform</p>
 
-<% if Rails.env.development? %>
-    <a href="http://localhost:3000" target="_blank">Click here</a>
-<% else %>
-    <a href="https://www.ezysystems.net" target="_blank">Click here</a>
-<% end %>
+<a href="<%= ENV['WEBSITE_URL'] %>" target="_blank">Click here</a>

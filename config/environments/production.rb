@@ -67,7 +67,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp-relay.brevo.com',
     authentication: :plain,
-    domain: 'https://www.ezysystems.net',
+    domain: ENV['WEBSITE_URL'],
     enable_starttls_auto: true,
     password: ENV["SENDGRID_KEY"],
     port: "587",
@@ -75,7 +75,7 @@ Rails.application.configure do
   }
   # ActionMailer Config
   config.action_mailer.default_url_options = {
-    host: 'https://www.ezysystems.net',
+    host: ENV['WEBSITE_URL'],
     protocol: 'https://'
   }
   config.action_mailer.delivery_method = :smtp
