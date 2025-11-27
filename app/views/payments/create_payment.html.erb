@@ -26,6 +26,8 @@
             <%= form_with url: make_payment_path, method: :post, local: true do |form| %>
                 <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
 								<br/>
+								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                <br/>
                 <%= form.hidden_field :authorize_only, value: true %>
                 <br />
 								<%= form.hidden_field :id, value: params[:id] %>

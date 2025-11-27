@@ -9,6 +9,7 @@ class CustomersController < ApplicationController
   end
 
   def create_payment
+    @description = params[:description]
     @customer = Customer.find(params[:id])
     amount_cents = (BigDecimal(params[:amount]) * 100).to_i
     connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
@@ -22,7 +23,7 @@ class CustomersController < ApplicationController
         currency:          "usd",
         idempotency_key:   "auth-#{@customer.id}-#{SecureRandom.uuid}",
         stripe_account:    connected_acct_id,
-        description:       "Authorization for Customer ##{@customer.id}",
+        description:       @description.blank? ? "Authorization for Customer ##{@customer.id}" : @description,
         force_3ds:         params[:force_3ds].present? # dev/test
       )
 
@@ -46,7 +47,7 @@ class CustomersController < ApplicationController
         currency:          "usd",
         idempotency_key:   "charge-#{@customer.id}-#{SecureRandom.uuid}",
         stripe_account:    connected_acct_id,
-        description:       "Manual charge for Customer ##{@customer.id}"
+        description:       @description.blank? ? "Manual charge for Customer ##{@customer.id}" : @description,
       )
 
       case res.status
