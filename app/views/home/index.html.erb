@@ -14,7 +14,7 @@
   <header class="site-header">
     <div class="container header-grid">
       <div class="brand">
-        <%= image_tag "ezysystem_logo.png", alt: "Ezysystem", class: "logo" %>
+        <%= image_tag "ezysystem_logo.png", alt: ENV['WEBSITE_NAME'], class: "logo" %>
       </div>
       <!-- Mobile hamburger -->
       <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
@@ -39,7 +39,7 @@
       <div class="backdrop" data-close></div>
       <div class="panel">
         <div class="panel-header">
-          <%= image_tag "logo.jpg", alt: "Ezysystem", class: "logo small" %>
+          <%= image_tag "logo.jpg", alt: ENV['WEBSITE_NAME'], class: "logo small" %>
           <button class="close" aria-label="Close menu" data-close>&times;</button>
         </div>
         <a href="#features" data-close>Features</a>
@@ -85,14 +85,14 @@
               <%= image_tag "100m.svg", alt: "stat-icon" %>        
               <h3>100m+</h3>
             </div>
-            <p>Hundreds of millions of jobs invoiced using Ezysystem</p>
+            <p>Hundreds of millions of jobs invoiced using <%= ENV['WEBSITE_NAME'] %></p>
           </div>
           <div class="stat-card">
             <div class="stat-content">
               <%= image_tag "1m.svg", alt: "feature" %>               
               <h3>1m+</h3>
             </div>
-            <p>Millions of payments made through Ezysystem every month</p>
+            <p>Millions of payments made through <%= ENV['WEBSITE_NAME'] %> every month</p>
           </div>
         </div>
         <div class="features-icons">
@@ -145,7 +145,7 @@
         </div>
         <div class="features-content">
           <h2>Let's explain the features</h2>
-          <p class="features-subtitle">Ezysystem is designed to automate processes keeping admin time to a minimum. It's easy for workers to use on any mobile device with real time updates so administrators can keep on top of the daily transactions.</p>
+          <p class="features-subtitle"><%= ENV['WEBSITE_NAME'] %> is designed to automate processes keeping admin time to a minimum. It's easy for workers to use on any mobile device with real time updates so administrators can keep on top of the daily transactions.</p>
           
           <div class="feature-list-detailed">
             <article class="feature-item">
@@ -153,7 +153,7 @@
              
               <div class="feature-text">
                 <h3>Invoicing</h3>
-                <p>Generating an invoice couldn't be simpler with Ezysystem. Invoices can be created and sent automatically in seconds.</p>
+                <p>Generating an invoice couldn't be simpler with <%= ENV['WEBSITE_NAME'] %>. Invoices can be created and sent automatically in seconds.</p>
                 <a href="#" class="feature-link">Invoicing →</a>
               </div>
             </article>
@@ -183,7 +183,7 @@
               
               <div class="feature-text">
                 <h3>Messaging</h3>
-                <p>Send and receive messages from customers within Ezysystem and configure push notifications for required alert types.</p>
+                <p>Send and receive messages from customers within <%= ENV['WEBSITE_NAME'] %> and configure push notifications for required alert types.</p>
                 <a href="#" class="feature-link">Messaging →</a>
               </div>
             </article>
@@ -208,7 +208,7 @@
       <div class="purple-grid">
         <div class="purple-left">
           <h2>Used Worldwide By Thousands of Businesses</h2>
-          <p class="muted">Ezysystem is used worldwide by thousands of businesses. With our advanced mapping and routing features no matter where you are you can optimise your routes, saving you countless hours of travel time. Our cloud based infrastructure allows Ezysystem services to be distributed around the globe, resulting in a fast and reliable service.</p>
+          <p class="muted"><%= ENV['WEBSITE_NAME'] %> is used worldwide by thousands of businesses. With our advanced mapping and routing features no matter where you are you can optimise your routes, saving you countless hours of travel time. Our cloud based infrastructure allows Ezysystem services to be distributed around the globe, resulting in a fast and reliable service.</p>
         </div>
         <div class="purple-right">
           <div class="globe"></div>
@@ -217,11 +217,11 @@
       <div class="mini-stats">
         <div class="mini"> 
           <strong>100m+</strong>
-          <span>Hundreds of millions of jobs invoiced using Ezysystem</span>
+          <span>Hundreds of millions of jobs invoiced using <%= ENV['WEBSITE_NAME'] %></span>
         </div>
         <div class="mini">
           <strong>130+</strong>
-          <span>Ezysystem has users registered in over 130 countries</span>
+          <span><%= ENV['WEBSITE_NAME'] %> has users registered in over 130 countries</span>
         </div>
         <div class="mini">
           <strong>1m+</strong>
@@ -240,7 +240,7 @@
         </div>
         <div class="integrations-content">
           <h2>Integrations</h2>
-          <p>Ezysystem integrates with many other third party systems to help keep your workflow in one place which, in turn simplifies and reduces your admin cost.</p>
+          <p><%= ENV['WEBSITE_NAME'] %> integrates with many other third party systems to help keep your workflow in one place which, in turn simplifies and reduces your admin cost.</p>
         </div>
       </div>
     </section>
@@ -248,10 +248,10 @@
     <section class="testimonials container">
       <div class="">
         <h2>What our customers say</h2>
-        <p class="testimonials-subtitle">See what a few of our many valuable customers think about Ezysystem</p>
+        <p class="testimonials-subtitle">See what a few of our many valuable customers think about <%= ENV['WEBSITE_NAME'] %></p>
         <div class="cards">
           <figure class="card">
-            <h3>Ezysystem has evolved into an absolute powerhouse.</h3>
+            <h3><%= ENV['WEBSITE_NAME'] %> has evolved into an absolute powerhouse.</h3>
             <blockquote>From customer service to planning and replanning, quotes and invoicing, billing and payments - it does it all. Any device, any time, one app and one subscription. It's absolutely essential for any appointment-based business. I wouldn't be without it. Thank you!</blockquote>
             <div class="testimonial-author">
 							<%= image_tag "C_Rose_Cleaning_Services_23_bff930deb3.webp", alt: "Chris Rose", class: "author-avatar" %>
@@ -263,7 +263,7 @@
           </figure>
           <figure class="card">
             <h3>Has single handedly brought my business into the 21st century.</h3>
-            <blockquote>Before Ezysystem I used to leave paper invoices and spend hours through the week checking payments online and marking them off on my spreadsheet. Now with just one swipe on my phone I can mark a job as done and either set up Direct Debit or send the invoice by text or email. Not only has the automation that Ezysystem offers reduced my admin by around 90% but it's also greatly improved my cashflow. Amazing</blockquote>
+            <blockquote>Before <%= ENV['WEBSITE_NAME'] %> I used to leave paper invoices and spend hours through the week checking payments online and marking them off on my spreadsheet. Now with just one swipe on my phone I can mark a job as done and either set up Direct Debit or send the invoice by text or email. Not only has the automation that Ezysystem offers reduced my admin by around 90% but it's also greatly improved my cashflow. Amazing</blockquote>
             <div class="testimonial-author">
 							<%= image_tag "DOT_W_Indow_Cleaning_b9cfac26b2.webp", alt: "Liam Askew", class: "author-avatar" %>
               <div>
