@@ -184,7 +184,9 @@ class PaymentsController < ApplicationController
           },
         },
       })
-      redirect_to session.url, allow_other_host: true
+
+      cookies[:session_url] = session.url
+      redirect_to success_path
       
     rescue Stripe::CardError => e
       flash[:error] = e.message
