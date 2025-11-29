@@ -80,7 +80,7 @@
                       <p><%= "#{customer.last_payment_id}" %></p>
                       <p><%= "#{customer.last_payment_amount}" %></p>
                       <p><%= "#{customer.last_payment_currency}" %></p>
-                      <p><%= "#{customer.last_payment_date}" %></p>
+                      <p><%= "#{customer.last_payment_date.to_date.strftime("%a, %d %b %Y")}" %></p>
                     </td>
                     <td style="word-break: break-all;white-space: normal;"><%= customer.customer_card_url %> </td>
                   </tr>
