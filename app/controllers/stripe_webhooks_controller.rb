@@ -2,6 +2,7 @@
 class StripeWebhooksController < ApplicationController
     require "stripe"
     Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
+    skip_before_action :verify_authenticity_token
   
     def receive
       payload = request.body.read
