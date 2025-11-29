@@ -147,7 +147,6 @@ class PaymentsController < ApplicationController
   end  
 
   def create_payment
-
   end
 
   def new_payment_link

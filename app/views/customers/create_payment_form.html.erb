@@ -26,6 +26,8 @@
             <%= form_with url: create_payment_path(@customer), method: :post do %>
                 <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
 								<br/>
+								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                <br/>
                 <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
           </div>
