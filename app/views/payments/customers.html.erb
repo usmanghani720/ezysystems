@@ -41,6 +41,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Created</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>ID</th>
@@ -55,6 +56,7 @@
                 <% @customers.each do |customer| %>
                   <tr>
                     <td><%= customer.name %></td>
+                    <td><%= customer.created_at.strftime("%a, %d %b %Y") %></td>
                     <td><%= customer.email %></td>
                     <td><%= customer.phone %></td>
                     <td><%= customer.customer_id %> </td>
