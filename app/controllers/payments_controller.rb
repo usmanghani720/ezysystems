@@ -150,6 +150,66 @@ class PaymentsController < ApplicationController
 
   end
 
+  def new_payment_link
+
+  end
+
+  def create_custom_payment_link 
+    begin
+      amount_cents = (params[:amount].to_f * 100 ).to_i
+      percentage = params[:percentage].present? ? params[:percentage] : 10
+      platform_fee_cents = (percentage.to_i * params[:amount].to_f).to_i     
+      connected_account_id = current_user.try(:stripe_user_id)
+      session = Stripe::Checkout::Session.create({
+        payment_method_types: ['card'],
+        line_items: [{
+          price_data: {
+            currency: ENV["CURRENCY"],
+            unit_amount: amount_cents,
+            product_data: {
+              name: params[:name],
+              description: params[:description].present? ? params[:description] : params[:name]
+            },
+          },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: ENV['SUCCESS_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
+        payment_intent_data: {
+          on_behalf_of: connected_account_id, # Ensures the connected account is the merchant of record
+          application_fee_amount: platform_fee_cents, # 10% fee to the platform
+          transfer_data: {
+            destination: connected_account_id, # Connected account receives the remaining balance
+          },
+        },
+      })
+      redirect_to session.url, allow_other_host: true
+      
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::RateLimitError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::APIConnectionError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue => e
+      flash[:error] = "System Error"
+      redirect_to authenticated_root_path
+    end 
+  end
+
   def remove_customer
     @customer = Customer.find_by(id: params[:format])
     if @customer.present? 

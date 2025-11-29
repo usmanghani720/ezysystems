@@ -27,6 +27,9 @@ Rails.application.routes.draw do
   post 'payment/create_small_payout', to: 'payments#create_small_payout', as: 'create_small_payout' 
   post 'payment/update_user_status', to: 'payments#update_user_status', as: 'update_user_status' 
   post 'payment/remove_customer', to: 'payments#remove_customer', as: 'remove_customer' 
+
+  get 'new_payment_link', to: 'payments#new_payment_link', as: 'new_payment_link'
+  post 'create_custom_payment_link', to: 'payments#create_custom_payment_link', as: 'create_custom_payment_link' 
   # Amount form + charge
   get  "/create_payment/:id", to: "customers#create_payment_form",  as: :create_payment_form
   post "/create_payment/:id", to: "customers#create_payment",       as: :create_payment
