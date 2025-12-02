@@ -1,0 +1,45 @@
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <a href="/">
+          <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo" %>
+        </a>
+      </div>
+      <!-- Mobile hamburger -->
+      <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="main-nav">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#industries">Industries</a>
+        <a href="#news">News & Updates</a>
+        <a href="#help">Help</a>
+      </nav>
+      <div class="auth">
+        <a class="btn btn-outline" href="/users/sign_in">Sign In</a>
+        <a class="btn btn-primary1" href="/users/sign_up">Sign Up</a>
+      </div>
+    </div>
+    <!-- Mobile menu drawer -->
+    <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
+      <div class="backdrop" data-close></div>
+      <div class="panel">
+        <div class="panel-header">
+          <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
+          <button class="close" aria-label="Close menu" data-close>&times;</button>
+        </div>
+        <a href="#features" data-close>Features</a>
+        <a href="#pricing" data-close>Pricing</a>
+        <a href="#industries" data-close>Industries</a>
+        <a href="#news" data-close>News & Updates</a>
+        <a href="#help" data-close>Help</a>
+        <div class="panel-actions">
+          <a class="btn btn-outline" style="color: white;" href="/users/sign_in">Sign In</a>
+          <a class="btn btn-primary" href="/users/sign_up">Sign Up</a>
+        </div>
+      </div>
+    </nav>
+  </header>

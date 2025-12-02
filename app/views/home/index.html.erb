@@ -11,50 +11,7 @@
 <link rel="icon" type="image/x-icon" href="/images/favicon.png">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-grid">
-      <div class="brand">
-        <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo" %>
-      </div>
-      <!-- Mobile hamburger -->
-      <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-      <nav class="main-nav">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#industries">Industries</a>
-        <a href="#news">News & Updates</a>
-        <a href="#help">Help</a>
-      </nav>
-      <div class="auth">
-        <a class="btn btn-outline" href="/users/sign_in">Sign In</a>
-        <a class="btn btn-primary1" href="/users/sign_up">Sign Up</a>
-      </div>
-    </div>
-    <!-- Mobile menu drawer -->
-    <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
-      <div class="backdrop" data-close></div>
-      <div class="panel">
-        <div class="panel-header">
-          <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
-          <button class="close" aria-label="Close menu" data-close>&times;</button>
-        </div>
-        <a href="#features" data-close>Features</a>
-        <a href="#pricing" data-close>Pricing</a>
-        <a href="#industries" data-close>Industries</a>
-        <a href="#news" data-close>News & Updates</a>
-        <a href="#help" data-close>Help</a>
-        <div class="panel-actions">
-          <a class="btn btn-outline" style="color: white;" href="/users/sign_in">Sign In</a>
-          <a class="btn btn-primary" href="/users/sign_up">Sign Up</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
+  <%= render partial: "layouts/header" %>
   <main>
     <section class="hero">
       <div class="container hero-grid">
@@ -287,65 +244,9 @@
       </div>
     </section>
 
+    <%= render partial: "layouts/footer" %>
+
   </main>
-
-  <footer class="site-footer">
-    <!-- Newsletter -->
-     <div class="container newsletter-section">
-        <div class=" newsletter-block">
-          <h3>Newsletter</h3>
-          <form class="newsletter-form large" action="#" method="post">
-            <input type="email" placeholder="Email *" aria-label="Email" required>
-          </form>
-          <button type="submit" id="btn-primary" class="btn btn-primary">Subscribe</button>
-        </div>
-     </div>
-
-    <!-- Footer links -->
-    <div class="container footer-links">
-      <div class="col">
-        <h5>Legal</h5>
-        <a href="#">Privacy</a>
-        <a href="#">Terms & Conditions</a>
-      </div>
-      <div class="col">
-        <h5>Information</h5>
-        <a href="#">Releases</a>
-        <a href="#">Testimonials</a>
-      </div>
-      <div class="col">
-        <h5>Help</h5>
-        <a href="#">Which device?</a>
-        <a href="#">How to use Ezysystem</a>
-        <a href="#">Frequently Asked Questions</a>
-      </div>
-      <div class="col">
-        <h5>Contact</h5>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <a href="#">Support</a>
-      </div>
-      
-    </div>
-
-    <!-- Extras / badges row -->
-    <div class="container footer-extras">
-      <div class="status-widgets">
-        <p>Email at: <%= ENV['WEBSITE_EMAIL'] %></p>
-      </div>
-      <div class="status-widgets">
-        <p>For a quote or support, call: <%= ENV['WEBSITE_PHONE'] %></p>     
-      </div>
-      <div class="status-widgets">
-        <p>© <%= Date.today.year %> <%= ENV['WEBSITE_COMPANY'] %>, All rights reserved.</p>
-      </div>
-      <div class="status-widgets">
-        <p><%= ENV['WEBSITE_ADDRESS'] %></p>
-      </div>
-    </div>
-
-    
-  </footer>
 
   <script>
     // Phone Slider Functionality

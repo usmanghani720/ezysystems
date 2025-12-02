@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ezysystem — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+</head>
+<body>
+	<%= render partial: "layouts/header" %>
+
+  <main>
+
+    <section class="testimonials container">
+      <div class="">
+				<p class="testimonials-subtitle">© <%= Date.today.year %> <%= ENV['WEBSITE_COMPANY'] %>, All rights reserved.</p>
+        <p class="testimonials-subtitle"><%= ENV['WEBSITE_ADDRESS'] %></p>
+				<p class="testimonials-subtitle">For a quote or support, call: <%= ENV['WEBSITE_PHONE'] %></p>
+				<p class="testimonials-subtitle"><%= ENV['WEBSITE_ADDRESS'] %></p>
+        <div class="cards">
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+	<%= render partial: "layouts/footer" %>
+</body>
+</html>

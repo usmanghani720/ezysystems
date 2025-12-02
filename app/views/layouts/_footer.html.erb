@@ -1,0 +1,57 @@
+  <footer class="site-footer">
+    <!-- Newsletter -->
+     <div class="container newsletter-section">
+        <div class=" newsletter-block">
+          <h3>Newsletter</h3>
+          <form class="newsletter-form large" action="#" method="post">
+            <input type="email" placeholder="Email *" aria-label="Email" required>
+          </form>
+          <button type="submit" id="btn-primary" class="btn btn-primary">Subscribe</button>
+        </div>
+     </div>
+
+    <!-- Footer links -->
+    <div class="container footer-links">
+      <div class="col">
+        <h5>Legal</h5>
+        <a href="#">Privacy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="col">
+        <h5>Information</h5>
+        <a href="#">Releases</a>
+        <a href="#">Testimonials</a>
+      </div>
+      <div class="col">
+        <h5>Help</h5>
+        <a href="#">Which device?</a>
+        <a href="#">How to use Ezysystem</a>
+        <a href="#">Frequently Asked Questions</a>
+      </div>
+      <div class="col">
+        <h5>Contact</h5>
+        <a href="#">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/contact">Support</a>
+      </div>
+      
+    </div>
+
+    <!-- Extras / badges row -->
+    <div class="container footer-extras">
+      <div class="status-widgets">
+        <p>Email at: <%= ENV['WEBSITE_EMAIL'] %></p>
+      </div>
+      <div class="status-widgets">
+        <p>For a quote or support, call: <%= ENV['WEBSITE_PHONE'] %></p>     
+      </div>
+      <div class="status-widgets">
+        <p>© <%= Date.today.year %> <%= ENV['WEBSITE_COMPANY'] %>, All rights reserved.</p>
+      </div>
+      <div class="status-widgets">
+        <p><%= ENV['WEBSITE_ADDRESS'] %></p>
+      </div>
+    </div>
+
+    
+  </footer>
