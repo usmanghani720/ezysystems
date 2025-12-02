@@ -19,7 +19,6 @@ Rails.application.routes.draw do
   get 'response', to: 'charges#response', as: 'response'
   post 'handle_payment_methods', to: 'charges#handle_payment_methods'
   get 'handle_payment_methods_confirm', to: 'charges#handle_payment_methods_confirm'
-  get 'connected_receipts/:id', to: 'connected_receipts#show', as: 'connected_receipt'
   post 'payment/create_payout', to: 'payments#create_payout', as: 'create_payout' 
   get 'payment/payouts', to: 'payments#payouts', as: 'payouts' 
   get 'payout', to: 'payments#payout', as: 'payout'

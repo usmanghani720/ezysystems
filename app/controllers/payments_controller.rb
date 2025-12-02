@@ -53,8 +53,8 @@ class PaymentsController < ApplicationController
         begin
           account_link = Stripe::AccountLink.create({
             account: current_user.stripe_user_id,
-            refresh_url: Rails.env.development? ? "http://localhost:3000" : "https://factuur.appointmentssetter.nl",
-            return_url: Rails.env.development? ? "#{"http://localhost:3000"}?id=#{current_user.stripe_user_id}" : "#{"https://factuur.appointmentssetter.nl"}?id=#{current_user.stripe_user_id}",
+            refresh_url: ENV['WEBSITE_URL'],
+            return_url: "#{ENV['WEBSITE_URL']}?id=#{current_user.stripe_user_id}",
             type: 'account_onboarding',
           })
           @onboarding_url = account_link["url"]
