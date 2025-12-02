@@ -6,62 +6,62 @@ class DailyBillingJob < ApplicationJob
 
     def perform
       today = Time.now.to_date
-      User.where.not(stripe_user_id: nil).each do |user|
-        if today.day == 1 || user.try(:monthly_charged).blank?
-          if user.try(:monthly_charged).blank?
-            begin
-              charge = Stripe::Charge.create(
-                {
-                  amount: 9900,
-                  currency: ENV["CURRENCY"],
-                  source: user.try(:stripe_user_id)
-                },
-              )
-              user.update(monthly_charged: true)
-            rescue Stripe::CardError => e
-              puts e.message
-            rescue Stripe::InvalidRequestError => e
-              puts e.message
-            rescue Stripe::RateLimitError => e
-              puts e.message
-            rescue Stripe::AuthenticationError => e
-              puts e.message
-            rescue Stripe::APIConnectionError => e
-              puts e.message
-            rescue Stripe::StripeError => e
-              puts e.message
-            rescue => e
-              puts "System Error"
-            end
-          elsif today.day == 1 
-            user.update(monthly_charged: nil)
-            begin
-              charge = Stripe::Charge.create(
-                {
-                  amount: 9900,
-                  currency: ENV["CURRENCY"],
-                  source: user.try(:stripe_user_id)
-                },
-              )
-              user.update(monthly_charged: true)
-            rescue Stripe::CardError => e
-              puts e.message
-            rescue Stripe::InvalidRequestError => e
-              puts e.message
-            rescue Stripe::RateLimitError => e
-              puts e.message
-            rescue Stripe::AuthenticationError => e
-              puts e.message
-            rescue Stripe::APIConnectionError => e
-              puts e.message
-            rescue Stripe::StripeError => e
-              puts e.message
-            rescue => e
-              puts "System Error"
-            end
-          end
-        end
-      end
+      # User.where.not(stripe_user_id: nil).each do |user|
+      #   if today.day == 1 || user.try(:monthly_charged).blank?
+      #     if user.try(:monthly_charged).blank?
+      #       begin
+      #         charge = Stripe::Charge.create(
+      #           {
+      #             amount: 9900,
+      #             currency: ENV["CURRENCY"],
+      #             source: user.try(:stripe_user_id)
+      #           },
+      #         )
+      #         user.update(monthly_charged: true)
+      #       rescue Stripe::CardError => e
+      #         puts e.message
+      #       rescue Stripe::InvalidRequestError => e
+      #         puts e.message
+      #       rescue Stripe::RateLimitError => e
+      #         puts e.message
+      #       rescue Stripe::AuthenticationError => e
+      #         puts e.message
+      #       rescue Stripe::APIConnectionError => e
+      #         puts e.message
+      #       rescue Stripe::StripeError => e
+      #         puts e.message
+      #       rescue => e
+      #         puts "System Error"
+      #       end
+      #     elsif today.day == 1 
+      #       user.update(monthly_charged: nil)
+      #       begin
+      #         charge = Stripe::Charge.create(
+      #           {
+      #             amount: 9900,
+      #             currency: ENV["CURRENCY"],
+      #             source: user.try(:stripe_user_id)
+      #           },
+      #         )
+      #         user.update(monthly_charged: true)
+      #       rescue Stripe::CardError => e
+      #         puts e.message
+      #       rescue Stripe::InvalidRequestError => e
+      #         puts e.message
+      #       rescue Stripe::RateLimitError => e
+      #         puts e.message
+      #       rescue Stripe::AuthenticationError => e
+      #         puts e.message
+      #       rescue Stripe::APIConnectionError => e
+      #         puts e.message
+      #       rescue Stripe::StripeError => e
+      #         puts e.message
+      #       rescue => e
+      #         puts "System Error"
+      #       end
+      #     end
+      #   end
+      # end
 
       begin
         @accounts = Stripe::Account.list({limit: 200})
