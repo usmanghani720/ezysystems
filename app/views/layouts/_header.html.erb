@@ -1,7 +1,7 @@
   <header class="site-header">
     <div class="container header-grid">
       <div class="brand">
-        <a href="/">
+        <a href="/" data-turbo="false">
           <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo" %>
         </a>
       </div>
@@ -13,7 +13,7 @@
       </button>
       <nav class="main-nav">
         <a href="#features">Features</a>
-        <a href="/pricing">Pricing</a>
+        <a href="/pricing" data-turbo="false">Pricing</a>
         <a href="#industries">Industries</a>
         <a href="#news">News & Updates</a>
         <a href="#help">Help</a>
@@ -32,7 +32,7 @@
           <button class="close" aria-label="Close menu" data-close>&times;</button>
         </div>
         <a href="#features" data-close>Features</a>
-        <a href="/pricing" data-close>Pricing</a>
+        <a href="/pricing" data-close data-turbo="false">Pricing</a>
         <a href="#industries" data-close>Industries</a>
         <a href="#news" data-close>News & Updates</a>
         <a href="#help" data-close>Help</a>

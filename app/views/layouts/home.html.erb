@@ -6,11 +6,80 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "home", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "home", "data-turbo-track": "reload", defer: true %>
     <%= favicon_link_tag 'fav.png' %>
   </head>
 
   <body>
     <%= yield %>
+  <script>
+  window.addEventListener("turbolinks:load", () => {
+    if (!sessionStorage.getItem('reloaded')) {
+      sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
+      location.reload(); // Reload the page
+    } else {
+      sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
+    }
+  });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu toggle
+      const toggle = document.querySelector('.mobile-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      function closeMenu(){
+        document.body.classList.remove('menu-open');
+        if(toggle) toggle.setAttribute('aria-expanded','false');
+        if(mobileMenu) mobileMenu.setAttribute('aria-hidden','true');
+      }
+      if(toggle && mobileMenu){
+        toggle.addEventListener('click', () => {
+          const isOpen = document.body.classList.toggle('menu-open');
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        });
+        mobileMenu.querySelectorAll('[data-close]').forEach(el => {
+          el.addEventListener('click', closeMenu);
+        });
+        document.addEventListener('keydown', (e)=>{
+          if(e.key === 'Escape') closeMenu();
+        });
+      }
+
+      const slides = document.querySelectorAll('.phone-mockup');
+      const dots = document.querySelectorAll('.slider-dots .dot');
+      let currentSlide = 0;
+      if (slides && dots){
+        const slideInterval = 3000; // Change slide every 3 seconds
+
+        function showSlide(index) {
+            // Remove active class from all slides and dots
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Add active class to current slide and dot
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function nextSlide() {
+          currentSlide = (currentSlide + 1) % slides.length;
+          showSlide(currentSlide);
+        }
+
+        // Auto-advance slides
+        let autoSlide = setInterval(nextSlide, slideInterval);
+
+        // Click on dots to change slides
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', function() {
+            currentSlide = index;
+              showSlide(currentSlide);
+            // Reset auto-advance timer
+            clearInterval(autoSlide);
+            autoSlide = setInterval(nextSlide, slideInterval);
+          });
+        });
+      }
+    });
+  </script>
   </body>
 </html>
