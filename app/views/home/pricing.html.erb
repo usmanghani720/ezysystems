@@ -1,0 +1,875 @@
+
+  <title><%= ENV['WEBSITE_NAME'] %> Pricing</title>
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1120;
+      --bg-card: #020617;
+      --accent: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.12);
+      --accent-soft-2: rgba(79, 70, 229, 0.3);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --danger: #f97373;
+      --shadow-soft: 0 18px 55px rgba(15, 23, 42, 0.85);
+      --radius-lg: 18px;
+      --radius-full: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			color: rgba(33, 31, 84, 1);
+    }
+
+    .pricing-page {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .pricing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.2), transparent 55%);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .pricing-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0%, #4f46e5 55%, #1d1b4b 100%);
+      box-shadow: 0 0 12px rgba(129, 140, 248, 0.9);
+    }
+
+    .pricing-title {
+      font-size: clamp(32px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .pricing-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 620px;
+      margin: 0 auto 20px;
+    }
+
+    .pricing-highlight {
+      color: #a5b4fc;
+      font-weight: 600;
+    }
+
+    .pricing-note {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* Toggle */
+
+    .billing-toggle-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0 32px;
+    }
+
+    .billing-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      border-radius: var(--radius-full);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.85);
+    }
+
+    .billing-option {
+      position: relative;
+      border-radius: var(--radius-full);
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .billing-option span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .billing-option.active {
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .billing-pill {
+      position: absolute;
+      inset: 2px;
+      border-radius: var(--radius-full);
+      background: radial-gradient(circle at top left, #4f46e5, #312e81);
+      opacity: 0;
+      transform: scale(0.96);
+      transition: all 0.18s ease;
+    }
+
+    .billing-option.active .billing-pill {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .billing-save {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* Plans */
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 20px;
+			color: #fff;
+    }
+
+    @media (min-width: 768px) {
+      .plans-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1040px) {
+      .plans-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .plan-card {
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.12), transparent 58%),
+                  radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.85), #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 20px 18px 18px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .plan-card.featured {
+      border-color: rgba(129, 140, 248, 0.7);
+      box-shadow: 0 22px 65px rgba(79, 70, 229, 0.5);
+    }
+
+    .plan-badge-featured {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.4), rgba(79, 70, 229, 0.9));
+      color: #e5e7eb;
+      border: 1px solid rgba(191, 219, 254, 0.7);
+    }
+
+    .plan-name {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .plan-tagline {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .plan-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .plan-price {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .plan-period {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .plan-small-note {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: -4px;
+    }
+
+    .plan-divider {
+      height: 1px;
+      background: radial-gradient(circle at center, rgba(148, 163, 184, 0.4), transparent 70%);
+      margin: 8px 0;
+    }
+
+    .plan-highlight-line {
+      font-size: 12px;
+      color: #a5b4fc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .dot-soft {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 50%, #1d1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
+    }
+
+    .plan-cta {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .plan-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: linear-gradient(to right, #111827, #020617);
+      font-size: 13px;
+      color: #e5e7eb;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .plan-button span {
+      font-weight: 500;
+    }
+
+    .plan-button.primary {
+      background: radial-gradient(circle at top left, #4f46e5, #312e81);
+      border-color: rgba(191, 219, 254, 0.7);
+      box-shadow: 0 16px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .plan-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .plan-button.primary:hover {
+      box-shadow: 0 20px 45px rgba(79, 70, 229, 0.85);
+    }
+
+    .plan-extra {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .plan-features-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .plan-features li {
+      display: flex;
+      gap: 6px;
+      color: #d1d5db;
+    }
+
+    .plan-feature-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 211, 153, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #6ee7b7;
+      background: rgba(22, 163, 74, 0.1);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .plan-feature-muted {
+      color: #6b7280;
+    }
+
+    .plan-footnote {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    /* Comparison + FAQ */
+
+    .features-grid {
+      margin-top: 36px;
+      padding: 22px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.28), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.9), #020617);
+      box-shadow: 0 20px 55px rgba(15, 23, 42, 0.95);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .features-main-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+			color: #fff;
+    }
+
+    .features-main-text {
+      font-size: 14px;
+      color: #d1d5db;
+      margin-bottom: 14px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: #cbd5f5;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .pill.hot {
+      border-color: rgba(248, 250, 252, 0.8);
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.3), rgba(5, 150, 105, 0.8));
+      color: #ecfdf5;
+    }
+
+    .feature-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 24px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      .feature-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature-item-text {
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+
+    .faq-block {
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .faq-item + .faq-item {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(55, 65, 81, 0.9);
+    }
+
+    .faq-q {
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .faq-a {
+      color: #9ca3af;
+    }
+
+    .faq-contact {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 12px;
+    }
+
+    .faq-contact a {
+      color: #a5b4fc;
+      text-decoration: none;
+    }
+
+    .faq-contact a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      margin-top: 26px;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+    }
+  </style>
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= ENV['WEBSITE_NAME'] %> — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+</head>
+<body>
+	<%= render partial: "layouts/header" %>
+  <main>
+		<div class="pricing-page" id="pricing-page" data-billing="monthly">
+			<header class="pricing-header">
+				<h1 class="pricing-title">
+					Simple pricing for growing service teams.
+				</h1>
+				<p class="pricing-subtitle">
+					Start with the plan that fits your workflow today and scale to advanced automation when you’re ready. 
+					Every plan includes our <span class="pricing-highlight">core scheduling, invoicing, and customer management</span> tools.
+				</p>
+				<p class="pricing-note">
+					Prices shown in USD. Change currency and tax settings inside your <%= ENV['WEBSITE_NAME'] %> account.
+				</p>
+			</header>
+
+			<!-- Billing toggle -->
+			<div class="billing-toggle-wrap">
+				<div class="billing-toggle">
+					<button class="billing-option active" data-billing-choice="monthly" type="button">
+						<div class="billing-pill"></div>
+						<span>Monthly</span>
+					</button>
+					<button class="billing-option" data-billing-choice="yearly" type="button">
+						<div class="billing-pill"></div>
+						<span>Yearly</span>
+					</button>
+					<span class="billing-save">Save up to 20%</span>
+				</div>
+			</div>
+
+			<!-- Plans -->
+			<section class="plans-grid">
+				<!-- Plan 1: Core -->
+				<article class="plan-card">
+					<h2 class="plan-name">
+						Core
+					</h2>
+					<p class="plan-tagline">For solo operators who want clean, simple job management.</p>
+
+					<div class="plan-price-wrap">
+						<div class="plan-price plan-price-monthly">$15</div>
+						<div class="plan-price plan-price-yearly" style="display:none;">$12</div>
+						<span class="plan-period">per user / month</span>
+					</div>
+					<p class="plan-small-note">Billed monthly, cancel anytime — or yearly for extra savings.</p>
+
+					<div class="plan-divider"></div>
+
+					<div class="plan-highlight-line">
+						<span class="dot-soft"></span>
+						<span>Essential scheduling and basic invoicing in one place.</span>
+					</div>
+
+					<div class="plan-cta">
+						<a href="#signup-core" class="plan-button">
+							<span>Start free trial</span>
+						</a>
+						<p class="plan-extra">No credit card required. Upgrade only when you’re ready.</p>
+					</div>
+
+					<p class="plan-features-title">What’s included</p>
+					<ul class="plan-features">
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Visual job calendar & drag-and-drop scheduling
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Mobile access for one user
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Simple quotes & invoices
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Customer list & job history
+						</li>
+						<li class="plan-feature-muted">
+							<span class="plan-feature-icon">•</span>
+							No advanced automations or team tools
+						</li>
+					</ul>
+
+					<p class="plan-footnote">Best for solo traders getting off spreadsheets.</p>
+				</article>
+
+				<!-- Plan 2: Advanced -->
+				<article class="plan-card featured">
+					<span class="plan-badge-featured">Most popular</span>
+					<h2 class="plan-name">
+						Advanced
+					</h2>
+					<p class="plan-tagline">For growing service teams that need smarter routing and payments.</p>
+
+					<div class="plan-price-wrap">
+						<div class="plan-price plan-price-monthly">$29</div>
+						<div class="plan-price plan-price-yearly" style="display:none;">$24</div>
+						<span class="plan-period">per user / month</span>
+					</div>
+					<p class="plan-small-note">Includes everything in Core, plus automation and team controls.</p>
+
+					<div class="plan-divider"></div>
+
+					<div class="plan-highlight-line">
+						<span class="dot-soft"></span>
+						<span>Smart route planning, card payments, and multi-user access.</span>
+					</div>
+
+					<div class="plan-cta">
+						<a href="#signup-advanced" class="plan-button primary">
+							<span>Start free 14-day trial</span>
+						</a>
+						<p class="plan-extra">Switch plans or cancel in a couple of clicks.</p>
+					</div>
+
+					<p class="plan-features-title">Everything in Core, plus</p>
+					<ul class="plan-features">
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Multi-user teams with role-based permissions
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Route optimisation & day planning
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Card-on-file & online payments
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Bulk messaging & appointment reminders
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Basic reports & revenue insights
+						</li>
+					</ul>
+
+					<p class="plan-footnote">Perfect for teams of 2–15 field workers.</p>
+				</article>
+
+				<!-- Plan 3: Ultimate -->
+				<article class="plan-card">
+					<h2 class="plan-name">
+						Ultimate
+					</h2>
+					<p class="plan-tagline">For operations that rely on deep reporting and automation.</p>
+
+					<div class="plan-price-wrap">
+						<div class="plan-price plan-price-monthly">$49</div>
+						<div class="plan-price plan-price-yearly" style="display:none;">$42</div>
+						<span class="plan-period">per user / month</span>
+					</div>
+					<p class="plan-small-note">Designed for high-volume teams that want full control.</p>
+
+					<div class="plan-divider"></div>
+
+					<div class="plan-highlight-line">
+						<span class="dot-soft"></span>
+						<span>Advanced reporting, accounting exports, and workflow automation.</span>
+					</div>
+
+					<div class="plan-cta">
+						<a href="#signup-ultimate" class="plan-button">
+							<span>Talk to sales</span>
+						</a>
+						<p class="plan-extra">We’ll help you import data and configure your account.</p>
+					</div>
+
+					<p class="plan-features-title">Everything in Advanced, plus</p>
+					<ul class="plan-features">
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Advanced reporting & export-ready accounting data
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Custom fields, tags & pricing rules
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Priority support & onboarding assistance
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Workflow automations for repetitive tasks
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Higher API rate limits & integrations
+						</li>
+					</ul>
+
+					<p class="plan-footnote">Best for multi-branch or franchise-style operations.</p>
+				</article>
+
+				<!-- Plan 4: Infinite / Enterprise -->
+				<article class="plan-card">
+					<h2 class="plan-name">
+						Infinite
+					</h2>
+					<p class="plan-tagline">For large organisations that need custom limits and hosting.</p>
+
+					<div class="plan-price-wrap">
+						<div class="plan-price">$—</div>
+						<span class="plan-period">Custom pricing</span>
+					</div>
+					<p class="plan-small-note">We’ll design a plan that matches your usage and compliance needs.</p>
+
+					<div class="plan-divider"></div>
+
+					<div class="plan-highlight-line">
+						<span class="dot-soft"></span>
+						<span>Private environments, custom SLAs, and dedicated support.</span>
+					</div>
+
+					<div class="plan-cta">
+						<a href="#contact-sales" class="plan-button">
+							<span>Book a call</span>
+						</a>
+						<p class="plan-extra">Tell us about your setup — we’ll handle the rest.</p>
+					</div>
+
+					<p class="plan-features-title">Everything in Ultimate, plus</p>
+					<ul class="plan-features">
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Flexible user limits & volume-based pricing
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Private cloud or on-premise deployment (where available)
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Custom contracts, SLAs & security reviews
+						</li>
+						<li>
+							<span class="plan-feature-icon">✓</span>
+							Dedicated success manager & priority roadmap input
+						</li>
+						<li class="plan-feature-muted">
+							<span class="plan-feature-icon">•</span>
+							White-labelling and custom portals available on request
+						</li>
+					</ul>
+
+					<p class="plan-footnote">Ideal for 50+ users or multi-region teams.</p>
+				</article>
+			</section>
+
+			<!-- Feature / FAQ section -->
+			<section class="features-grid">
+				<div>
+					<h2 class="features-main-title">Every plan includes the <%= ENV['WEBSITE_NAME'] %> core.</h2>
+					<p class="features-main-text">
+						No matter which plan you choose, you get the same fast, reliable platform built for 
+						modern service businesses: real-time sync across devices, secure cloud backup, and a 
+						customer experience your clients actually enjoy.
+					</p>
+
+					<div class="pill-row">
+						<div class="pill hot">Real-time sync</div>
+						<div class="pill">Offline-friendly mobile app</div>
+						<div class="pill">Daily backups</div>
+						<div class="pill">Email & chat support</div>
+					</div>
+
+					<div class="feature-columns">
+						<div>
+							<p class="feature-item-title">Planning &amp; Scheduling</p>
+							<p class="feature-item-text">
+								Visual day, week, and month views; assign work in seconds; keep your team 
+								and customers updated automatically.
+							</p>
+						</div>
+						<div>
+							<p class="feature-item-title">Billing &amp; Payments</p>
+							<p class="feature-item-text">
+								Turn completed jobs into professional invoices with one click and connect 
+								your payment provider to get paid faster.
+							</p>
+						</div>
+						<div>
+							<p class="feature-item-title">Customer Experience</p>
+							<p class="feature-item-text">
+								Keep clients in the loop with reminders, follow-ups, and a clear history of 
+								every visit, quote, and invoice.
+							</p>
+						</div>
+						<div>
+							<p class="feature-item-title">Insights &amp; Reporting</p>
+							<p class="feature-item-text">
+								Understand revenue, job volume, and staff performance at a glance so you can 
+								make better decisions each week.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="faq-block">
+					<div class="faq-item">
+						<p class="faq-q">Can I try <%= ENV['WEBSITE_NAME'] %> before paying?</p>
+						<p class="faq-a">
+							Yes. You can start a free trial of our paid plans with no credit card required. 
+							When the trial ends, you can choose a plan or pause your account.
+						</p>
+					</div>
+					<div class="faq-item">
+						<p class="faq-q">Can I change plans later?</p>
+						<p class="faq-a">
+							Absolutely. You can upgrade or downgrade between plans at any time. Changes apply 
+							from your next billing period.
+						</p>
+					</div>
+					<div class="faq-item">
+						<p class="faq-q">Do you charge per user?</p>
+						<p class="faq-a">
+							Yes. Each person who logs into <%= ENV['WEBSITE_NAME'] %> needs a user licence. This keeps your 
+							data secure and lets you see exactly who did what.
+						</p>
+					</div>
+					<div class="faq-item">
+						<p class="faq-q">Is my data secure?</p>
+						<p class="faq-a">
+							We use modern encryption, secure hosting, and regular backups to protect your 
+							data. See our Privacy Policy for full details.
+						</p>
+					</div>
+
+					<p class="faq-contact">
+						Still have questions? <a href="mailto:<%= ENV['WEBSITE_EMAIL'] %>>">Email our team</a> or 
+						<a href="#contact-sales">book a quick demo</a>.
+					</p>
+				</div>
+			</section>
+
+			<p class="footer-note">
+				* Prices, features, and limits are examples. Update them to match your actual <%= ENV['WEBSITE_NAME'] %> plans and billing details.
+			</p>
+		</div>
+  </main>
+	<%= render partial: "layouts/footer" %>
+</body>
+</html>
+
+<script>
+  (function () {
+    const page = document.getElementById("pricing-page");
+    const options = document.querySelectorAll(".billing-option");
+    const monthlyPrices = document.querySelectorAll(".plan-price-monthly");
+    const yearlyPrices = document.querySelectorAll(".plan-price-yearly");
+
+    function setBilling(mode) {
+      page.dataset.billing = mode;
+      options.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.billingChoice === mode);
+      });
+      const showYearly = mode === "yearly";
+      monthlyPrices.forEach(el => el.style.display = showYearly ? "none" : "inline-block");
+      yearlyPrices.forEach(el => el.style.display = showYearly ? "inline-block" : "none");
+    }
+
+    options.forEach(btn => {
+      btn.addEventListener("click", () => {
+        setBilling(btn.dataset.billingChoice);
+      });
+    });
+
+    setBilling("monthly");
+  })();
+</script>
+
+

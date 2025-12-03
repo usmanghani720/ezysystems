@@ -16,5 +16,9 @@ class HomeController < ApplicationController
 			file_path = Rails.root.join(ENV['TERMS_DOC'])
 			@terms_html = File.read(file_path)
 		end
+
+		def pricing 
+
+		end
   end
   
