@@ -49,6 +49,7 @@ Rails.application.routes.draw do
 
   get  "/contact",          to: "home#contact",  as: :contact
   get "/privacy", to: "home#privacy", as: :privacy
+  get "/terms", to: "home#terms", as: :terms
 
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
