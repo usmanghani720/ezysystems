@@ -1,0 +1,1002 @@
+
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Customer Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Customer Management Page ========= */
+
+    .cm-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .cm-page * {
+      box-sizing: border-box;
+    }
+
+    .cm-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .cm-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .cm-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cm-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .cm-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .cm-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .cm-title span {
+      color: var(--accent-dark);
+    }
+
+    .cm-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .cm-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .cm-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .cm-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .cm-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .cm-hero-media {
+      position: relative;
+    }
+
+    .cm-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 20px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .cm-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .cm-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .cm-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .cm-hero-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .cm-hero-topline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #e5e7eb;
+    }
+
+    .cm-hero-topline strong {
+      font-size: 13px;
+    }
+
+    .cm-hero-table {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 12px;
+      padding: 10px 10px 8px;
+      margin-bottom: 8px;
+    }
+
+    .cm-hero-head,
+    .cm-hero-row {
+      display: grid;
+      grid-template-columns: 1.6fr 1.1fr 0.9fr;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .cm-hero-head {
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .cm-hero-row {
+      margin-bottom: 2px;
+    }
+
+    .cm-hero-row strong {
+      font-weight: 500;
+    }
+
+    .cm-hero-summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .cm-hero-summary dl {
+      margin: 0;
+    }
+
+    .cm-hero-summary dt {
+      color: #9ca3af;
+    }
+
+    .cm-hero-summary dd {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .cm-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .cm-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .cm-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .cm-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cm-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .cm-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .cm-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .cm-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .cm-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .cm-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .cm-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .cm-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .cm-section-title {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .cm-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- Feature cards ---------- */
+
+    .cm-feature-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .cm-feature-group {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cm-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cm-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .cm-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .cm-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .cm-feature-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .cm-feature-list li {
+      margin-bottom: 3px;
+    }
+
+    .cm-feature-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .cm-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .cm-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .cm-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cm-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .cm-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .cm-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cm-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cm-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cm-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cm-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .cm-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .cm-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .cm-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cm-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .cm-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .cm-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .cm-article-text {
+      color: var(--text-sub);
+    }
+
+    .cm-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .cm-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .cm-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .cm-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .cm-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cm-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .cm-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .cm-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .cm-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .cm-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .cm-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .cm-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="cm-page" id="customer-management">
+  <div class="cm-shell">
+
+    <!-- HERO -->
+    <section class="cm-hero">
+      <div>
+        <h1 class="cm-title">
+          Smart tools to keep your <span>customer relationships organised.</span>
+        </h1>
+        <p class="cm-sub">
+          <%= ENV['WEBSITE_NAME'] %> gives you a CRM built for field and service businesses. Keep every customer and lead
+          in one place — contact details, properties, services, job history, invoices and payments —
+          searchable and synced across your team.
+        </p>
+        <p class="cm-hero-note">
+          Whether you’re in the office or out on the road, you always know who your customers are, what
+          you’ve done for them and what’s coming up next.
+        </p>
+
+        <div class="cm-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+        </div>
+        <p class="cm-hero-foot">
+          <span>Customer management, scheduling, invoicing and payments — all in <%= ENV['WEBSITE_NAME'] %>.</span>
+        </p>
+      </div>
+
+      <!-- Right: CRM mockup -->
+      <div class="cm-hero-media">
+        <div class="cm-hero-card">
+          <div class="cm-hero-header">
+            <div class="cm-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Customer List</div>
+            <div class="cm-hero-status">Live sync with field teams</div>
+          </div>
+
+          <div class="cm-hero-topline">
+            <span>Customers: <strong>2,534 active</strong></span>
+            <span>Segment: <strong>Route A · Residential</strong></span>
+          </div>
+
+          <div class="cm-hero-table">
+            <div class="cm-hero-head">
+              <span>Customer</span>
+              <span>Next job</span>
+              <span>Balance</span>
+            </div>
+            <div class="cm-hero-row">
+              <span><strong>Sarah Collins</strong> · 14 Oakview Rd</span>
+              <span>07 Mar 2025 · Exterior clean</span>
+              <span>$0.00</span>
+            </div>
+            <div class="cm-hero-row">
+              <span><strong>Wicked Windows · Ash Ward</strong></span>
+              <span>09 Mar 2025 · Shopfront route</span>
+              <span>$145.00</span>
+            </div>
+            <div class="cm-hero-row">
+              <span><strong>Somerset Window Cleaning · Dan Lee</strong></span>
+              <span>11 Mar 2025 · Commercial contract</span>
+              <span>$920.50</span>
+            </div>
+          </div>
+
+          <div class="cm-hero-summary">
+            <dl>
+              <dt>Invoices due</dt>
+              <dd>36 customers</dd>
+            </dl>
+            <dl>
+              <dt>Overdue balance</dt>
+              <dd>$4,230.75</dd>
+            </dl>
+          </div>
+
+          <div class="cm-hero-meta">
+            View: <code>Customers · Active · Filtered by route &amp; balance</code>
+          </div>
+
+          <div class="cm-hero-footer">
+            <span>
+              <span class="cm-hero-footer-dot"></span>
+              Changes sync to every device in real-time
+            </span>
+            <span>Tap any customer to see full history</span>
+          </div>
+        </div>
+        <div class="cm-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="cm-intro">
+      <h2>Are you serious about scaling your business?</h2>
+      <p>
+        You need a CRM that’s built for the way service businesses actually work — routes, repeat jobs,
+        properties, teams and constant movement between jobs.
+      </p>
+      <p>
+        <%= ENV['WEBSITE_NAME'] %> helps you stay consistent and deliver a better customer experience. Keep all your
+        customer and lead information together: names, addresses, contact details, notes, service
+        history, upcoming bookings, invoices and payments.
+      </p>
+      <p>
+        <strong>Everyone on your team sees the same, up-to-date information, wherever they are.</strong>
+      </p>
+    </section>
+
+    <!-- FEATURES: MANAGE DETAILS / UNLIMITED CUSTOMERS -->
+    <section>
+      <div class="cm-section-heading">
+        <p class="cm-section-kicker">Customer records</p>
+        <h2 class="cm-section-title">Customer details that stay organised as you grow.</h2>
+        <p class="cm-section-sub">
+          Store everything you need to know about a customer in one place, keep records tidy and make it
+          easy to find the right person when you need them.
+        </p>
+      </div>
+
+      <div class="cm-feature-group">
+        <!-- Manage customer details -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Manage Customer Details</p>
+          <h3 class="cm-feature-title">Store, access and manage all your customer &amp; lead info</h3>
+          <p class="cm-feature-text">
+            Build complete profiles for every customer and lead — not just a name and number. Link
+            properties, notes, service preferences and communication history so your team always has
+            context.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Store names, addresses, contact details and property notes</li>
+            <li>View full job history, invoices, payments and upcoming bookings</li>
+            <li>Quickly search and filter records for fast access on the go</li>
+          </ul>
+          <p class="cm-feature-note">
+            All data stays in sync across the office and field app in real-time.
+          </p>
+        </article>
+
+        <!-- Add unlimited customers -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Add Unlimited Customers</p>
+          <h3 class="cm-feature-title">Perfect for growing teams ready to scale</h3>
+          <p class="cm-feature-text">
+            Whether you’re adding your first hundred customers or your first ten thousand, <%= ENV['WEBSITE_NAME'] %>
+            is built to grow with you. Capture new customers in the moment and keep them organised from
+            day one.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Add customers instantly from your phone or desktop</li>
+            <li>Convert leads into customers without retyping details</li>
+            <li>Keep residential, commercial and route customers clearly segmented</li>
+          </ul>
+          <p class="cm-feature-note">
+            Higher-volume accounts are supported on advanced plans designed for scaling teams.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FEATURES: SEARCH / SEGMENTING -->
+    <section>
+      <div class="cm-section-heading">
+        <p class="cm-section-kicker">Search &amp; organisation</p>
+        <h2 class="cm-section-title">Find the right customer in seconds, not minutes.</h2>
+        <p class="cm-section-sub">
+          Powerful search and filtering tools make it easy to find the customer, property or segment you
+          need — even as your database grows.
+        </p>
+      </div>
+
+      <div class="cm-feature-group">
+        <!-- Smart search -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Smart Search</p>
+          <h3 class="cm-feature-title">Look up customers by name, address, route or status</h3>
+          <p class="cm-feature-text">
+            Find a customer while you’re on a call, standing at the van or checking the schedule.
+            Search by name, street, postcode, route, tag or balance and jump straight into their record.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Instant search from mobile or desktop</li>
+            <li>Filter by status, balance, route or service</li>
+            <li>Pin commonly used views for quick access</li>
+          </ul>
+        </article>
+
+        <!-- Segments & tags -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Segments &amp; Tags</p>
+          <h3 class="cm-feature-title">Group customers to work smarter and communicate better</h3>
+          <p class="cm-feature-text">
+            Tag customers by route, frequency, service type or any custom label you choose. Use those
+            segments to plan work, run promotions or send targeted messages.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Tag VIPs, paused customers, new leads and more</li>
+            <li>Filter routes and schedules by customer segments</li>
+            <li>Use segments alongside <%= ENV['WEBSITE_NAME'] %> messaging and marketing tools</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- FEATURES: HISTORY / TEAM ACCESS -->
+    <section>
+      <div class="cm-section-heading">
+        <p class="cm-section-kicker">History &amp; context</p>
+        <h2 class="cm-section-title">Every interaction, job and payment in one timeline.</h2>
+        <p class="cm-section-sub">
+          See the full story for each customer — from the first quote to the latest payment — so your
+          team can respond quickly and confidently.
+        </p>
+      </div>
+
+      <div class="cm-feature-group">
+        <!-- Timeline -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Customer Timeline</p>
+          <h3 class="cm-feature-title">One place for notes, jobs, invoices and messages</h3>
+          <p class="cm-feature-text">
+            Open any customer to see a chronological timeline of activity: booked jobs, completed work,
+            invoices, payments, outbound messages and important notes.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Quickly check recent work before you visit or call</li>
+            <li>See who spoke to the customer last and what was agreed</li>
+            <li>Reduce duplication and misunderstandings within your team</li>
+          </ul>
+        </article>
+
+        <!-- Team access -->
+        <article class="cm-feature-card">
+          <p class="cm-feature-label">Team-wide Access</p>
+          <h3 class="cm-feature-title">Give your whole team the context they need</h3>
+          <p class="cm-feature-text">
+            Office staff, field staff and managers all access the same up-to-date customer data. Set
+            roles and permissions according to your needs, while keeping everything in sync.
+          </p>
+          <ul class="cm-feature-list">
+            <li>Staff see today’s customers with all the details</li>
+            <li>Office team handles changes that update instantly</li>
+            <li>Keep everyone on the same page, even across multiple routes</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="cm-section-heading">
+        <p class="cm-section-kicker">Don’t just take our word for it</p>
+        <h2 class="cm-section-title">Hear from teams who organise thousands of customers with <%= ENV['WEBSITE_NAME'] %>.</h2>
+        <p class="cm-section-sub">
+          Service businesses use <%= ENV['WEBSITE_NAME'] %> every day to keep their client lists organised, cut admin
+          and focus on doing the work that grows their companies.
+        </p>
+      </div>
+
+      <div class="cm-testimonial-grid">
+        <article class="cm-testimonial-card">
+          <p class="cm-testimonial-logo">ROUTE-BASED CLEANING</p>
+          <h3 class="cm-testimonial-heading">“Takes the hassle out of admin.”</h3>
+          <p class="cm-testimonial-text">
+            We used to juggle paper records and spreadsheets to track customers. With <%= ENV['WEBSITE_NAME'] %>, every
+            client has a proper profile and our team just taps a name to see job history, balances and
+            notes. The system quietly takes care of the boring admin.
+          </p>
+          <p class="cm-testimonial-person">
+            <strong>Ash W.</strong>
+            Owner · Wicked Window Cleaning
+          </p>
+        </article>
+
+        <article class="cm-testimonial-card">
+          <p class="cm-testimonial-logo">GROWING BUSINESS</p>
+          <h3 class="cm-testimonial-heading">“From zero to 2,500 customers and still organised.”</h3>
+          <p class="cm-testimonial-text">
+            We started with no customers and grew quickly. <%= ENV['WEBSITE_NAME'] %> helped us keep every new customer
+            organised — bookings, invoices, payments and reports — so scaling didn’t turn into chaos.
+          </p>
+          <p class="cm-testimonial-person">
+            <strong>Dan L.</strong>
+            Director · Somerset Window Cleaning
+          </p>
+        </article>
+
+        <article class="cm-testimonial-card">
+          <p class="cm-testimonial-logo">MODERN OPERATIONS</p>
+          <h3 class="cm-testimonial-heading">“Brought our customer records into the 21st century.”</h3>
+          <p class="cm-testimonial-text">
+            Before <%= ENV['WEBSITE_NAME'] %> we had stacks of paper and manual checks for who had paid. Now our jobs,
+            invoices and customer records are all connected. Admin is down, cash flow is up and the team
+            can pull up any customer’s info in seconds.
+          </p>
+          <p class="cm-testimonial-person">
+            <strong>Liam A.</strong>
+            Owner · Dot Cleaning
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="cm-section-heading">
+        <p class="cm-section-kicker">Guides &amp; resources</p>
+        <h2 class="cm-section-title">Articles to help you get more from <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="cm-articles-grid">
+        <article class="cm-article-card">
+          <p class="cm-article-tag">Customer Portals</p>
+          <h3 class="cm-article-title">Customer portals and their value to your business</h3>
+          <p class="cm-article-text">
+            Learn how giving customers self-service access to their jobs, invoices and payments can
+            reduce calls, build trust and improve your service.
+          </p>
+          <p class="cm-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="cm-article-link">Read more</a>
+        </article>
+
+        <article class="cm-article-card">
+          <p class="cm-article-tag">Customer Experience</p>
+          <h3 class="cm-article-title">Using <%= ENV['WEBSITE_NAME'] %> to deliver a better customer journey</h3>
+          <p class="cm-article-text">
+            See how organised records, clear communication and consistent follow-up translate into
+            happier customers and more referrals.
+          </p>
+          <p class="cm-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="cm-article-link">Read more</a>
+        </article>
+
+        <article class="cm-article-card">
+          <p class="cm-article-tag">Customer Stories</p>
+          <h3 class="cm-article-title">How growing service businesses manage hundreds of clients</h3>
+          <p class="cm-article-text">
+            Real examples of teams that use <%= ENV['WEBSITE_NAME'] %> to handle large customer lists without losing
+            personal service.
+          </p>
+          <p class="cm-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="cm-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="cm-newsletter">
+      <div>
+        <h3>Make every customer interaction more organised with <%= ENV['WEBSITE_NAME'] %>.</h3>
+        <p>
+          Get occasional tips, feature updates and workflow ideas for managing your customer base and
+          growing your business — no spam.
+        </p>
+      </div>
+      <form class="cm-newsletter-form">
+        <input type="email" class="cm-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="cm-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

@@ -1,0 +1,1155 @@
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Work Assignment & Scheduling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Work Assignment & Scheduling Page ========= */
+
+    .as-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .as-page * {
+      box-sizing: border-box;
+    }
+
+    .as-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .as-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .as-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .as-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .as-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .as-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .as-title span {
+      color: var(--accent-dark);
+    }
+
+    .as-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .as-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .as-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .as-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .as-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .as-hero-media {
+      position: relative;
+    }
+
+    .as-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 18px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .as-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .as-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .as-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .as-hero-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .as-hero-topline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #e5e7eb;
+    }
+
+    .as-hero-topline strong {
+      font-size: 13px;
+    }
+
+    .as-hero-map {
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      margin-bottom: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .as-hero-map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: #9ca3af;
+    }
+
+    .as-hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .as-hero-pill {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .as-hero-map-body {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .as-hero-map-main {
+      background: radial-gradient(circle at center, rgba(79, 70, 229, 0.5), rgba(15, 23, 42, 1));
+      border-radius: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .as-hero-map-main::before {
+      content: "Optimised routes · Live view";
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      font-size: 10px;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .as-hero-map-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+    }
+
+    .as-hero-map-dot.red {
+      background: #f97316;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+    }
+
+    .as-hero-map-dot.blue {
+      background: #60a5fa;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.9);
+    }
+
+    .as-hero-map-list {
+      font-size: 10px;
+    }
+
+    .as-hero-map-item-head,
+    .as-hero-map-item-row {
+      display: grid;
+      grid-template-columns: 1.5fr 0.9fr 0.7fr;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .as-hero-map-item-head {
+      color: #9ca3af;
+    }
+
+    .as-hero-map-item-row strong {
+      font-weight: 500;
+    }
+
+    .as-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin: 6px 0;
+    }
+
+    .as-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .as-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .as-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .as-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .as-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .as-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .as-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .as-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .as-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .as-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .as-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .as-section-title {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .as-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- Feature cards ---------- */
+
+    .as-feature-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .as-feature-group {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .as-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .as-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .as-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .as-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .as-feature-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .as-feature-list li {
+      margin-bottom: 3px;
+    }
+
+    .as-feature-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .as-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .as-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .as-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .as-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .as-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .as-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .as-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .as-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .as-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .as-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .as-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .as-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .as-article-text {
+      color: var(--text-sub);
+    }
+
+    .as-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .as-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .as-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .as-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .as-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .as-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .as-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .as-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .as-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .as-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .as-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .as-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="as-page" id="assignment-scheduling">
+  <div class="as-shell">
+
+    <!-- HERO -->
+    <section class="as-hero">
+      <div>
+        <h1 class="as-title">
+          Assign jobs, manage shifts <span>and plan your week with confidence.</span>
+        </h1>
+        <p class="as-sub">
+          <%= ENV['WEBSITE_NAME'] %> gives you everything you need to assign jobs, plan routes and organise shifts for
+          mobile teams. See the whole week, optimise travel and keep everyone working on the right
+          jobs at the right time.
+        </p>
+        <p class="as-hero-note">
+          Perfect for appointment-based work across multiple locations where every minute and every
+          mile matters.
+        </p>
+
+        <div class="as-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+        </div>
+        <p class="as-hero-foot">
+          <span>Assignments, routes, customers, invoicing and payments — all in <%= ENV['WEBSITE_NAME'] %>.</span>
+        </p>
+      </div>
+
+      <!-- Right: assignment & scheduling mockup -->
+      <div class="as-hero-media">
+        <div class="as-hero-card">
+          <div class="as-hero-header">
+            <div class="as-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Work Assignment</div>
+            <div class="as-hero-status">Routes optimised</div>
+          </div>
+
+          <div class="as-hero-topline">
+            <span>Jobs today: <strong>68 scheduled</strong></span>
+            <span>Workers active: <strong>7</strong></span>
+          </div>
+
+          <div class="as-hero-map">
+            <div class="as-hero-map-header">
+              <span>Day Pilot · Map view</span>
+              <div class="as-hero-pill-row">
+                <span class="as-hero-pill">Route A · Liam</span>
+                <span class="as-hero-pill">Route B · Emma</span>
+                <span class="as-hero-pill">Route C · Tom</span>
+              </div>
+            </div>
+
+            <div class="as-hero-map-body">
+              <div class="as-hero-map-main">
+                <!-- Fake map dots -->
+                <div class="as-hero-map-dot" style="top: 40%; left: 22%;"></div>
+                <div class="as-hero-map-dot blue" style="top: 28%; left: 60%;"></div>
+                <div class="as-hero-map-dot red" style="top: 64%; left: 52%;"></div>
+                <div class="as-hero-map-dot" style="top: 55%; left: 18%;"></div>
+                <div class="as-hero-map-dot blue" style="top: 32%; left: 36%;"></div>
+              </div>
+
+              <div class="as-hero-map-list">
+                <div class="as-hero-map-item-head">
+                  <span>Job</span>
+                  <span>Worker</span>
+                  <span>Status</span>
+                </div>
+                <div class="as-hero-map-item-row">
+                  <span><strong>High Street · Shopfronts</strong></span>
+                  <span>Liam</span>
+                  <span>In route</span>
+                </div>
+                <div class="as-hero-map-item-row">
+                  <span>Oakview Estate · Route B</span>
+                  <span>Emma</span>
+                  <span>Scheduled</span>
+                </div>
+                <div class="as-hero-map-item-row">
+                  <span>Riverside Offices</span>
+                  <span>Tom</span>
+                  <span>Completed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="as-hero-meta">
+            View: <code>Assignments · Today · Optimised by travel time</code>
+          </div>
+
+          <div class="as-hero-footer">
+            <span>
+              <span class="as-hero-footer-dot"></span>
+              Auto-calc best route for each worker
+            </span>
+            <span>Reassign jobs with drag &amp; drop</span>
+          </div>
+        </div>
+        <div class="as-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="as-intro">
+      <h2>Organise and plan jobs for the most efficient workflow.</h2>
+      <p>
+        If your work is appointment-based and spread across different areas, route optimisation isn’t a
+        luxury — it’s what keeps your day profitable. Manually reshuffling jobs and updating worksheets
+        slows everything down.
+      </p>
+      <p>
+        <%= ENV['WEBSITE_NAME'] %>’s assignment and scheduling tools help you plan faster, reduce wasted travel and keep
+        your team moving smoothly from job to job.
+      </p>
+      <p>
+        <strong>Stop fighting the schedule and start using it as a competitive advantage.</strong>
+      </p>
+    </section>
+
+    <!-- SECTION: ORGANISE & PLAN -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Planning</p>
+        <h2 class="as-section-title">Plan your week once and let <%= ENV['WEBSITE_NAME'] %> do the heavy lifting.</h2>
+        <p class="as-section-sub">
+          Build schedules that respect travel time, worker availability and customer expectations — with
+          tools that update in real time as things change.
+        </p>
+      </div>
+
+      <div class="as-feature-group">
+        <!-- Organise jobs & shifts -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Organise Jobs &amp; Shifts</p>
+          <h3 class="as-feature-title">Build clear schedules for every worker and team</h3>
+          <p class="as-feature-text">
+            Start with your confirmed jobs and planned shifts. <%= ENV['WEBSITE_NAME'] %> lets you drop them into a
+            structured view by day, worker, route or team. Everyone sees what’s ahead and where they
+            need to be.
+          </p>
+          <ul class="as-feature-list">
+            <li>View jobs by worker, team, round or area</li>
+            <li>Quickly spot gaps, overlaps and heavy days</li>
+            <li>Filter by job type, status or priority</li>
+          </ul>
+          <p class="as-feature-note">
+            Ideal for owners and dispatchers who want a calm, predictable day — even when it’s busy.
+          </p>
+        </article>
+
+        <!-- Weekly planning -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Weekly Planning</p>
+          <h3 class="as-feature-title">Plan days—or full weeks—at once</h3>
+          <p class="as-feature-text">
+            Create daily or weekly assignment plans that fit how your business runs. Schedule recurring
+            work, one-off visits and responsive jobs together without losing sight of capacity.
+          </p>
+          <ul class="as-feature-list">
+            <li>Switch between daily and weekly planning views</li>
+            <li>Set targets for each route or worker</li>
+            <li>Block out time for travel, training or maintenance</li>
+          </ul>
+          <p class="as-feature-note">
+            When the plan is set, <%= ENV['WEBSITE_NAME'] %> keeps everyone in sync across web and mobile.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: OPTIMISED ROUTE NAVIGATION -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Route optimisation</p>
+        <h2 class="as-section-title">Optimised routes that save time, fuel and stress.</h2>
+        <p class="as-section-sub">
+          Reduce unnecessary driving by letting <%= ENV['WEBSITE_NAME'] %> order jobs in a smart sequence for each
+          worker, using start and end points that reflect the real world.
+        </p>
+      </div>
+
+      <div class="as-feature-group">
+        <!-- Optimised route navigation -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Optimised Route Navigation</p>
+          <h3 class="as-feature-title">Set custom start and end points for each worker</h3>
+          <p class="as-feature-text">
+            Choose where each worker’s day starts and ends – home, depot, yard or a key site – and let
+            <%= ENV['WEBSITE_NAME'] %> build the most efficient route between their jobs.
+          </p>
+          <ul class="as-feature-list">
+            <li>Individual start and finish locations per worker</li>
+            <li>Automatically ordered visits to minimise backtracking</li>
+            <li>Ideal for mixed residential and commercial routes</li>
+          </ul>
+          <p class="as-feature-note">
+            Changes to the plan are recalculated so routes stay efficient as the day evolves.
+          </p>
+        </article>
+
+        <!-- Day Pilot style navigation -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Day Pilot Navigation</p>
+          <h3 class="as-feature-title">Send optimised routes straight to the mapping app you use</h3>
+          <p class="as-feature-text">
+            Once the route is ready, launch your preferred map app directly from <%= ENV['WEBSITE_NAME'] %> – whether
+            that’s Google Maps, Apple Maps or another supported provider.
+          </p>
+          <ul class="as-feature-list">
+            <li>Tap to open the full day’s route on mobile</li>
+            <li>Step-by-step navigation while keeping the schedule in view</li>
+            <li>Fewer wrong turns and less time between jobs</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: REPLAN JOBS -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Replanning</p>
+        <h2 class="as-section-title">Reassign and reshuffle jobs without wrecking the day.</h2>
+        <p class="as-section-sub">
+          When conditions change, you shouldn’t have to rebuild everything from scratch. <%= ENV['WEBSITE_NAME'] %>
+          gives you flexible tools to replan quickly.
+        </p>
+      </div>
+
+      <div class="as-feature-group">
+        <!-- Replan jobs -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Replan Jobs</p>
+          <h3 class="as-feature-title">Move jobs around within the day in a few clicks</h3>
+          <p class="as-feature-text">
+            Need to switch the order of visits, move a job to tomorrow or assign it to another
+            route? Replan jobs from a single view and let <%= ENV['WEBSITE_NAME'] %> handle the updates.
+          </p>
+          <ul class="as-feature-list">
+            <li>Drag and drop jobs to new time slots or workers</li>
+            <li>Shift an entire day or selected jobs at once</li>
+            <li>Keep customers informed with built-in messaging tools</li>
+          </ul>
+          <p class="as-feature-note">
+            Perfect for managing weather delays, traffic issues or last-minute customer requests.
+          </p>
+        </article>
+
+        <!-- Multi planner -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Multi-planner View</p>
+          <h3 class="as-feature-title">See multiple routes side by side</h3>
+          <p class="as-feature-text">
+            Compare routes and workloads across your team in one place. Move jobs from one worker to
+            another while watching travel and capacity in real time.
+          </p>
+          <ul class="as-feature-list">
+            <li>View multiple workers or teams on the same screen</li>
+            <li>Balance heavy and light routes with simple moves</li>
+            <li>Keep the day fair, efficient and realistic</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: ASSIGN WORK TO USERS & TEAMS -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Assignment</p>
+        <h2 class="as-section-title">Assign work to users and teams in just a couple of clicks.</h2>
+        <p class="as-section-sub">
+          Make assignment simple for one-off jobs and recurring schedules alike. <%= ENV['WEBSITE_NAME'] %> is designed
+          to keep your workload flexible without becoming complicated.
+        </p>
+      </div>
+
+      <div class="as-feature-group">
+        <!-- Assign to users & teams -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Assign to Users &amp; Teams</p>
+          <h3 class="as-feature-title">Fast, flexible work assignment for every situation</h3>
+          <p class="as-feature-text">
+            Choose a worker or team and assign jobs from the planner, customer record or map. Whether
+            it’s a single visit or part of a repeating schedule, the process stays fast and consistent.
+          </p>
+          <ul class="as-feature-list">
+            <li>Assign one-off or recurring jobs in two clicks</li>
+            <li>Allocate by area, skill set, route or availability</li>
+            <li>Update assignments without losing history or notes</li>
+          </ul>
+          <p class="as-feature-note">
+            Your team sees new assignments instantly in the <%= ENV['WEBSITE_NAME'] %> app.
+          </p>
+        </article>
+
+        <!-- Default assignments for recurring work -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Default Assignments</p>
+          <h3 class="as-feature-title">Set default owners for repeat work</h3>
+          <p class="as-feature-text">
+            For regular contracts or routes, save time by setting default assignments. <%= ENV['WEBSITE_NAME'] %> will
+            automatically allocate those jobs to the right person or crew every time they recur.
+          </p>
+          <ul class="as-feature-list">
+            <li>Default workers or teams for recurring services</li>
+            <li>Automatic allocation when new cycles are created</li>
+            <li>Override defaults easily when you need to make exceptions</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: REAL-TIME WORKER UPDATES -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Real-time visibility</p>
+        <h2 class="as-section-title">Live worker updates that keep everyone in sync.</h2>
+        <p class="as-section-sub">
+          Stay on top of the day without constant calls and messages. <%= ENV['WEBSITE_NAME'] %> shows job progress and
+          worker locations in real time.
+        </p>
+      </div>
+
+      <div class="as-feature-group">
+        <!-- Real-time updates -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Real-time Worker Updates</p>
+          <h3 class="as-feature-title">See who’s on time, ahead or running late</h3>
+          <p class="as-feature-text">
+            <%= ENV['WEBSITE_NAME'] %>’s live overview shows each worker’s last known location, job status and route
+            progress so you can make decisions quickly and confidently.
+          </p>
+          <ul class="as-feature-list">
+            <li>Monitor completed, in-progress and pending jobs</li>
+            <li>See route progress without chasing for updates</li>
+            <li>Use live information to adjust schedules on the fly</li>
+          </ul>
+        </article>
+
+        <!-- Connected team -->
+        <article class="as-feature-card">
+          <p class="as-feature-label">Connected Team</p>
+          <h3 class="as-feature-title">Keep office and field teams aligned all day</h3>
+          <p class="as-feature-text">
+            Office staff see the same information as your field team: schedules, status updates and job
+            details. That means fewer misunderstandings and smoother customer interactions.
+          </p>
+          <ul class="as-feature-list">
+            <li>Field staff update status in the app as they work</li>
+            <li>Office team responds with accurate ETA and progress</li>
+            <li>Customers get reliable communication backed by live data</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Don’t just take our word for it…</p>
+        <h2 class="as-section-title">Hear from teams who depend on <%= ENV['WEBSITE_NAME'] %> every day.</h2>
+        <p class="as-section-sub">
+          Field service businesses use <%= ENV['WEBSITE_NAME'] %> to handle their assignments, routes and planning —
+          and to grow without drowning in admin.
+        </p>
+      </div>
+
+      <div class="as-testimonial-grid">
+        <article class="as-testimonial-card">
+          <p class="as-testimonial-logo">WINDOW CLEANING</p>
+          <h3 class="as-testimonial-heading">“Assignments are no longer a headache.”</h3>
+          <p class="as-testimonial-text">
+            <%= ENV['WEBSITE_NAME'] %> lets us assign and reassign work without rewriting everything. Routes make sense,
+            staff know where they’re going and late afternoon panic has disappeared.
+          </p>
+          <p class="as-testimonial-person">
+            <strong>Steve B.</strong>
+            Owner · Oakley Window Cleaning Services
+          </p>
+        </article>
+
+        <article class="as-testimonial-card">
+          <p class="as-testimonial-logo">GROWING TEAMS</p>
+          <h3 class="as-testimonial-heading">“The only way we could scale this fast.”</h3>
+          <p class="as-testimonial-text">
+            We tried other systems but <%= ENV['WEBSITE_NAME'] %> is the one that actually kept up as we added routes,
+            staff and customers. The assignment tools are the backbone of our operation.
+          </p>
+          <p class="as-testimonial-person">
+            <strong>Joshua G.</strong>
+            Director · The Spotless Group
+          </p>
+        </article>
+
+        <article class="as-testimonial-card">
+          <p class="as-testimonial-logo">MODERN OPERATIONS</p>
+          <h3 class="as-testimonial-heading">“It’s our control centre for every workday.”</h3>
+          <p class="as-testimonial-text">
+            From planning and replanning to invoicing and payments, <%= ENV['WEBSITE_NAME'] %> sits at the centre of our
+            business. Any device, any time, the team can see exactly what needs to happen next.
+          </p>
+          <p class="as-testimonial-person">
+            <strong>Chris R.</strong>
+            Owner · C Rose Cleaning Services
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="as-section-heading">
+        <p class="as-section-kicker">Guides &amp; resources</p>
+        <h2 class="as-section-title">Articles to help you get the most out of <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="as-articles-grid">
+        <article class="as-article-card">
+          <p class="as-article-tag">Marketing</p>
+          <h3 class="as-article-title">10 ways to market your mobile service business</h3>
+          <p class="as-article-text">
+            Practical tips to reach more customers using social media, local search and smart follow-up —
+            without needing a big marketing budget.
+          </p>
+          <p class="as-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="as-article-link">Read more</a>
+        </article>
+
+        <article class="as-article-card">
+          <p class="as-article-tag">Customer Story</p>
+          <h3 class="as-article-title">How a growing team manages over 450 regular customers</h3>
+          <p class="as-article-text">
+            See how one service business uses <%= ENV['WEBSITE_NAME'] %> to assign jobs, manage routes and deliver a
+            consistent experience at scale.
+          </p>
+          <p class="as-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="as-article-link">Read more</a>
+        </article>
+
+        <article class="as-article-card">
+          <p class="as-article-tag">Sales</p>
+          <h3 class="as-article-title">Win more quotes with better communication</h3>
+          <p class="as-article-text">
+            Learn how clear scheduling, automated reminders and simple online approvals can increase
+            your quote win rate.
+          </p>
+          <p class="as-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="as-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="as-newsletter">
+      <div>
+        <h3>Turn your schedule into a strength with <%= ENV['WEBSITE_NAME'] %>.</h3>
+        <p>
+          Get occasional tips, feature releases and workflow ideas for assignment, routing and planning
+          with less stress — no spam.
+        </p>
+      </div>
+      <form class="as-newsletter-form">
+        <input type="email" class="as-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="as-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

@@ -1,0 +1,1119 @@
+<head>
+  <meta charset="UTF-8">
+  <title><%= ENV['WEBSITE_NAME'] %> – Add & Edit Jobs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Add & Edit Jobs Page ========= */
+
+    .aj-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .aj-page * {
+      box-sizing: border-box;
+    }
+
+    .aj-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .aj-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .aj-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .aj-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .aj-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .aj-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .aj-title span {
+      color: var(--accent-dark);
+    }
+
+    .aj-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .aj-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .aj-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .aj-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .aj-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .aj-hero-media {
+      position: relative;
+    }
+
+    .aj-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 18px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .aj-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .aj-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .aj-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .aj-hero-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .aj-hero-topline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #e5e7eb;
+    }
+
+    .aj-hero-topline strong {
+      font-size: 13px;
+    }
+
+    .aj-hero-map {
+      border-radius: 14px;
+      padding: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      margin-bottom: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .aj-hero-map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: #9ca3af;
+    }
+
+    .aj-hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .aj-hero-pill {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .aj-hero-map-body {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .aj-hero-map-main {
+      background: radial-gradient(circle at center, rgba(79, 70, 229, 0.5), rgba(15, 23, 42, 1));
+      border-radius: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+      min-height: 120px;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .aj-hero-map-main::before {
+      content: "Live map view \00b7 Jobs & staff";
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      font-size: 10px;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .aj-hero-map-dot {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
+    }
+
+    .aj-hero-map-dot.red {
+      background: #f97316;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+    }
+
+    .aj-hero-map-dot.blue {
+      background: #60a5fa;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.9);
+    }
+
+    .aj-hero-map-list {
+      font-size: 10px;
+    }
+
+    .aj-hero-map-item-head,
+    .aj-hero-map-item-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 0.6fr;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .aj-hero-map-item-head {
+      color: #9ca3af;
+    }
+
+    .aj-hero-map-item-row strong {
+      font-weight: 500;
+    }
+
+    .aj-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin: 6px 0;
+    }
+
+    .aj-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .aj-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .aj-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .aj-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .aj-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .aj-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .aj-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .aj-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .aj-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .aj-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .aj-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .aj-section-title {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .aj-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- Feature cards ---------- */
+
+    .aj-feature-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .aj-feature-group {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .aj-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .aj-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .aj-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .aj-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .aj-feature-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .aj-feature-list li {
+      margin-bottom: 3px;
+    }
+
+    .aj-feature-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .aj-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .aj-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .aj-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .aj-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .aj-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .aj-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aj-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aj-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aj-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aj-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .aj-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .aj-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .aj-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .aj-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .aj-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .aj-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .aj-article-text {
+      color: var(--text-sub);
+    }
+
+    .aj-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .aj-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .aj-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .aj-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .aj-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .aj-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .aj-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .aj-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .aj-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .aj-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .aj-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .aj-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="aj-page" id="adding-jobs">
+  <div class="aj-shell">
+
+    <!-- HERO -->
+    <section class="aj-hero">
+      <div>
+        <h1 class="aj-title">
+          A faster, smarter way to <span>schedule jobs, adjust routes and track the day.</span>
+        </h1>
+        <p class="aj-sub">
+          <%= ENV['WEBSITE_NAME'] %> gives you a live, map-based job planner that makes it simple to add new work, edit
+          job details, reassign routes and keep your team up to date — all from one screen.
+        </p>
+        <p class="aj-hero-note">
+          Watch the day unfold in real time, then drag, drop and replan jobs in a few clicks when
+          weather, traffic or last-minute changes hit.
+        </p>
+
+        <div class="aj-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+        </div>
+        <p class="aj-hero-foot">
+          <span>Job scheduling, routes, customers, invoices and payments — all in <%= ENV['WEBSITE_NAME'] %>.</span>
+        </p>
+      </div>
+
+      <!-- Right: map-based jobs mockup -->
+      <div class="aj-hero-media">
+        <div class="aj-hero-card">
+          <div class="aj-hero-header">
+            <div class="aj-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Today’s Jobs</div>
+            <div class="aj-hero-status">Live route view</div>
+          </div>
+
+          <div class="aj-hero-topline">
+            <span>Jobs today: <strong>74 scheduled</strong></span>
+            <span>Completed: <strong>36</strong></span>
+          </div>
+
+          <div class="aj-hero-map">
+            <div class="aj-hero-map-header">
+              <span>Map view · Route planner</span>
+              <div class="aj-hero-pill-row">
+                <span class="aj-hero-pill">Route A · Liam</span>
+                <span class="aj-hero-pill">Route B · Emma</span>
+                <span class="aj-hero-pill">Route C · Tom</span>
+              </div>
+            </div>
+
+            <div class="aj-hero-map-body">
+              <div class="aj-hero-map-main">
+                <!-- Fake map dots -->
+                <div class="aj-hero-map-dot" style="top: 42%; left: 24%;"></div>
+                <div class="aj-hero-map-dot blue" style="top: 26%; left: 64%;"></div>
+                <div class="aj-hero-map-dot red" style="top: 68%; left: 52%;"></div>
+                <div class="aj-hero-map-dot" style="top: 59%; left: 18%;"></div>
+                <div class="aj-hero-map-dot blue" style="top: 30%; left: 38%;"></div>
+              </div>
+
+              <div class="aj-hero-map-list">
+                <div class="aj-hero-map-item-head">
+                  <span>Job</span>
+                  <span>Worker</span>
+                  <span>Status</span>
+                </div>
+                <div class="aj-hero-map-item-row">
+                  <span><strong>High Street · Shopfronts</strong></span>
+                  <span>Liam</span>
+                  <span>In progress</span>
+                </div>
+                <div class="aj-hero-map-item-row">
+                  <span>Oakview Estate · Route B</span>
+                  <span>Emma</span>
+                  <span>Scheduled</span>
+                </div>
+                <div class="aj-hero-map-item-row">
+                  <span>Riverside Offices</span>
+                  <span>Tom</span>
+                  <span>Delayed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="aj-hero-meta">
+            View: <code>Jobs · Today · Map + worker filter</code>
+          </div>
+
+          <div class="aj-hero-footer">
+            <span>
+              <span class="aj-hero-footer-dot"></span>
+              Drag jobs to replan routes in seconds
+            </span>
+            <span>Tap any marker to see full job details</span>
+          </div>
+        </div>
+        <div class="aj-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="aj-intro">
+      <h2>Job scheduling made for busy field teams.</h2>
+      <p>
+        When your days are packed with work, you can’t afford to juggle paper schedules and manual
+        changes. You need a planner that moves as fast as your team does.
+      </p>
+      <p>
+        <%= ENV['WEBSITE_NAME'] %> brings mapping, routing, jobs, staff and customers together in one place. Add new
+        work, edit existing jobs, reassign visits and keep everyone aligned without jumping between
+        apps or rewriting the whole day.
+      </p>
+      <p>
+        <strong>See the full picture on the map, make changes with a drag and your team sees the update
+        instantly in the app.</strong>
+      </p>
+    </section>
+
+    <!-- SECTION: MAP & LIVE VIEW -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Live planning</p>
+        <h2 class="aj-section-title">See your day unfold on the map.</h2>
+        <p class="aj-section-sub">
+          Stay in control of your schedule with a live, map-based overview of every job, route and
+          worker. Make adjustments as the day changes and keep the workload balanced.
+        </p>
+      </div>
+
+      <div class="aj-feature-group">
+        <!-- Map view -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Map &amp; Planner</p>
+          <h3 class="aj-feature-title">Plan and adjust jobs visually on a map</h3>
+          <p class="aj-feature-text">
+            See every scheduled job for the day plotted on a map alongside your workers’ last known
+            locations. Filter by team, worker or route and understand at a glance who is doing what and
+            where.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Filter by worker, vehicle, team or round</li>
+            <li>Spot gaps, overlaps and heavy routes instantly</li>
+            <li>Tap into any job marker to see full details and history</li>
+          </ul>
+          <p class="aj-feature-note">
+            Ideal for dispatchers and owners who need a real-time picture of the day.
+          </p>
+        </article>
+
+        <!-- Add & edit jobs quickly -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Add &amp; Edit Jobs</p>
+          <h3 class="aj-feature-title">Create, update and reassign jobs in seconds</h3>
+          <p class="aj-feature-text">
+            Add new jobs straight from the map or job list, change dates and times, update notes or
+            reassign work to another team member in a few clicks.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Add new jobs from customer or property records</li>
+            <li>Edit frequency, services, pricing and notes any time</li>
+            <li>Reassign jobs when someone is off sick or routes change</li>
+          </ul>
+          <p class="aj-feature-note">
+            Updates appear instantly on mobile devices so your crew is never left guessing.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: SKILLS & MATCHING -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Skills &amp; safety</p>
+        <h2 class="aj-section-title">Assign jobs based on staff skills &amp; certifications.</h2>
+        <p class="aj-section-sub">
+          Some work can only be done by the right people. <%= ENV['WEBSITE_NAME'] %> helps you match jobs to staff with
+          the correct skills and training, every time.
+        </p>
+      </div>
+
+      <div class="aj-feature-group">
+        <!-- Required skills -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Required Skills</p>
+          <h3 class="aj-feature-title">Make sure the right person gets the right job</h3>
+          <p class="aj-feature-text">
+            Add skills, qualifications and certifications to staff profiles — like working at height,
+            specialist equipment training or access checks — then mark which skills are required for
+            particular job types.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Tag team members with skills and training</li>
+            <li>Assign jobs using skill-based filters</li>
+            <li>Reduce risk and rework by sending the right staff first time</li>
+          </ul>
+          <p class="aj-feature-note">
+            Ideal for specialised work or compliance-sensitive contracts.
+          </p>
+        </article>
+
+        <!-- Staff allocation -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Staff Allocation</p>
+          <h3 class="aj-feature-title">See only eligible staff when assigning jobs</h3>
+          <p class="aj-feature-text">
+            When you allocate a job with specific requirements, <%= ENV['WEBSITE_NAME'] %> can highlight only the staff
+            members who match the needed skills, so planning is quick and confident.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Filter staff by location, route and skill set</li>
+            <li>Prevent accidental assignment to unqualified workers</li>
+            <li>Improve quality and consistency across every visit</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: REPLAN & DRAG/DROP -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Replanning &amp; flexibility</p>
+        <h2 class="aj-section-title">Replan jobs when the day changes — without starting again.</h2>
+        <p class="aj-section-sub">
+          Weather, traffic and customer requests can change your plans in an instant. <%= ENV['WEBSITE_NAME'] %> gives
+          you the tools to replan quickly and keep everyone on track.
+        </p>
+      </div>
+
+      <div class="aj-feature-group">
+        <!-- Replan jobs -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Replan Jobs</p>
+          <h3 class="aj-feature-title">Drag, drop and move jobs around within the day</h3>
+          <p class="aj-feature-text">
+            Need to change the order of visits or move jobs between workers? Use the planner to drag
+            jobs into new time slots or to different routes without losing any details.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Drag and drop jobs between staff or routes</li>
+            <li>Shift an entire schedule forward or back when needed</li>
+            <li>Keep travel distance and workload balanced as you go</li>
+          </ul>
+          <p class="aj-feature-note">
+            Your team sees the latest plan immediately in their mobile app.
+          </p>
+        </article>
+
+        <!-- Rounds / routes -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Rounds &amp; Routes</p>
+          <h3 class="aj-feature-title">Group jobs into efficient rounds that stay organised</h3>
+          <p class="aj-feature-text">
+            Build rounds based on area, day or team, then let <%= ENV['WEBSITE_NAME'] %> keep them on a repeating
+            schedule. Jobs are automatically slotted into routes and shown on the map.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Name rounds by area, day or route type</li>
+            <li>Assign colours so they’re easy to spot on the map</li>
+            <li>Set frequency and preferred days; jobs appear automatically</li>
+          </ul>
+          <p class="aj-feature-note">
+            Rounds can be fine-tuned with the visual planner as you add new work.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: BULK CHANGES -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Bulk updates</p>
+        <h2 class="aj-section-title">Handle price changes and schedule tweaks at scale.</h2>
+        <p class="aj-section-sub">
+          When fuel, wages or material costs change, you shouldn’t have to update every job one by one.
+          <%= ENV['WEBSITE_NAME'] %> helps you make controlled bulk changes with clear communication.
+        </p>
+      </div>
+
+      <div class="aj-feature-group">
+        <!-- Bulk price changes -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Bulk Price Changes</p>
+          <h3 class="aj-feature-title">Update pricing quickly and keep customers informed</h3>
+          <p class="aj-feature-text">
+            Adjust prices across selected jobs, routes or customer groups in a few steps. <%= ENV['WEBSITE_NAME'] %> can
+            apply changes from a chosen date and tie them to your messaging tools to keep customers in
+            the loop.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Increase or decrease prices for selected segments</li>
+            <li>Schedule changes to start on a future date</li>
+            <li>Use <%= ENV['WEBSITE_NAME'] %> messaging to notify affected customers</li>
+          </ul>
+          <p class="aj-feature-note">
+            Keep your margins healthy without causing confusion or extra admin.
+          </p>
+        </article>
+
+        <!-- Bulk scheduling tweaks -->
+        <article class="aj-feature-card">
+          <p class="aj-feature-label">Bulk Scheduling</p>
+          <h3 class="aj-feature-title">Shift schedules for entire rounds when plans change</h3>
+          <p class="aj-feature-text">
+            Bank holidays, road closures or staff leave can impact entire routes. With <%= ENV['WEBSITE_NAME'] %>, you
+            can move rounds or sets of jobs forward, back or onto different days without rebuilding
+            everything from scratch.
+          </p>
+          <ul class="aj-feature-list">
+            <li>Shift all jobs for a date range to another day</li>
+            <li>Reassign a full route to another worker for a period</li>
+            <li>Combine or split rounds as your business grows</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Don’t just take our word for it</p>
+        <h2 class="aj-section-title">Hear from teams who plan their whole day with <%= ENV['WEBSITE_NAME'] %>.</h2>
+        <p class="aj-section-sub">
+          Service businesses rely on <%= ENV['WEBSITE_NAME'] %> every day to schedule work, adapt to change and keep
+          customer promises without drowning in admin.
+        </p>
+      </div>
+
+      <div class="aj-testimonial-grid">
+        <article class="aj-testimonial-card">
+          <p class="aj-testimonial-logo">ROUTE-BASED CLEANING</p>
+          <h3 class="aj-testimonial-heading">“We can reshuffle the day in minutes.”</h3>
+          <p class="aj-testimonial-text">
+            If someone calls in sick or the weather changes, we use <%= ENV['WEBSITE_NAME'] %> to move jobs to other
+            routes and keep everything balanced. It used to take an hour on paper, now we do it in a
+            few clicks.
+          </p>
+          <p class="aj-testimonial-person">
+            <strong>Ash W.</strong>
+            Owner · Wicked Window Cleaning
+          </p>
+        </article>
+
+        <article class="aj-testimonial-card">
+          <p class="aj-testimonial-logo">GROWING BUSINESS</p>
+          <h3 class="aj-testimonial-heading">“Scaling routes without losing control.”</h3>
+          <p class="aj-testimonial-text">
+            As we added more customers and staff, the map-based planner in <%= ENV['WEBSITE_NAME'] %> kept everything
+            manageable. We can see who’s overloaded and move jobs around before it becomes an issue.
+          </p>
+          <p class="aj-testimonial-person">
+            <strong>Dan L.</strong>
+            Director · Somerset Window Cleaning
+          </p>
+        </article>
+
+        <article class="aj-testimonial-card">
+          <p class="aj-testimonial-logo">MODERN OPERATIONS</p>
+          <h3 class="aj-testimonial-heading">“A live control centre for the whole day.”</h3>
+          <p class="aj-testimonial-text">
+            The planner has become our daily control centre. We book jobs, see progress on the map and
+            can react fast when something unexpected happens. It’s taken a lot of stress out of the job.
+          </p>
+          <p class="aj-testimonial-person">
+            <strong>Emma C.</strong>
+            Operations · Cannins Exterior Cleaning
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="aj-section-heading">
+        <p class="aj-section-kicker">Guides &amp; resources</p>
+        <h2 class="aj-section-title">Articles to help you get the most out of <%= ENV['WEBSITE_NAME'] %> scheduling.</h2>
+      </div>
+
+      <div class="aj-articles-grid">
+        <article class="aj-article-card">
+          <p class="aj-article-tag">Rounds &amp; Routing</p>
+          <h3 class="aj-article-title">Scheduling by rounds: keeping jobs organised at scale</h3>
+          <p class="aj-article-text">
+            Learn how to use rounds in <%= ENV['WEBSITE_NAME'] %> to group jobs by area and frequency, so you can add new
+            work without breaking your routes.
+          </p>
+          <p class="aj-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="aj-article-link">Read more</a>
+        </article>
+
+        <article class="aj-article-card">
+          <p class="aj-article-tag">Operations</p>
+          <h3 class="aj-article-title">A week in the life of a modern cleaning company</h3>
+          <p class="aj-article-text">
+            Follow a growing cleaning company through a week as they use <%= ENV['WEBSITE_NAME'] %> to schedule work,
+            update jobs on the fly and keep customers informed.
+          </p>
+          <p class="aj-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="aj-article-link">Read more</a>
+        </article>
+
+        <article class="aj-article-card">
+          <p class="aj-article-tag">Family Business</p>
+          <h3 class="aj-article-title">Building a family business with smarter scheduling</h3>
+          <p class="aj-article-text">
+            See how one family-run service company used <%= ENV['WEBSITE_NAME'] %> to grow from a few routes to a
+            full-time team, without losing sight of customers or commitments.
+          </p>
+          <p class="aj-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="aj-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="aj-newsletter">
+      <div>
+        <h3>Make every day more productive and profitable with <%= ENV['WEBSITE_NAME'] %>.</h3>
+        <p>
+          Get occasional tips, feature updates and workflow ideas for planning jobs, routes and
+          schedules with less effort — no spam.
+        </p>
+      </div>
+      <form class="aj-newsletter-form">
+        <input type="email" class="aj-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="aj-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

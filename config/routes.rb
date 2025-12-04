@@ -59,6 +59,10 @@ Rails.application.routes.draw do
   get "/invoicing", to: "home#invoicing", as: :invoicing
   get "/expenses", to: "home#expenses", as: :expenses
   get "/bookkeeping", to: "home#bookkeeping", as: :bookkeeping
+  get "/customer_management", to: "home#customer_management", as: :customer_management
+  get "/jobs", to: "home#jobs", as: :jobs
+  get "/assignment_scheduling", to: "home#assignment_scheduling", as: :assignment_scheduling
+  get "/job_records", to: "home#job_records", as: :job_records
   
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'

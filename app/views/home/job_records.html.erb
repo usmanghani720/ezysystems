@@ -1,0 +1,250 @@
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Job Records & Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> Job Records & Tracking Page ===== */
+
+    .jr-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15,23,42,0.12);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+    .jr-page * { box-sizing: border-box; }
+    .jr-shell { max-width: 960px; margin: 0 auto; }
+
+    .jr-hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .jr-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .jr-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 8px rgba(129,140,248,0.8);
+    }
+    .jr-title {
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .jr-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 640px;
+      margin: 0 auto 24px;
+    }
+    .jr-cta-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79,70,229,0.4);
+      border-color: rgba(191,219,254,0.9);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79,70,229,0.6);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148,163,184,0.6);
+    }
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .jr-section {
+      margin-bottom: 48px;
+    }
+
+    .jr-section h2 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+    .jr-section p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .jr-feature-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .jr-feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .jr-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .jr-feature-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .jr-feature-text {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+    .jr-feature-list {
+      margin: 8px 0 0 16px;
+      color: var(--text-sub);
+    }
+    .jr-feature-list li {
+      margin-bottom: 6px;
+    }
+
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="jr-page" id="job-records">
+  <div class="jr-shell">
+
+    <!-- HERO -->
+    <section class="jr-hero">
+      <h1 class="jr-title">Capture, store and track every detail of your jobs.</h1>
+      <p class="jr-sub">
+        With <%= ENV['WEBSITE_NAME'] %>, you get a robust job-record and tracking system — upload photos and files, log time, add custom checklists and fields, and always have the full picture before, during, and after every job.
+      </p>
+      <div class="jr-cta-row">
+        <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+        <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+      </div>
+    </section>
+
+    <!-- FEATURE SECTIONS -->
+    <section class="jr-section">
+      <h2>Attach files, photos and evidence</h2>
+      <p>
+        Keep everything related to a job — before, during and after you work — in one organised place. Useful for proof-of-work, client references or compliance checks.
+      </p>
+      <div class="jr-feature-group">
+        <div class="jr-feature-card">
+          <p class="jr-feature-label">Photos &amp; Files</p>
+          <h3 class="jr-feature-title">Upload images, PDFs or documents per job</h3>
+          <p class="jr-feature-text">
+            Add before-/after photos, attach PDF reports or customer documents — everything stays linked to the job. Your whole team sees the same records.
+          </p>
+        </div>
+
+        <div class="jr-feature-card">
+          <p class="jr-feature-label">Proof of Work</p>
+          <h3 class="jr-feature-title">Secure evidence for compliance or clients</h3>
+          <p class="jr-feature-text">
+            With files and photos attached, you have a full history of what was done — ideal for audits, disputes or quality assurance.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="jr-section">
+      <h2>Track time & job duration</h2>
+      <p>
+        Accurately record how long each job takes to improve planning, payroll or invoicing. Gain insights to make scheduling more efficient over time.
+      </p>
+      <div class="jr-feature-group">
+        <div class="jr-feature-card">
+          <p class="jr-feature-label">Time Recording</p>
+          <h3 class="jr-feature-title">Log time spent on each task or job</h3>
+          <p class="jr-feature-text">
+            Team members can start, pause and stop timers, and every job record shows total time spent — helping with productivity tracking and accurate invoicing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="jr-section">
+      <h2>Custom checklists & fields</h2>
+      <p>
+        Ensure consistency and compliance across jobs by using custom checklists, notes, fields, or signatures as needed. Perfect for inspections, safety checks or special requirements.
+      </p>
+      <div class="jr-feature-group">
+        <div class="jr-feature-card">
+          <p class="jr-feature-label">Custom Checklists &amp; Fields</p>
+          <h3 class="jr-feature-title">Flexible job-specific forms and fields</h3>
+          <p class="jr-feature-text">
+            Create your own fields — text, numbers, checkboxes, images or even signatures — and link them to a job so nothing is overlooked.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="jr-section">
+      <h2>Secure storage & team access</h2>
+      <p>
+        All job records are stored securely, and accessible by everyone assigned to the job — so your whole team stays aligned no matter who did the work or where.
+      </p>
+      <div class="jr-feature-group">
+        <div class="jr-feature-card">
+          <p class="jr-feature-label">Unified Records</p>
+          <h3 class="jr-feature-title">All files & data in one place</h3>
+          <p class="jr-feature-text">
+            Images, documents, time logs, checklists — every detail for a job lives under one record. Easy to review, download or share when needed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

@@ -52,5 +52,21 @@ class HomeController < ApplicationController
 		def bookkeeping
 
 		end
+
+		def customer_management
+
+		end
+
+		def jobs
+
+		end
+
+		def assignment_scheduling
+
+		end
+
+		def job_records
+
+		end
   end
   
