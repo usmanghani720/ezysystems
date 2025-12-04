@@ -36,5 +36,21 @@ class HomeController < ApplicationController
 		def marketing_messaging
 
 		end
+
+		def payment
+
+		end
+
+		def invoicing
+
+		end
+
+		def expenses
+
+		end
+
+		def bookkeeping
+
+		end
   end
   

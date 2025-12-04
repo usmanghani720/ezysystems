@@ -1,0 +1,1141 @@
+
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Bookkeeping</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Bookkeeping Page ========= */
+
+    .bk-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .bk-page * {
+      box-sizing: border-box;
+    }
+
+    .bk-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .bk-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .bk-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .bk-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .bk-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .bk-title span {
+      color: var(--accent-dark);
+    }
+
+    .bk-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .bk-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .bk-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .bk-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bk-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .bk-hero-media {
+      position: relative;
+    }
+
+    .bk-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 20px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .bk-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .bk-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .bk-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .bk-hero-topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .bk-hero-topline span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #e5e7eb;
+    }
+
+    .bk-hero-topline strong {
+      font-size: 13px;
+    }
+
+    .bk-hero-table {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 12px;
+      padding: 10px 10px 8px;
+      margin-bottom: 8px;
+    }
+
+    .bk-hero-row,
+    .bk-hero-head {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 0.9fr 0.8fr;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .bk-hero-head {
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .bk-hero-row {
+      margin-bottom: 2px;
+    }
+
+    .bk-hero-row strong {
+      font-weight: 500;
+    }
+
+    .bk-hero-summary {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      font-size: 11px;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .bk-hero-summary dl {
+      margin: 0;
+    }
+
+    .bk-hero-summary dt {
+      color: #9ca3af;
+    }
+
+    .bk-hero-summary dd {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .bk-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .bk-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .bk-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .bk-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bk-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .bk-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .bk-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .bk-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .bk-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .bk-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Top-level feature grid ---------- */
+
+    .bk-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 960px) {
+      .bk-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .bk-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .bk-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .bk-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .bk-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .bk-feature-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .bk-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .bk-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bk-section-main-title {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .bk-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- Two-column blocks ---------- */
+
+    .bk-section-block {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+
+    .bk-section-block.reverse {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
+
+    @media (max-width: 900px) {
+      .bk-section-block,
+      .bk-section-block.reverse {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .bk-section-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .bk-section-text {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .bk-section-text + .bk-section-text {
+      margin-top: 2px;
+    }
+
+    .bk-section-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .bk-section-list li {
+      margin-bottom: 3px;
+    }
+
+    .bk-section-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+      font-size: 12px;
+    }
+
+    .bk-section-card h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .bk-section-card p {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .bk-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .bk-pill {
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .bk-pill.alt {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .bk-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .bk-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .bk-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .bk-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .bk-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bk-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bk-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bk-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bk-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .bk-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .bk-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .bk-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .bk-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .bk-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .bk-article-text {
+      color: var(--text-sub);
+    }
+
+    .bk-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .bk-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .bk-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .bk-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .bk-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bk-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .bk-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .bk-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .bk-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .bk-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .bk-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .bk-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="bk-page" id="bookkeeping">
+  <div class="bk-shell">
+
+    <!-- HERO -->
+    <section class="bk-hero">
+      <div>
+        <h1 class="bk-title">
+          Turn your daily work into <span>clean, accountant-ready books.</span>
+        </h1>
+        <p class="bk-sub">
+          <%= ENV['WEBSITE_NAME'] %> connects jobs, invoices, payments and expenses so your books stay accurate as you
+          work — not weeks later. See income, costs and profit in one clear view, then export everything
+          for your accountant or accounting software.
+        </p>
+        <p class="bk-hero-note">
+          No more guessing from bank statements or chasing missing invoices. <%= ENV['WEBSITE_NAME'] %> keeps your
+          records joined up from the moment a job is booked.
+        </p>
+
+        <div class="bk-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">See pricing</a>
+        </div>
+        <p class="bk-hero-foot">
+          <span>Scheduling, invoicing, payments, expenses and bookkeeping in one place.</span>
+        </p>
+      </div>
+
+      <!-- Right: bookkeeping mockup -->
+      <div class="bk-hero-media">
+        <div class="bk-hero-card">
+          <div class="bk-hero-header">
+            <div class="bk-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Bookkeeping Overview</div>
+            <div class="bk-hero-status">Month reconciled</div>
+          </div>
+
+          <div class="bk-hero-topline">
+            <span>Period: <strong>Mar 2025</strong></span>
+            <span>Profit: <strong>$18,420.75</strong></span>
+          </div>
+
+          <div class="bk-hero-table">
+            <div class="bk-hero-head">
+              <span>Category</span>
+              <span>Income</span>
+              <span>Expenses</span>
+              <span>Net</span>
+            </div>
+            <div class="bk-hero-row">
+              <span><strong>Routes &amp; regular jobs</strong></span>
+              <span>$28,560.00</span>
+              <span>$6,940.25</span>
+              <span>$21,619.75</span>
+            </div>
+            <div class="bk-hero-row">
+              <span>One-off work &amp; extras</span>
+              <span>$9,320.50</span>
+              <span>$2,519.50</span>
+              <span>$6,801.00</span>
+            </div>
+            <div class="bk-hero-row">
+              <span>Adjustments &amp; write-offs</span>
+              <span>$0.00</span>
+              <span>$0.00</span>
+              <span>$0.00</span>
+            </div>
+          </div>
+
+          <div class="bk-hero-summary">
+            <dl>
+              <dt>Total income</dt>
+              <dd>$37,880.50</dd>
+            </dl>
+            <dl>
+              <dt>Total expenses</dt>
+              <dd>$9,459.75</dd>
+            </dl>
+          </div>
+
+          <div class="bk-hero-meta">
+            View: <code>P&amp;L · This month · By category</code>
+          </div>
+
+          <div class="bk-hero-footer">
+            <span>
+              <span class="bk-hero-footer-dot"></span>
+              Data pulled from jobs, invoices &amp; expenses
+            </span>
+            <span>Export as CSV for accounting</span>
+          </div>
+        </div>
+        <div class="bk-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="bk-intro">
+      <h2>Bookkeeping that starts where your work actually happens.</h2>
+      <p>
+        Traditional bookkeeping tools expect you to rebuild your business in their system — customers,
+        invoices, payments, expenses. <%= ENV['WEBSITE_NAME'] %> already has that information, because it’s where you
+        schedule jobs, invoice and take payments.
+      </p>
+      <p>
+        That means your numbers are always close to reality: <strong>who owes what, how much you’ve
+        collected, and what you’ve spent to get the work done.</strong>
+      </p>
+      <p>
+        Use <%= ENV['WEBSITE_NAME'] %> day-to-day, then pass clean summaries and exports to your accountant or
+        accounting platform when they need deeper detail.
+      </p>
+    </section>
+
+    <!-- TOP-LEVEL FEATURE GRID -->
+    <section class="bk-feature-grid">
+      <article class="bk-feature-card">
+        <p class="bk-feature-label">Joined-up Data</p>
+        <h3 class="bk-feature-title">One source of truth for your numbers</h3>
+        <p class="bk-feature-text">
+          Jobs, invoices, payments and expenses live in the same system, so totals and reports are
+          based on real activity, not duplicate data entry.
+        </p>
+        <p class="bk-feature-meta">
+          No more juggling between scheduling software, spreadsheets and accounting tools just to
+          figure out the basics.
+        </p>
+      </article>
+
+      <article class="bk-feature-card">
+        <p class="bk-feature-label">Simple Reporting</p>
+        <h3 class="bk-feature-title">Understand performance in a glance</h3>
+        <p class="bk-feature-text">
+          See how much money is coming in, what’s been spent and how that breaks down by route,
+          service, team member or customer type.
+        </p>
+        <p class="bk-feature-meta">
+          Keep an eye on margins and spot issues before they become problems.
+        </p>
+      </article>
+
+      <article class="bk-feature-card">
+        <p class="bk-feature-label">Accountant-Friendly</p>
+        <h3 class="bk-feature-title">Exports tailored for bookkeeping software</h3>
+        <p class="bk-feature-text">
+          When it’s time for formal accounts, export clean CSV data your accountant can import into
+          their system, grouped and labelled properly.
+        </p>
+        <p class="bk-feature-meta">
+          Less time explaining spreadsheets, more time making decisions.
+        </p>
+      </article>
+    </section>
+
+    <!-- SECTION: DAILY BOOKKEEPING -->
+    <section>
+      <div class="bk-section-heading">
+        <p class="bk-section-kicker">Daily bookkeeping</p>
+        <h2 class="bk-section-main-title">Let your everyday workflow keep the books up to date.</h2>
+        <p class="bk-section-sub">
+          Every completed job, invoice, payment and expense automatically feeds into your bookkeeping
+          view, so you’re not building accounts from scratch later.
+        </p>
+      </div>
+
+      <div class="bk-section-block">
+        <div>
+          <p class="bk-section-label">Workflows</p>
+          <h2 class="bk-section-title">From job to invoice to payment, automatically reflected in your books.</h2>
+          <p class="bk-section-text">
+            When you or your team mark a job as complete, <%= ENV['WEBSITE_NAME'] %> already knows the services performed,
+            the pricing and which customer it belongs to. Turning that into an invoice and tracking the
+            payment is a natural, connected flow.
+          </p>
+          <p class="bk-section-text">
+            Once an invoice is paid, your bookkeeping views update automatically, showing income by
+            customer, route and service. Record your expenses and the full picture is there.
+          </p>
+          <ul class="bk-section-list">
+            <li>Jobs feed into invoicing automatically</li>
+            <li>Payments update balances and income totals</li>
+            <li>Expenses complete the picture for profit analysis</li>
+          </ul>
+        </div>
+
+        <aside class="bk-section-card">
+          <div class="bk-pill-row">
+            <span class="bk-pill">Jobs → Invoices</span>
+            <span class="bk-pill alt">Payments &amp; Expenses</span>
+          </div>
+          <h3>Bookkeeping as a byproduct of doing the work</h3>
+          <p>
+            Instead of catching up every few weeks, your numbers keep pace with the day’s schedule.
+            That makes it easier to trust what you’re seeing and act quickly when needed.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION: ACCOUNTANT / EXPORT -->
+    <section class="bk-section-block reverse">
+      <aside class="bk-section-card">
+        <div class="bk-pill-row">
+          <span class="bk-pill">CSV Export</span>
+          <span class="bk-pill alt">Accounting ready</span>
+        </div>
+        <h3>Give your accountant what they actually need</h3>
+        <p>
+          Export income and expense data with dates, categories, customer names and tax information,
+          ready to be imported into your accountant’s preferred software.
+        </p>
+      </aside>
+
+      <div>
+        <p class="bk-section-label">Accountant &amp; Tools</p>
+        <h2 class="bk-section-title">Pass clean, structured data to your accountant or accounting app.</h2>
+        <p class="bk-section-text">
+          Instead of sending messy spreadsheets or screenshots, share exports that are already grouped
+          by income type, expense category and tax rate. Your accountant can plug them straight into
+          their system.
+        </p>
+        <p class="bk-section-text">
+          You keep the operational view in <%= ENV['WEBSITE_NAME'] %> — jobs, customers, routes — while your accountant
+          handles compliance and statutory filings in tools designed for that job.
+        </p>
+        <ul class="bk-section-list">
+          <li>Export invoices, payments and expenses by date range</li>
+          <li>Include tax breakdowns and categories</li>
+          <li>Designed to work alongside common accounting platforms</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION: REPORTING & PROFIT -->
+    <section class="bk-section-block">
+      <div>
+        <p class="bk-section-label">Reporting</p>
+        <h2 class="bk-section-title">See which work is most profitable, not just most busy.</h2>
+        <p class="bk-section-text">
+          Use <%= ENV['WEBSITE_NAME'] %>’s views to compare income and costs by route, team member, service type or
+          customer segment. It’s not just about how much you’re doing — it’s about how much you’re
+          making.
+        </p>
+        <p class="bk-section-text">
+          With expenses properly captured and jobs tied to invoices, you can quickly see which areas are
+          high-margin and which ones need attention.
+        </p>
+        <ul class="bk-section-list">
+          <li>Filter by route, staff, service or customer type</li>
+          <li>Compare income against tracked expenses</li>
+          <li>Spot underperforming services or routes early</li>
+        </ul>
+      </div>
+
+      <aside class="bk-section-card">
+        <div class="bk-pill-row">
+          <span class="bk-pill">Routes</span>
+          <span class="bk-pill">Services</span>
+          <span class="bk-pill alt">Profit focus</span>
+        </div>
+        <h3>Decisions based on more than gut feeling</h3>
+        <p>
+          When you can see how work translates into profit, you make stronger decisions about pricing,
+          discounts and which jobs are worth prioritising.
+        </p>
+      </aside>
+    </section>
+
+    <!-- SECTION: YEAR-END / COMPLIANCE -->
+    <section class="bk-section-block reverse">
+      <aside class="bk-section-card">
+        <div class="bk-pill-row">
+          <span class="bk-pill">Year-end</span>
+          <span class="bk-pill alt">Compliance</span>
+        </div>
+        <h3>Arrive at year-end prepared, not panicked</h3>
+        <p>
+          With income, expenses and tax details already in order, year-end stops being a frantic scramble
+          and becomes a simple handover to your accountant.
+        </p>
+      </aside>
+
+      <div>
+        <p class="bk-section-label">Year-end &amp; Tax</p>
+        <h2 class="bk-section-title">Stay ready for tax time all year round.</h2>
+        <p class="bk-section-text">
+          Good bookkeeping isn’t a once-a-year event. <%= ENV['WEBSITE_NAME'] %> makes it part of your everyday workflow,
+          so by the time year-end or tax deadlines roll around, most of the heavy lifting is already done.
+        </p>
+        <p class="bk-section-text">
+          Run summaries for the year, export data for your accountant and keep digital records of the
+          key details your accountant will ask for.
+        </p>
+        <ul class="bk-section-list">
+          <li>Yearly summaries for income, expenses and tax</li>
+          <li>Digital audit trail of invoices, payments and receipts</li>
+          <li>Cleaner data for smoother tax filings</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="bk-section-heading">
+        <p class="bk-section-kicker">What teams say about <%= ENV['WEBSITE_NAME'] %> bookkeeping</p>
+        <h2 class="bk-section-main-title">Less guesswork, more confidence in the numbers.</h2>
+        <p class="bk-section-sub">
+          Hear from businesses that use <%= ENV['WEBSITE_NAME'] %> to keep their books aligned with what’s really
+          happening day to day.
+        </p>
+      </div>
+
+      <div class="bk-testimonial-grid">
+        <article class="bk-testimonial-card">
+          <p class="bk-testimonial-logo">ROUTE-BASED CLEANING</p>
+          <h3 class="bk-testimonial-heading">“We finally see the full picture.”</h3>
+          <p class="bk-testimonial-text">
+            Before <%= ENV['WEBSITE_NAME'] %>, we had rough ideas of what we earned. Now, with jobs, invoices, payments
+            and expenses tied together, we can see real profit by route and service.
+          </p>
+          <p class="bk-testimonial-person">
+            <strong>Tom H.</strong>
+            Owner · ClearView Routes
+          </p>
+        </article>
+
+        <article class="bk-testimonial-card">
+          <p class="bk-testimonial-logo">HOME SERVICES</p>
+          <h3 class="bk-testimonial-heading">“My accountant loves the exports.”</h3>
+          <p class="bk-testimonial-text">
+            Instead of asking for piles of paperwork, our accountant just asks for the <%= ENV['WEBSITE_NAME'] %> export.
+            Everything is grouped correctly and ready to be imported into their system.
+          </p>
+          <p class="bk-testimonial-person">
+            <strong>Amelia P.</strong>
+            Director · BrightNest Home Care
+          </p>
+        </article>
+
+        <article class="bk-testimonial-card">
+          <p class="bk-testimonial-logo">GROWING TEAMS</p>
+          <h3 class="bk-testimonial-heading">“We plan growth with real numbers now.”</h3>
+          <p class="bk-testimonial-text">
+            Because the books update in step with daily work, we trust our reports. That makes it far
+            easier to plan new hires, vehicles and routes with confidence.
+          </p>
+          <p class="bk-testimonial-person">
+            <strong>Marcus Y.</strong>
+            Operations Lead · RouteRise Services
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="bk-section-heading">
+        <p class="bk-section-kicker">Guides &amp; resources</p>
+        <h2 class="bk-section-main-title">Articles to help you build better bookkeeping habits.</h2>
+      </div>
+
+      <div class="bk-articles-grid">
+        <article class="bk-article-card">
+          <p class="bk-article-tag">Bookkeeping Basics</p>
+          <h3 class="bk-article-title">Connecting daily operations to your books in <%= ENV['WEBSITE_NAME'] %></h3>
+          <p class="bk-article-text">
+            Learn how jobs, invoices, payments and expenses flow together so your bookkeeping view
+            stays accurate without extra admin.
+          </p>
+          <p class="bk-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="bk-article-link">Read more</a>
+        </article>
+
+        <article class="bk-article-card">
+          <p class="bk-article-tag">Reporting</p>
+          <h3 class="bk-article-title">Using <%= ENV['WEBSITE_NAME'] %> to understand profit by route and service</h3>
+          <p class="bk-article-text">
+            See how to use filters and summaries to compare income and cost across different parts of
+            your business.
+          </p>
+          <p class="bk-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="bk-article-link">Read more</a>
+        </article>
+
+        <article class="bk-article-card">
+          <p class="bk-article-tag">Year-end Prep</p>
+          <h3 class="bk-article-title">Preparing accountant-ready exports from <%= ENV['WEBSITE_NAME'] %></h3>
+          <p class="bk-article-text">
+            A simple checklist to follow before sending your data to your accountant at year-end or
+            during tax season.
+          </p>
+          <p class="bk-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="bk-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="bk-newsletter">
+      <div>
+        <h3>Stay ahead with <%= ENV['WEBSITE_NAME'] %> bookkeeping tips and updates.</h3>
+        <p>
+          Get occasional ideas, feature updates and best practices for keeping your numbers accurate
+          and your books tidy — without extra effort.
+        </p>
+      </div>
+      <form class="bk-newsletter-form">
+        <input type="email" class="bk-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="bk-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

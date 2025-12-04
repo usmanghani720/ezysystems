@@ -55,7 +55,11 @@ Rails.application.routes.draw do
   get "/customer_messaging", to: "home#customer_messaging", as: :customer_messaging
   get "/marketing_tools", to: "home#marketing_tools", as: :marketing_tools
   get "/marketing_messaging", to: "home#marketing_messaging", as: :marketing_messaging
-
+  get "/payment", to: "home#payment", as: :payment
+  get "/invoicing", to: "home#invoicing", as: :invoicing
+  get "/expenses", to: "home#expenses", as: :expenses
+  get "/bookkeeping", to: "home#bookkeeping", as: :bookkeeping
+  
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
   

@@ -1,0 +1,1087 @@
+
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Payments & Quotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Payments Page ========= */
+
+    .pay-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .pay-page * {
+      box-sizing: border-box;
+    }
+
+    .pay-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .pay-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .pay-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .pay-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .pay-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .pay-title span {
+      color: var(--accent-dark);
+    }
+
+    .pay-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .pay-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .pay-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .pay-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pay-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .pay-hero-media {
+      position: relative;
+    }
+
+    .pay-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 20px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .pay-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .pay-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .pay-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .pay-hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .pay-hero-stat label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .pay-hero-stat strong {
+      font-size: 14px;
+    }
+
+    .pay-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .pay-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .pay-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .pay-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pay-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .pay-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .pay-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .pay-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .pay-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .pay-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Feature grid (top-level) ---------- */
+
+    .pay-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 960px) {
+      .pay-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .pay-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .pay-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .pay-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .pay-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .pay-feature-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---------- Two-column sections ---------- */
+
+    .pay-section-block {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 36px;
+      align-items: center;
+      margin-bottom: 44px;
+    }
+
+    .pay-section-block.reverse {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    }
+
+    @media (max-width: 900px) {
+      .pay-section-block,
+      .pay-section-block.reverse {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-section-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .pay-section-title {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .pay-section-text {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .pay-section-text + .pay-section-text {
+      margin-top: 2px;
+    }
+
+    .pay-section-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .pay-section-list li {
+      margin-bottom: 3px;
+    }
+
+    .pay-section-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      padding: 18px 18px 16px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+      font-size: 12px;
+    }
+
+    .pay-section-card h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .pay-section-card p {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .pay-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pay-pill {
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .pay-pill.alt {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .pay-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .pay-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .pay-section-main-title {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .pay-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .pay-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .pay-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .pay-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .pay-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .pay-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pay-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pay-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pay-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pay-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .pay-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .pay-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .pay-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .pay-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .pay-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .pay-article-text {
+      color: var(--text-sub);
+    }
+
+    .pay-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .pay-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .pay-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .pay-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .pay-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pay-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .pay-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .pay-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .pay-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .pay-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .pay-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .pay-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="pay-page" id="payments">
+  <div class="pay-shell">
+
+    <!-- HERO -->
+    <section class="pay-hero">
+      <div>
+        <h1 class="pay-title">
+          Make it easy for customers to pay—<span>no chasing, no stress.</span>
+        </h1>
+        <p class="pay-sub">
+          <%= ENV['WEBSITE_NAME'] %> connects quoting, invoicing and payments so you can move from first enquiry to paid
+          job in just a few clicks. Customers pay the way they prefer, and your accounts stay up to date
+          automatically.
+        </p>
+        <p class="pay-hero-note">
+          Invite customers to set up automated payment methods, take card payments on-site, or let them
+          pay securely online. However they pay, it’s all tracked back to the same customer record.
+        </p>
+
+        <div class="pay-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">See pricing</a>
+        </div>
+        <p class="pay-hero-foot">
+          <span>Built-in tools for quotes, invoices and payments.</span> No extra systems to bolt on.
+        </p>
+      </div>
+
+      <!-- Right: payments mockup -->
+      <div class="pay-hero-media">
+        <div class="pay-hero-card">
+          <div class="pay-hero-header">
+            <div class="pay-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Payments</div>
+            <div class="pay-hero-status">Invoice paid</div>
+          </div>
+
+          <div class="pay-hero-stats">
+            <div class="pay-hero-stat">
+              <label>Outstanding</label>
+              <strong>$0.00</strong>
+            </div>
+            <div class="pay-hero-stat">
+              <label>Paid this week</label>
+              <strong>$8.4k</strong>
+            </div>
+            <div class="pay-hero-stat">
+              <label>Auto-pay</label>
+              <strong>74%</strong>
+            </div>
+          </div>
+
+          <div class="pay-hero-meta">
+            Method: <code>Auto payment · Card · Stripe</code>
+          </div>
+
+          <div class="pay-hero-footer">
+            <span>
+              <span class="pay-hero-footer-dot"></span>
+              Job → Invoice → Payment → Receipt
+            </span>
+            <span>Fully tracked in <%= ENV['WEBSITE_NAME'] %></span>
+          </div>
+        </div>
+        <div class="pay-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="pay-intro">
+      <h2>Streamline payments and quoting from one place.</h2>
+      <p>
+        Getting paid shouldn’t be the hardest part of the job. With <%= ENV['WEBSITE_NAME'] %>, quoting, invoicing and
+        payments all live in the same system, connected to your customers and your schedule.
+      </p>
+      <p>
+        Create a quote, send it instantly, get notified when it’s approved and convert it to a job in
+        a couple of clicks. Once the job is done, invoices can be sent automatically and paid online,
+        in person, or via automated methods.
+      </p>
+      <p>
+        <strong>Less chasing, fewer spreadsheets and clearer cash flow</strong> – so you can focus on
+        doing great work, not tracking who still owes what.
+      </p>
+    </section>
+
+    <!-- TOP-LEVEL FEATURE GRID -->
+    <section class="pay-feature-grid">
+      <article class="pay-feature-card">
+        <p class="pay-feature-label">Automatic Payments</p>
+        <h3 class="pay-feature-title">Let payments run in the background</h3>
+        <p class="pay-feature-text">
+          Invite customers to save a card on file or set up direct debit. When you mark the job complete,
+          <%= ENV['WEBSITE_NAME'] %> triggers payment automatically and issues a receipt.
+        </p>
+        <p class="pay-feature-meta">
+          Works with providers like Stripe and GoCardless so you don’t have to reinvent your payment stack.
+        </p>
+      </article>
+
+      <article class="pay-feature-card">
+        <p class="pay-feature-label">Manual &amp; Recorded Payments</p>
+        <h3 class="pay-feature-title">Log payments in a couple of taps</h3>
+        <p class="pay-feature-text">
+          Cash, bank transfer or on-site card payment – however the customer pays, you can record it
+          quickly and keep the invoice, customer and account balances in sync.
+        </p>
+        <p class="pay-feature-meta">
+          No more paper notes or guessing what was paid where.
+        </p>
+      </article>
+
+      <article class="pay-feature-card">
+        <p class="pay-feature-label">Quotes &amp; Statements</p>
+        <h3 class="pay-feature-title">From quote to statement, fully connected</h3>
+        <p class="pay-feature-text">
+          Generate professional quotes, convert them to jobs without retyping, and send clear customer
+          statements that show every job, invoice and payment.
+        </p>
+        <p class="pay-feature-meta">
+          Help customers see exactly what they owe and why.
+        </p>
+      </article>
+    </section>
+
+    <!-- DEEPER SECTIONS -->
+
+    <!-- Automatic Payments -->
+    <section class="pay-section-block">
+      <div>
+        <p class="pay-section-label">Automatic Payments</p>
+        <h2 class="pay-section-title">Get paid automatically when jobs are complete.</h2>
+        <p class="pay-section-text">
+          <%= ENV['WEBSITE_NAME'] %> lets you offer automated payment options so customers are charged only once the job
+          is marked as done. Set up recurring card payments through Stripe, or direct debit via providers
+          like GoCardless.
+        </p>
+        <p class="pay-section-text">
+          As soon as work is completed, <%= ENV['WEBSITE_NAME'] %> can send the invoice by SMS and email, trigger the
+          payment request and send the customer a receipt – without you lifting a finger.
+        </p>
+        <ul class="pay-section-list">
+          <li>Card-on-file and direct debit options</li>
+          <li>Charge only when the job is complete</li>
+          <li>Automatic receipts and notifications</li>
+        </ul>
+      </div>
+
+      <aside class="pay-section-card">
+        <div class="pay-pill-row">
+          <span class="pay-pill">Stripe</span>
+          <span class="pay-pill">GoCardless</span>
+          <span class="pay-pill alt">Auto-pay</span>
+        </div>
+        <h3>Fewer late payments, better cash flow</h3>
+        <p>
+          With customers on automated payments, you can forecast income more accurately and spend far
+          less time chasing outstanding invoices.
+        </p>
+      </aside>
+    </section>
+
+    <!-- Record Payments -->
+    <section class="pay-section-block reverse">
+      <aside class="pay-section-card">
+        <div class="pay-pill-row">
+          <span class="pay-pill">Cash &amp; Bank</span>
+          <span class="pay-pill alt">Instant logging</span>
+        </div>
+        <h3>One place to record every payment</h3>
+        <p>
+          Whether it’s cash on the doorstep, a bank transfer that lands overnight or an online payment
+          from a portal, logging it in <%= ENV['WEBSITE_NAME'] %> takes seconds.
+        </p>
+      </aside>
+
+      <div>
+        <p class="pay-section-label">Record Payments</p>
+        <h2 class="pay-section-title">Log payments quickly and keep records accurate.</h2>
+        <p class="pay-section-text">
+          Open the job or invoice, choose the payment method and enter the amount. <%= ENV['WEBSITE_NAME'] %> updates the
+          invoice status, customer balance and your payment reports at the same time.
+        </p>
+        <p class="pay-section-text">
+          You’ll always know who has paid, who still has an outstanding balance and how much is due in
+          total – without scrolling through bank statements and manual lists.
+        </p>
+        <ul class="pay-section-list">
+          <li>Capture cash, bank transfer and external card payments</li>
+          <li>See up-to-date balances for each customer</li>
+          <li>Exportable records for your accountant or bookkeeping tools</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Point of Sale / Tap to Pay -->
+    <section class="pay-section-block">
+      <div>
+        <p class="pay-section-label">Point of Sale</p>
+        <h2 class="pay-section-title">Take secure in-person payments on the spot.</h2>
+        <p class="pay-section-text">
+          Use point-of-sale tools such as Square’s ‘tap to pay’ on compatible devices to accept card
+          payments without extra hardware. Charge the customer as you finish the job and keep everything
+          in sync with <%= ENV['WEBSITE_NAME'] %>.
+        </p>
+        <p class="pay-section-text">
+          It’s ideal for teams on the move who want to give customers flexibility while keeping a clean
+          digital record of every transaction.
+        </p>
+        <ul class="pay-section-list">
+          <li>Accept contactless card payments on-site</li>
+          <li>Issue invoices and receipts digitally</li>
+          <li>All payments recorded in <%= ENV['WEBSITE_NAME'] %> for reporting</li>
+        </ul>
+      </div>
+
+      <aside class="pay-section-card">
+        <div class="pay-pill-row">
+          <span class="pay-pill">Square</span>
+          <span class="pay-pill alt">Tap to pay</span>
+        </div>
+        <h3>Fast, flexible payments in person</h3>
+        <p>
+          Reduce the “I’ll pay later” scenarios by making it easy for customers to pay there and then,
+          while your team is still on site.
+        </p>
+      </aside>
+    </section>
+
+    <!-- Create & Send Quotes -->
+    <section class="pay-section-block reverse">
+      <aside class="pay-section-card">
+        <div class="pay-pill-row">
+          <span class="pay-pill">Quotes</span>
+          <span class="pay-pill alt">Instant approvals</span>
+        </div>
+        <h3>From quote to booked job with no retyping</h3>
+        <p>
+          Customers receive clear, branded quotes they can approve online. Once accepted, you can turn
+          them into scheduled jobs with just a few clicks.
+        </p>
+      </aside>
+
+      <div>
+        <p class="pay-section-label">Create &amp; Send Quotes</p>
+        <h2 class="pay-section-title">Move from enquiry to scheduled work faster.</h2>
+        <p class="pay-section-text">
+          Build professional quotes using saved services and pricing rules in <%= ENV['WEBSITE_NAME'] %>. Send them by
+          email or SMS, then track who has opened, viewed or accepted them.
+        </p>
+        <p class="pay-section-text">
+          When a quote is accepted, there’s no need to re-enter details. Convert it directly into a job,
+          assign it to a worker and keep all pricing information consistent.
+        </p>
+        <ul class="pay-section-list">
+          <li>Instant quote sending via email and SMS</li>
+          <li>Status tracking (sent, viewed, accepted, declined)</li>
+          <li>One-click conversion to booked jobs</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Customer Statements -->
+    <section class="pay-section-block">
+      <div>
+        <p class="pay-section-label">Customer Statements</p>
+        <h2 class="pay-section-title">Show customers a clear history of work and payments.</h2>
+        <p class="pay-section-text">
+          Generate statements that show every job, invoice, payment and outstanding balance for a chosen
+          period. Email them directly from <%= ENV['WEBSITE_NAME'] %> or export when needed.
+        </p>
+        <p class="pay-section-text">
+          This level of transparency helps customers understand what they’re paying for, reduces billing
+          disputes and improves overall trust.
+        </p>
+        <ul class="pay-section-list">
+          <li>Statements by customer, date range or account type</li>
+          <li>Include jobs, invoices, payments and credit notes</li>
+          <li>Ideal for regular commercial clients and end-of-year summaries</li>
+        </ul>
+      </div>
+
+      <aside class="pay-section-card">
+        <div class="pay-pill-row">
+          <span class="pay-pill">Transparency</span>
+          <span class="pay-pill alt">Fewer disputes</span>
+        </div>
+        <h3>Give customers the full picture</h3>
+        <p>
+          Statements make it simple for customers to reconcile their own records, which means fewer
+          questions and faster payments.
+        </p>
+      </aside>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="pay-section-heading">
+        <p class="pay-section-kicker">Don’t just take our word for it</p>
+        <h2 class="pay-section-main-title">Hear from teams using <%= ENV['WEBSITE_NAME'] %> to simplify payments.</h2>
+        <p class="pay-section-sub">
+          See how service businesses connect automatic payments, on-site card charging and clear quoting
+          into one smooth process.
+        </p>
+      </div>
+
+      <div class="pay-testimonial-grid">
+        <article class="pay-testimonial-card">
+          <p class="pay-testimonial-logo">PROPERTY SERVICES</p>
+          <h3 class="pay-testimonial-heading">“Chasing payments almost disappeared overnight.”</h3>
+          <p class="pay-testimonial-text">
+            Once we moved regular customers onto automated payments, outstanding invoices dropped
+            dramatically. Now most of our income is collected without anyone picking up the phone.
+          </p>
+          <p class="pay-testimonial-person">
+            <strong>Sam D.</strong>
+            Director · Summit Property Care
+          </p>
+        </article>
+
+        <article class="pay-testimonial-card">
+          <p class="pay-testimonial-logo">ROUTE-BASED CLEANING</p>
+          <h3 class="pay-testimonial-heading">“Jobs, invoices and payments finally live together.”</h3>
+          <p class="pay-testimonial-text">
+            Before <%= ENV['WEBSITE_NAME'] %> we had a diary, a separate invoicing system and our bank. Now it’s all in
+            one place. It’s easier to see what’s been paid and which routes bring in the most revenue.
+          </p>
+          <p class="pay-testimonial-person">
+            <strong>Leah C.</strong>
+            Owner · ClearGlass Services
+          </p>
+        </article>
+
+        <article class="pay-testimonial-card">
+          <p class="pay-testimonial-logo">HOME MAINTENANCE</p>
+          <h3 class="pay-testimonial-heading">“Quotes, approvals and payments are all connected.”</h3>
+          <p class="pay-testimonial-text">
+            We send a quote, get notified when it’s accepted, and schedule the job straight away.
+            Once we mark it as done, invoices and payments just flow. Admin has dropped by at least 70%.
+          </p>
+          <p class="pay-testimonial-person">
+            <strong>Jordan P.</strong>
+            Operations Lead · Evergreen Maintenance
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="pay-section-heading">
+        <p class="pay-section-kicker">Guides &amp; resources</p>
+        <h2 class="pay-section-main-title">Articles to help you simplify quoting and payments.</h2>
+      </div>
+
+      <div class="pay-articles-grid">
+        <article class="pay-article-card">
+          <p class="pay-article-tag">Automatic Payments</p>
+          <h3 class="pay-article-title">Connecting Stripe &amp; GoCardless to <%= ENV['WEBSITE_NAME'] %></h3>
+          <p class="pay-article-text">
+            Learn how to link your payment providers, sync customers and start charging automatically
+            when jobs are complete.
+          </p>
+          <p class="pay-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="pay-article-link">Read more</a>
+        </article>
+
+        <article class="pay-article-card">
+          <p class="pay-article-tag">Cash Flow</p>
+          <h3 class="pay-article-title">5 ways to improve cash flow with better payment workflows</h3>
+          <p class="pay-article-text">
+            From offering auto-pay to using statements and reminders, discover simple changes that can
+            transform your cash flow.
+          </p>
+          <p class="pay-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="pay-article-link">Read more</a>
+        </article>
+
+        <article class="pay-article-card">
+          <p class="pay-article-tag">Quoting</p>
+          <h3 class="pay-article-title">Turning more quotes into booked work</h3>
+          <p class="pay-article-text">
+            See how faster quoting, clear layouts and automatic follow-ups can increase your conversion
+            rate and keep your team busy.
+          </p>
+          <p class="pay-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="pay-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="pay-newsletter">
+      <div>
+        <h3>Stay up to date on <%= ENV['WEBSITE_NAME'] %> payments and quoting.</h3>
+        <p>
+          Get occasional tips, product updates and ideas for improving cash flow and reducing admin – no spam,
+          just practical advice.
+        </p>
+      </div>
+      <form class="pay-newsletter-form">
+        <input type="email" class="pay-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="pay-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>
