@@ -1,0 +1,884 @@
+  <head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Self-Service Customer Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Customer Portal Page ========= */
+
+    .portal-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .portal-page * {
+      box-sizing: border-box;
+    }
+
+    .portal-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .portal-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .portal-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .portal-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .portal-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .portal-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .portal-title span {
+      color: var(--accent-dark);
+    }
+
+    .portal-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .portal-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .portal-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .portal-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .portal-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .portal-hero-media {
+      position: relative;
+    }
+
+    .portal-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 20px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .portal-hero-chip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .portal-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .portal-hero-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.16);
+      color: #bbf7d0;
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      font-weight: 500;
+    }
+
+    .portal-hero-balance {
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+
+    .portal-hero-balance label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .portal-hero-balance strong {
+      font-size: 18px;
+    }
+
+    .portal-hero-list {
+      font-size: 11px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px 10px;
+      margin-bottom: 14px;
+    }
+
+    .portal-hero-list span {
+      opacity: 0.9;
+    }
+
+    .portal-hero-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .portal-hero-pay-btn {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(to right, #22c55e, #16a34a);
+      color: #ecfdf5;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 500;
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.5);
+    }
+
+    .portal-hero-tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      color: #cbd5f5;
+    }
+
+    .portal-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro section ---------- */
+
+    .portal-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .portal-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .portal-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .portal-intro p + p {
+      margin-top: 2px;
+    }
+
+    .portal-intro-highlight {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    /* ---------- Feature cards ---------- */
+
+    .portal-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 960px) {
+      .portal-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .portal-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .portal-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .portal-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .portal-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .portal-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .portal-feature-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .portal-section-header {
+      margin-bottom: 18px;
+    }
+
+    .portal-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .portal-section-title {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .portal-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 560px;
+    }
+
+    .portal-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 52px;
+    }
+
+    @media (max-width: 960px) {
+      .portal-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 700px) {
+      .portal-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .portal-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .portal-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .portal-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portal-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portal-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portal-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .portal-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .portal-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 960px) {
+      .portal-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 700px) {
+      .portal-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .portal-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .portal-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .portal-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .portal-article-text {
+      color: var(--text-sub);
+    }
+
+    .portal-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .portal-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .portal-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .portal-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .portal-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .portal-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .portal-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .portal-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .portal-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .portal-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .portal-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .portal-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="portal-page" id="customer-portal">
+  <div class="portal-shell">
+
+    <!-- HERO -->
+    <section class="portal-hero">
+      <div>
+        <h1 class="portal-title">
+          Let your customers <span>book, pay and manage</span> their services anytime.
+        </h1>
+        <p class="portal-sub">
+          The <%= ENV['WEBSITE_NAME'] %> Customer Portal gives your clients a single place to see upcoming visits,
+          review their full payment history, check their balance and pay in seconds — without needing
+          to message your team.
+        </p>
+        <p class="portal-hero-note">
+          Designed for always-on customers, the portal cuts down repetitive calls and messages by
+          giving them instant answers.
+        </p>
+
+        <div class="portal-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+        </div>
+        <p class="portal-hero-foot">
+          <span>Works with your existing <%= ENV['WEBSITE_NAME'] %> account.</span> No extra software to install.
+        </p>
+      </div>
+
+      <!-- Right: mock customer-portal card -->
+      <div class="portal-hero-media">
+        <div class="portal-hero-card">
+          <div class="portal-hero-chip-row">
+            <div class="portal-hero-chip">
+              Customer Portal · <%= ENV['WEBSITE_NAME'] %>
+            </div>
+            <div class="portal-hero-badge">
+              Customer logged in
+            </div>
+          </div>
+
+          <div class="portal-hero-balance">
+            <label>Current balance</label>
+            <strong>$87.80</strong>
+          </div>
+
+          <div class="portal-hero-list">
+            <span>• Next visit: Tue 21st</span>
+            <span>• Last payment: Stripe</span>
+            <span>• 24/7 access</span>
+            <span>• 12 past invoices</span>
+            <span>• Card on file</span>
+            <span>• Messaging enabled</span>
+          </div>
+
+          <div class="portal-hero-actions">
+            <button class="portal-hero-pay-btn">Pay balance now</button>
+            <span class="portal-hero-tag">Customer view · Live sync</span>
+          </div>
+        </div>
+        <div class="portal-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="portal-intro">
+      <h2>Give your customers 24/7 access to everything they need.</h2>
+      <p>
+        Upcoming appointments, payment history and their current balance are all visible in one place
+        inside the <%= ENV['WEBSITE_NAME'] %> Customer Portal.
+      </p>
+      <p>
+        By letting customers help themselves, you reduce inbound messages across WhatsApp, SMS and email —
+        while still delivering <span class="portal-intro-highlight">faster support and a more professional experience.</span>
+      </p>
+      <p>
+        Add optional components like self-service quotes and online booking so new customers can discover
+        your services, request a quote and confirm their first appointment without you lifting a finger.
+      </p>
+    </section>
+
+    <!-- FEATURE GRID -->
+    <section class="portal-feature-grid">
+      <article class="portal-feature-card" id="customer-portal-card">
+        <p class="portal-feature-label">Portal Website</p>
+        <h3 class="portal-feature-title">Secure portal, branded to your business</h3>
+        <p class="portal-feature-text">
+          Each customer can sign in with their email or portal ID to see upcoming work, invoices and
+          payments — all styled with your logo and colours, and linked directly from your website or emails.
+        </p>
+        <p class="portal-feature-meta">
+          Works seamlessly on desktop, tablet and mobile.
+        </p>
+      </article>
+
+      <article class="portal-feature-card" id="payments">
+        <p class="portal-feature-label">Request Quote</p>
+        <h3 class="portal-feature-title">Showcase services and capture new bookings</h3>
+        <p class="portal-feature-text">
+          Use the quoting component to list your services and optional extras. Decide whether customers
+          receive instant pricing or submit a quote request with photos and notes.
+        </p>
+        <p class="portal-feature-meta">
+          Connected directly to your <%= ENV['WEBSITE_NAME'] %> services and pricing rules.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Reviews</p>
+        <h3 class="portal-feature-title">Turn every job into social proof</h3>
+        <p class="portal-feature-text">
+          After each visit, customers are invited to leave a quick star rating and review. High-scoring
+          reviews can be nudged towards Google or Facebook to help grow your reputation.
+        </p>
+        <p class="portal-feature-meta">
+          Build trust automatically with every completed appointment.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Cards &amp; Payments</p>
+        <h3 class="portal-feature-title">Customers can update payment details themselves</h3>
+        <p class="portal-feature-text">
+          Let customers add or update card details or direct debit mandates directly in the portal, so your
+          team no longer has to chase card numbers or expired details manually.
+        </p>
+        <p class="portal-feature-meta">
+          Works with your chosen payment processors in <%= ENV['WEBSITE_NAME'] %>.
+        </p>
+      </article>
+
+      <article class="portal-feature-card" id="customer-management">
+        <p class="portal-feature-label">Appointments</p>
+        <h3 class="portal-feature-title">See what’s coming up at a glance</h3>
+        <p class="portal-feature-text">
+          Customers can view today’s appointment, their upcoming schedule and past visits — with optional ETAs
+          if you choose to share them.
+        </p>
+        <p class="portal-feature-meta">
+          Fewer “What time are you coming?” messages in your inbox.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Live Chat</p>
+        <h3 class="portal-feature-title">All portal messages in one tidy hub</h3>
+        <p class="portal-feature-text">
+          Incoming questions from the portal land in a single message stream so nothing gets lost. Keep the
+          whole conversation threaded against the customer record.
+        </p>
+        <p class="portal-feature-meta">
+          Optional auto-replies can guide customers back to self-service options.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Profile</p>
+        <h3 class="portal-feature-title">Let customers keep their own details up to date</h3>
+        <p class="portal-feature-text">
+          Customers can update their contact details, addresses and communication preferences themselves,
+          so your CRM stays accurate without admin time.
+        </p>
+        <p class="portal-feature-meta">
+          Changes sync instantly to their profile in <%= ENV['WEBSITE_NAME'] %>.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Automation</p>
+        <h3 class="portal-feature-title">Set it once. Let the portal do the work.</h3>
+        <p class="portal-feature-text">
+          Combine reminders, quotes, bookings and payment requests so your team moves from manual follow-ups
+          to reviewing results.
+        </p>
+        <p class="portal-feature-meta">
+          Available on Advanced and Ultimate plans.
+        </p>
+      </article>
+
+      <article class="portal-feature-card">
+        <p class="portal-feature-label">Upgrade Path</p>
+        <h3 class="portal-feature-title">Start small, expand as you grow</h3>
+        <p class="portal-feature-text">
+          Enable the basic portal on day one, then add quoting, reviews, live chat and more when your
+          processes are ready.
+        </p>
+        <p class="portal-feature-meta">
+          Configure everything from inside your <%= ENV['WEBSITE_NAME'] %> settings.
+        </p>
+      </article>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="portal-section-header">
+        <p class="portal-section-kicker">How <%= ENV['WEBSITE_NAME'] %> helps teams like yours</p>
+        <h2 class="portal-section-title">Save admin time and give customers a better experience.</h2>
+        <p class="portal-section-sub">
+          Hear how service businesses use <%= ENV['WEBSITE_NAME'] %> and the customer portal to stay organised, reduce admin and
+          get paid faster.
+        </p>
+      </div>
+
+      <div class="portal-testimonial-grid">
+        <article class="portal-testimonial-card">
+          <p class="portal-testimonial-logo">FIELD SERVICES · 12 OPERATIVES</p>
+          <h3 class="portal-testimonial-heading">“The portal has become our always-on front desk.”</h3>
+          <p class="portal-testimonial-text">
+            Before <%= ENV['WEBSITE_NAME'] %> we were replying to messages all evening just to answer simple questions.
+            Now customers log in, check their next visit, see what they owe and pay in a few taps.
+            Our phones are quieter and the team can focus on the work.
+          </p>
+          <p class="portal-testimonial-person">
+            <strong>Alex R.</strong>
+            Owner · Northside Exterior Cleaning
+          </p>
+        </article>
+
+        <article class="portal-testimonial-card">
+          <p class="portal-testimonial-logo">HOME MAINTENANCE</p>
+          <h3 class="portal-testimonial-heading">“Invoices, payments and history in one timeline.”</h3>
+          <p class="portal-testimonial-text">
+            We run hundreds of recurring jobs every month. Having every visit and payment visible to the
+            customer in their portal means fewer disputes and far fewer “Can you resend that invoice?” emails.
+          </p>
+          <p class="portal-testimonial-person">
+            <strong>Danielle M.</strong>
+            Operations Manager · Brightside Services
+          </p>
+        </article>
+
+        <article class="portal-testimonial-card">
+          <p class="portal-testimonial-logo">FRANCHISE NETWORK</p>
+          <h3 class="portal-testimonial-heading">“Consistent customer experience across every location.”</h3>
+          <p class="portal-testimonial-text">
+            Each franchise runs their own <%= ENV['WEBSITE_NAME'] %> workspace but our portal keeps the customer journey
+            consistent — same login link, same review flow, same payment options. It feels unified to the client.
+          </p>
+          <p class="portal-testimonial-person">
+            <strong>Imran S.</strong>
+            Franchise Director · Clearline Group
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="portal-section-header">
+        <p class="portal-section-kicker">Guides &amp; resources</p>
+        <h2 class="portal-section-title">Articles to help you get the most from <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="portal-articles-grid">
+        <article class="portal-article-card">
+          <p class="portal-article-tag">Customer Experience</p>
+          <h3 class="portal-article-title">Customer portals and why your next customer expects one</h3>
+          <p class="portal-article-text">
+            Learn how self-service portals reduce friction, lower support volume and make your business feel
+            more modern overnight.
+          </p>
+          <p class="portal-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="portal-article-link">Read more</a>
+        </article>
+
+        <article class="portal-article-card">
+          <p class="portal-article-tag">Quoting &amp; Booking</p>
+          <h3 class="portal-article-title">Turning quote requests into confirmed appointments</h3>
+          <p class="portal-article-text">
+            Use the portal’s quoting component to capture details, send clear pricing and automate follow-ups
+            so more quotes turn into scheduled work.
+          </p>
+          <p class="portal-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="portal-article-link">Read more</a>
+        </article>
+
+        <article class="portal-article-card">
+          <p class="portal-article-tag">Payments</p>
+          <h3 class="portal-article-title">Get paid faster with online and automated payments</h3>
+          <p class="portal-article-text">
+            Combine the <%= ENV['WEBSITE_NAME'] %> portal with card-on-file, bank debits and automated reminders to smooth out
+            cashflow and reduce overdue balances.
+          </p>
+          <p class="portal-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="portal-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="portal-newsletter">
+      <div>
+        <h3>Stay ahead with <%= ENV['WEBSITE_NAME'] %> tips and feature updates.</h3>
+        <p>
+          Get occasional emails on new automation features, customer experience ideas and ways to save
+          admin time — no spam, ever.
+        </p>
+      </div>
+      <form class="portal-newsletter-form">
+        <input type="email" class="portal-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="portal-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+  </div>
+</div>
+
+<%= render partial: "layouts/footer" %>

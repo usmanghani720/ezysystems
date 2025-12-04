@@ -1,0 +1,934 @@
+<head>
+  <title><%= ENV['WEBSITE_NAME'] %> – Messaging for Marketing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ========= <%= ENV['WEBSITE_NAME'] %> Messaging for Marketing Page ========= */
+
+    .mm-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --accent-dark: #312e81;
+      --accent-green: #16a34a;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 72px;
+    }
+
+    .mm-page * {
+      box-sizing: border-box;
+    }
+
+    .mm-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- Hero ---------- */
+
+    .mm-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .mm-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mm-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .mm-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .mm-title {
+      font-size: clamp(32px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .mm-title span {
+      color: var(--accent-dark);
+    }
+
+    .mm-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
+
+    .mm-hero-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .mm-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 38px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.6);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .mm-hero-foot {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mm-hero-foot span {
+      font-weight: 500;
+      color: var(--accent-dark);
+    }
+
+    .mm-hero-media {
+      position: relative;
+    }
+
+    .mm-hero-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.98));
+      padding: 18px 18px 20px;
+      color: #e5e7eb;
+      box-shadow: var(--shadow-soft);
+      font-size: 12px;
+    }
+
+    .mm-hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .mm-hero-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .mm-hero-status {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-weight: 500;
+    }
+
+    .mm-bubble-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+      margin-top: 4px;
+    }
+
+    .mm-bubble {
+      max-width: 92%;
+      padding: 8px 10px;
+      border-radius: 16px;
+      line-height: 1.4;
+    }
+
+    .mm-bubble.you {
+      align-self: flex-end;
+      background: linear-gradient(to right, #4f46e5, #6366f1);
+      border-bottom-right-radius: 4px;
+    }
+
+    .mm-bubble.them {
+      align-self: flex-start;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom-left-radius: 4px;
+      color: #e5e7eb;
+    }
+
+    .mm-bubble-label {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .mm-bubble-text {
+      font-size: 11px;
+    }
+
+    .mm-hero-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .mm-hero-meta code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 5px;
+      border-radius: 6px;
+      color: #e0e7ff;
+    }
+
+    .mm-hero-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .mm-hero-footer span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mm-hero-footer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .mm-hero-shadow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* ---------- Intro ---------- */
+
+    .mm-intro {
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .mm-intro h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .mm-intro p {
+      font-size: 15px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .mm-intro strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    /* ---------- Section headings ---------- */
+
+    .mm-section-heading {
+      margin: 40px 0 16px;
+    }
+
+    .mm-section-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .mm-section-title {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .mm-section-sub {
+      font-size: 14px;
+      color: var(--text-sub);
+      max-width: 620px;
+    }
+
+    /* ---------- SMS / Email / Private number / Bulk / Scheduled / Push ---------- */
+
+    .mm-feature-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .mm-feature-group {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mm-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+      padding: 18px 18px 20px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mm-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .mm-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .mm-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .mm-feature-list {
+      font-size: 13px;
+      color: var(--text-sub);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .mm-feature-list li {
+      margin-bottom: 3px;
+    }
+
+    .mm-feature-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .mm-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 52px;
+    }
+
+    @media (max-width: 960px) {
+      .mm-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 700px) {
+      .mm-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mm-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.6);
+    }
+
+    .mm-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.5), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .mm-testimonial-logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mm-testimonial-heading {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mm-testimonial-text {
+      font-size: 13px;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mm-testimonial-person {
+      font-size: 12px;
+      color: #9ca3af;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mm-testimonial-person strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .mm-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin: 24px 0 40px;
+    }
+
+    @media (max-width: 960px) {
+      .mm-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 700px) {
+      .mm-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mm-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .mm-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .mm-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .mm-article-text {
+      color: var(--text-sub);
+    }
+
+    .mm-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .mm-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .mm-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter ---------- */
+
+    .mm-newsletter {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .mm-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mm-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .mm-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .mm-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .mm-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.8);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .mm-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .mm-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.5);
+      white-space: nowrap;
+    }
+
+    .mm-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="mm-page" id="messaging-marketing">
+  <div class="mm-shell">
+
+    <!-- HERO -->
+    <section class="mm-hero">
+      <div>
+        <h1 class="mm-title">
+          The easy way to <span>keep in touch</span> with every customer.
+        </h1>
+        <p class="mm-sub">
+          <%= ENV['WEBSITE_NAME'] %> brings SMS, email and notifications into one place so you can send reminders,
+          promotions and updates that feel personal – without juggling different apps or devices.
+        </p>
+        <p class="mm-hero-note">
+          Perfect for appointment-based and route-based businesses that want consistent communication,
+          faster responses and happier customers.
+        </p>
+
+        <div class="mm-cta-row">
+          <a href="/users/sign_up" class="btn-pill btn-primary">Start a free trial</a>
+          <a href="/pricing" class="btn-pill btn-secondary">Which plan?</a>
+        </div>
+        <p class="mm-hero-foot">
+          <span>Messaging credits are included with selected <%= ENV['WEBSITE_NAME'] %> plans.</span>
+          Top up when you’re ready to scale.
+        </p>
+      </div>
+
+      <!-- Right: combined messaging + marketing mockup -->
+      <div class="mm-hero-media">
+        <div class="mm-hero-card">
+          <div class="mm-hero-header">
+            <div class="mm-hero-chip"><%= ENV['WEBSITE_NAME'] %> · Messaging &amp; Marketing</div>
+            <div class="mm-hero-status">Campaign running</div>
+          </div>
+
+          <div class="mm-bubble-list">
+            <div class="mm-bubble them">
+              <span class="mm-bubble-label">Customer · SMS</span>
+              <span class="mm-bubble-text">Hi, can I book my annual clean again this month?</span>
+            </div>
+            <div class="mm-bubble you">
+              <span class="mm-bubble-label">You · Campaign reply</span>
+              <span class="mm-bubble-text">
+                Absolutely {{customer_name}} — we’ve added you to our {{service_name}} route on
+                {{next_available_date}}. You’ll receive a reminder the day before.
+              </span>
+            </div>
+            <div class="mm-bubble them">
+              <span class="mm-bubble-label">Customer · Email</span>
+              <span class="mm-bubble-text">Thanks! Love how easy it is to book with you.</span>
+            </div>
+          </div>
+
+          <div class="mm-hero-meta">
+            Template: <code>Annual service reminder · {{route_name}}</code>
+          </div>
+
+          <div class="mm-hero-footer">
+            <span>
+              <span class="mm-hero-footer-dot"></span>
+              SMS, email &amp; push in sync
+            </span>
+            <span>Replies stored on the customer record</span>
+          </div>
+        </div>
+        <div class="mm-hero-shadow"></div>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="mm-intro">
+      <h2>Consistent communication, faster responses and less chasing.</h2>
+      <p>
+        Managing messages across SMS, email and other apps can get overwhelming. With <%= ENV['WEBSITE_NAME'] %>, every
+        message connects back to the customer and the job – whether it’s a one-to-one conversation, a
+        reminder or a bulk update.
+      </p>
+      <p>
+        Send automated reminders, schedule marketing campaigns and respond to customers in a single,
+        organised inbox. <strong>Stay professional, save time and reduce missed appointments</strong> with
+        tools that work alongside your schedule.
+      </p>
+      <p>
+        And because messaging is built into <%= ENV['WEBSITE_NAME'] %>, you can pull in live data (like appointment times,
+        outstanding balances or addresses) without copying and pasting.
+      </p>
+    </section>
+
+    <!-- SMS / EMAIL / PRIVATE NUMBER / BULK / SCHEDULED / PUSH -->
+
+    <div class="mm-section-heading">
+      <p class="mm-section-kicker">Messaging Channels</p>
+      <h2 class="mm-section-title">Everything you need to contact customers clearly and reliably.</h2>
+      <p class="mm-section-sub">
+        Combine SMS, email, private numbers, bulk sends, schedules and push notifications into one
+        connected communication toolkit.
+      </p>
+    </div>
+
+    <section class="mm-feature-group">
+      <!-- SMS Messaging -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">SMS Messaging</p>
+        <h3 class="mm-feature-title">Keep SMS conversations tidy and easy to follow</h3>
+        <p class="mm-feature-text">
+          Scroll through full SMS history with each customer, see when messages were delivered and read,
+          and respond from your desktop or mobile app instead of a personal phone.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Complete conversation timeline per customer</li>
+          <li>Clear timestamps for every message</li>
+          <li>Personalise texts with names, addresses and job details</li>
+        </ul>
+        <p class="mm-feature-note">
+          Ideal for appointment confirmations, on-the-way messages and quick updates.
+        </p>
+      </article>
+
+      <!-- Email Messaging -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">Email Messaging</p>
+        <h3 class="mm-feature-title">Send professional emails straight from <%= ENV['WEBSITE_NAME'] %></h3>
+        <p class="mm-feature-text">
+          Use your usual business email address for outgoing messages so customers always recognise who
+          it’s from. Set up automated emails for specific actions and keep a record of everything against
+          the customer profile.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Automatic emails for job completion or invoices</li>
+          <li>Templates for different services or customer segments</li>
+          <li>Tokens for customer name, job address and appointment dates</li>
+        </ul>
+        <p class="mm-feature-note">
+          Great for invoices, follow-up notes and longer updates.
+        </p>
+      </article>
+    </section>
+
+    <section class="mm-feature-group">
+      <!-- Private Number -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">Private Business Number</p>
+        <h3 class="mm-feature-title">Keep a consistent business identity</h3>
+        <p class="mm-feature-text">
+          Add a dedicated business number to your <%= ENV['WEBSITE_NAME'] %> account so SMS messages always come from the
+          same sender ID. Redirect calls from that number to different team members depending on who’s
+          working that day.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Single, professional number for all customer texts</li>
+          <li>Call forwarding rules you control</li>
+          <li>No more mixing personal and work conversations</li>
+        </ul>
+      </article>
+
+      <!-- Bulk Messages -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">Bulk Messages</p>
+        <h3 class="mm-feature-title">Send bulk updates without feeling spammy</h3>
+        <p class="mm-feature-text">
+          Select a group of jobs or customers and send a tailored message in just a few clicks. Ideal
+          for informing customers when routes change, weather causes delays or you want to promote a
+          seasonal offer.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Choose recipients by route, service or tag</li>
+          <li>Use tokens to insert dates, times and names automatically</li>
+          <li>Save templates so common messages are ready to go</li>
+        </ul>
+        <p class="mm-feature-note">
+          Keep customers informed at scale while still feeling personal.
+        </p>
+      </article>
+    </section>
+
+    <section class="mm-feature-group">
+      <!-- Scheduled Messages -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">Scheduled Messages</p>
+        <h3 class="mm-feature-title">Let reminders go out at the perfect time</h3>
+        <p class="mm-feature-text">
+          Choose when messages are sent – early morning, afternoon, evening or at a precise time –
+          and let <%= ENV['WEBSITE_NAME'] %> deliver them automatically.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Predefined time windows or custom times</li>
+          <li>Send before appointments, renewals or follow-ups</li>
+          <li>Mix email and SMS depending on urgency</li>
+        </ul>
+        <p class="mm-feature-note">
+          Reduce no-shows and last-minute cancellations without manual effort.
+        </p>
+      </article>
+
+      <!-- Push Notifications -->
+      <article class="mm-feature-card">
+        <p class="mm-feature-label">Push Notifications</p>
+        <h3 class="mm-feature-title">Know what’s happening the moment it happens</h3>
+        <p class="mm-feature-text">
+          Use push notifications to stay on top of incoming messages, appointment changes and payment
+          events. Tap a notification to jump straight into the customer’s thread or job.
+        </p>
+        <ul class="mm-feature-list">
+          <li>Customisable alerts for different event types</li>
+          <li>Instant access to the full conversation</li>
+          <li>Helps teams respond quickly from anywhere</li>
+        </ul>
+        <p class="mm-feature-note">
+          Perfect for keeping office and field teams aligned in real time.
+        </p>
+      </article>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="mm-section-heading">
+        <p class="mm-section-kicker">Trusted by growing service businesses</p>
+        <h2 class="mm-section-title">Messaging that makes your business feel organised and responsive.</h2>
+        <p class="mm-section-sub">
+          Hear how teams use <%= ENV['WEBSITE_NAME'] %> messaging and marketing together to improve communication,
+          reduce admin and keep calendars full.
+        </p>
+      </div>
+
+      <div class="mm-testimonial-grid">
+        <article class="mm-testimonial-card">
+          <p class="mm-testimonial-logo">ROUTE-BASED CLEANING</p>
+          <h3 class="mm-testimonial-heading">“Customers love how well we communicate now.”</h3>
+          <p class="mm-testimonial-text">
+            Day-before reminders, on-the-way texts and quick replies all happen from <%= ENV['WEBSITE_NAME'] %>. We no
+            longer jump between phones, messaging apps and email. Customers notice the difference.
+          </p>
+          <p class="mm-testimonial-person">
+            <strong>Chris R.</strong>
+            Owner · Horizon Window Care
+          </p>
+        </article>
+
+        <article class="mm-testimonial-card">
+          <p class="mm-testimonial-logo">HOME SERVICES</p>
+          <h3 class="mm-testimonial-heading">“Small automations made a huge impact.”</h3>
+          <p class="mm-testimonial-text">
+            Automatic reminders and bulk updates mean our team spends far less time chasing people.
+            Missed appointments are down, and payments come in faster because customers always know
+            what’s happening.
+          </p>
+          <p class="mm-testimonial-person">
+            <strong>Gareth K.</strong>
+            Director · BrightSide Home Care
+          </p>
+        </article>
+
+        <article class="mm-testimonial-card">
+          <p class="mm-testimonial-logo">GROWING TEAMS</p>
+          <h3 class="mm-testimonial-heading">“We finally have one system for all customer messages.”</h3>
+          <p class="mm-testimonial-text">
+            Before <%= ENV['WEBSITE_NAME'] %>, each team member was using their own phone. Now everything is tracked in
+            one place. If someone is off, another person can pick up exactly where the conversation left off.
+          </p>
+          <p class="mm-testimonial-person">
+            <strong>Jack A.</strong>
+            Operations Lead · ClearLine Services
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section>
+      <div class="mm-section-heading">
+        <p class="mm-section-kicker">Guides &amp; resources</p>
+        <h2 class="mm-section-title">Articles to help you get the most from <%= ENV['WEBSITE_NAME'] %> messaging.</h2>
+      </div>
+
+      <div class="mm-articles-grid">
+        <article class="mm-article-card">
+          <p class="mm-article-tag">2-way Messaging</p>
+          <h3 class="mm-article-title">Getting started with <%= ENV['WEBSITE_NAME'] %> two-way messaging</h3>
+          <p class="mm-article-text">
+            Learn how to connect your number, configure notifications and start handling all customer
+            replies from one shared inbox.
+          </p>
+          <p class="mm-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="mm-article-link">Read more</a>
+        </article>
+
+        <article class="mm-article-card">
+          <p class="mm-article-tag">Marketing</p>
+          <h3 class="mm-article-title">Using messaging and campaigns together to fill your schedule</h3>
+          <p class="mm-article-text">
+            See how to combine routine reminders, bulk messages and targeted offers to keep your team
+            busy in the days and weeks ahead.
+          </p>
+          <p class="mm-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="mm-article-link">Read more</a>
+        </article>
+
+        <article class="mm-article-card">
+          <p class="mm-article-tag">Credits &amp; Costs</p>
+          <h3 class="mm-article-title">Understanding messaging credits and keeping costs predictable</h3>
+          <p class="mm-article-text">
+            A simple guide to how credits work in <%= ENV['WEBSITE_NAME'] %>, how far they go and how to get the best
+            return on every message you send.
+          </p>
+          <p class="mm-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="mm-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="mm-newsletter">
+      <div>
+        <h3>Stay ahead with <%= ENV['WEBSITE_NAME'] %> messaging tips and updates.</h3>
+        <p>
+          Get occasional emails on new messaging features, marketing ideas and ways to keep customers
+          informed without adding more admin — no spam.
+        </p>
+      </div>
+      <form class="mm-newsletter-form">
+        <input type="email" class="mm-newsletter-input" placeholder="you@example.com" />
+        <button type="submit" class="mm-newsletter-btn">Subscribe</button>
+      </form>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

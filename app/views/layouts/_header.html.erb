@@ -1,45 +1,310 @@
-  <header class="site-header">
-    <div class="container header-grid">
-      <div class="brand">
-        <a href="/" data-turbo="false">
-          <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo" %>
-        </a>
+<header class="site-header">
+  <div class="container header-grid">
+    <div class="brand">
+      <a href="/" data-turbo="false">
+        <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo" %>
+      </a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <!-- Desktop nav -->
+    <nav class="main-nav">
+      <!-- Features + mega menu trigger -->
+      <div class="nav-item has-mega">
+        <a href="#features" class="nav-link">Features</a>
+
+        <!-- Mega menu panel -->
+        <div class="mega-menu">
+          <div class="mega-inner">
+            <!-- Column 1 -->
+            <div class="mega-column">
+              <div class="mega-column-header">
+                <span class="mega-column-icon">👥</span>
+                <div>
+                  <p class="mega-column-title">Customer Services</p>
+                  <p class="mega-column-sub">Delight customers at every step.</p>
+                </div>
+              </div>
+              <ul class="mega-links">
+                <li>
+                  <a href="/custom_portal">
+                    <span class="mega-link-title">Customer Portal</span>
+                    <span class="mega-link-text">Let customers book, pay &amp; manage services.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/customer_messaging">
+                    <span class="mega-link-title">Customer Messaging</span>
+                    <span class="mega-link-text">Clear communication, fewer missed jobs.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/marketing_tools">
+                    <span class="mega-link-title">Marketing Tools</span>
+                    <span class="mega-link-text">Grow your business &amp; win more work.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/marketing_messaging">
+                    <span class="mega-link-title">Marketing Messaging</span>
+                    <span class="mega-link-text">Stay in touch with your customers.</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="mega-column">
+              <div class="mega-column-header">
+                <span class="mega-column-icon">💼</span>
+                <div>
+                  <p class="mega-column-title">Business Management</p>
+                  <p class="mega-column-sub">Control money, paperwork &amp; reporting.</p>
+                </div>
+              </div>
+              <ul class="mega-links">
+                <li>
+                  <a href="#payments">
+                    <span class="mega-link-title">Payments</span>
+                    <span class="mega-link-text">Make it easy to get paid on time.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#invoicing">
+                    <span class="mega-link-title">Invoicing</span>
+                    <span class="mega-link-text">Automatic invoicing &amp; cashflow visibility.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#expenses">
+                    <span class="mega-link-title">Expenses</span>
+                    <span class="mega-link-text">Keep your records accurate &amp; compliant.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#reporting">
+                    <span class="mega-link-title">Financials &amp; Reporting</span>
+                    <span class="mega-link-text">Understand revenue, profit &amp; performance.</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="mega-column">
+              <div class="mega-column-header">
+                <span class="mega-column-icon">📋</span>
+                <div>
+                  <p class="mega-column-title">Job Management</p>
+                  <p class="mega-column-sub">Stay on top of every job and team member.</p>
+                </div>
+              </div>
+              <ul class="mega-links">
+                <li>
+                  <a href="#customer-management">
+                    <span class="mega-link-title">Customer Management</span>
+                    <span class="mega-link-text">Keep relationships organised and updated.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#jobs">
+                    <span class="mega-link-title">Add &amp; Edit Jobs</span>
+                    <span class="mega-link-text">Manage tasks, edit details, track progress.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#scheduling">
+                    <span class="mega-link-title">Work Assignment &amp; Scheduling</span>
+                    <span class="mega-link-text">Assign jobs, shifts and plan your week.</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#job-records">
+                    <span class="mega-link-title">Job Records &amp; Tracking</span>
+                    <span class="mega-link-text">Capture and store every job detail.</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div><!-- /.mega-menu -->
+      </div><!-- /.nav-item.has-mega -->
+
+      <a href="/pricing" data-turbo="false">Pricing</a>
+      <a href="#industries">Industries</a>
+      <a href="#news">News &amp; Updates</a>
+    </nav>
+
+    <div class="auth">
+      <a class="btn btn-outline" href="/users/sign_in">Sign In</a>
+      <a class="btn btn-primary1" href="/users/sign_up">Sign Up</a>
+    </div>
+  </div>
+
+  <!-- Mobile menu drawer -->
+  <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
+    <div class="backdrop" data-close></div>
+    <div class="panel">
+      <div class="panel-header">
+        <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
+        <button class="close" aria-label="Close menu" data-close>&times;</button>
       </div>
-      <!-- Mobile hamburger -->
-      <button class="mobile-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-      <nav class="main-nav">
-        <a href="#features">Features</a>
-        <a href="/pricing" data-turbo="false">Pricing</a>
-        <a href="#industries">Industries</a>
-        <a href="#news">News & Updates</a>
-        <a href="#help">Help</a>
-      </nav>
-      <div class="auth">
-        <a class="btn btn-outline" href="/users/sign_in">Sign In</a>
-        <a class="btn btn-primary1" href="/users/sign_up">Sign Up</a>
+      <a href="/pricing" data-close data-turbo="false">Pricing</a>
+      <a href="#industries" data-close>Industries</a>
+      <a href="#news" data-close>News &amp; Updates</a>
+      <div class="panel-actions">
+        <a class="btn btn-outline" style="color: white;" href="/users/sign_in">Sign In</a>
+        <a class="btn btn-primary" href="/users/sign_up">Sign Up</a>
       </div>
     </div>
-    <!-- Mobile menu drawer -->
-    <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
-      <div class="backdrop" data-close></div>
-      <div class="panel">
-        <div class="panel-header">
-          <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
-          <button class="close" aria-label="Close menu" data-close>&times;</button>
-        </div>
-        <a href="#features" data-close>Features</a>
-        <a href="/pricing" data-close data-turbo="false">Pricing</a>
-        <a href="#industries" data-close>Industries</a>
-        <a href="#news" data-close>News & Updates</a>
-        <a href="#help" data-close>Help</a>
-        <div class="panel-actions">
-          <a class="btn btn-outline" style="color: white;" href="/users/sign_in">Sign In</a>
-          <a class="btn btn-primary" href="/users/sign_up">Sign Up</a>
-        </div>
-      </div>
-    </nav>
-  </header>
+  </nav>
+</header>
+
+<style>
+/* --- Mega menu (desktop) --- */
+
+/* parent wrapper for "Features" */
+.nav-item.has-mega {
+  position: relative;
+}
+
+/* dropdown panel (absolute under Features link) */
+.nav-item.has-mega .mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+
+  /* FIX: give it a real width so it doesn't shrink */
+  width: 1040px;
+  max-width: calc(100vw - 48px);
+}
+
+/* show on hover / focus */
+.nav-item.has-mega:hover .mega-menu,
+.nav-item.has-mega:focus-within .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+/* inner layout */
+.mega-inner {
+  width: 100%;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(226, 232, 240, 0.9);
+  padding: 24px 32px 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+
+/* column styling */
+.mega-column {
+  min-width: 0;
+}
+
+.mega-column-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mega-column-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4ff;
+  font-size: 16px;
+}
+
+.mega-column-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+.mega-column-sub {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* links list */
+.mega-links {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mega-links li a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.mega-link-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.mega-link-text {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.mega-links li a:hover {
+  background: #f3f4ff;
+  transform: translateX(2px);
+}
+
+/* optional chevron */
+.mega-links li a::after {
+  content: "›";
+  float: right;
+  font-size: 14px;
+  color: #cbd5f5;
+  margin-left: 6px;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+.mega-links li a:hover::after {
+  transform: translateX(2px);
+  color: #4f46e5;
+}
+
+/* hide mega menu on small screens (mobile uses slide-out menu) */
+@media (max-width: 1000px) {
+  .nav-item.has-mega .mega-menu {
+    display: none;
+  }
+}
+</style>

@@ -51,6 +51,10 @@ Rails.application.routes.draw do
   get "/privacy", to: "home#privacy", as: :privacy
   get "/terms", to: "home#terms", as: :terms
   get "/pricing", to: "home#pricing", as: :pricing
+  get "/custom_portal", to: "home#custom_portal", as: :custom_portal
+  get "/customer_messaging", to: "home#customer_messaging", as: :customer_messaging
+  get "/marketing_tools", to: "home#marketing_tools", as: :marketing_tools
+  get "/marketing_messaging", to: "home#marketing_messaging", as: :marketing_messaging
 
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'

@@ -20,5 +20,21 @@ class HomeController < ApplicationController
 		def pricing 
 
 		end
+
+		def custom_portal 
+
+		end
+
+		def customer_messaging
+
+		end
+
+		def marketing_tools
+
+		end
+
+		def marketing_messaging
+
+		end
   end
   
