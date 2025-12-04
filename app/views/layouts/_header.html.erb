@@ -155,6 +155,35 @@
         <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
         <button class="close" aria-label="Close menu" data-close>&times;</button>
       </div>
+      <div class="mobile-accordion">
+        <button class="mobile-accordion-trigger">
+          Features
+          <span class="chevron">›</span>
+        </button>
+
+        <div class="mobile-accordion-panel">
+          
+          <p class="mobile-accordion-heading">Customer Services</p>
+          <a href="/custom_portal">Customer Portal</a>
+          <a href="/customer_messaging">Customer Messaging</a>
+          <a href="/marketing_tools">Marketing Tools</a>
+          <a href="/marketing_messaging">Marketing Messaging</a>
+
+          <p class="mobile-accordion-heading">Business Management</p>
+          <a href="/payment">Payments</a>
+          <a href="/invoicing">Invoicing</a>
+          <a href="/expenses">Expenses</a>
+          <a href="/bookkeeping">Financials & Reporting</a>
+
+          <p class="mobile-accordion-heading">Job Management</p>
+          <a href="/customer_management">Customer Management</a>
+          <a href="/jobs">Add & Edit Jobs</a>
+          <a href="/assignment_scheduling">Work Assignment & Scheduling</a>
+          <a href="/job_records">Job Records & Tracking</a>
+
+        </div>
+      </div>
+
       <a href="/pricing" data-close data-turbo="false">Pricing</a>
       <a href="#industries" data-close>Industries</a>
       <a href="#news" data-close>News &amp; Updates</a>
@@ -167,6 +196,54 @@
 </header>
 
 <style>
+/* Mobile accordion (for Features inside mobile menu) */
+.mobile-accordion {
+  width: 100%;
+}
+
+.mobile-accordion-trigger {
+  width: 100%;
+  text-align: left;
+  padding: 14px 0;
+  border: none;
+  background: none;
+  font-size: 16px;
+  color: #211f54;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-accordion-trigger .chevron {
+  transition: transform 0.25s ease;
+}
+
+.mobile-accordion.open .chevron {
+  transform: rotate(90deg);
+}
+
+.mobile-accordion-panel {
+  display: none;
+  flex-direction: column;
+  padding-left: 12px;
+  margin-bottom: 12px;
+}
+
+.mobile-accordion-panel a {
+  padding: 8px 0;
+  display: block;
+  color: #211f54;
+  font-size: 14px;
+}
+
+.mobile-accordion-heading {
+  margin-top: 12px;
+  color: #9ca3af;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 /* --- Mega menu (desktop) --- */
 
 /* parent wrapper for "Features" */
@@ -308,3 +385,19 @@
   }
 }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const triggers = document.querySelectorAll(".mobile-accordion-trigger");
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener("click", () => {
+      const parent = trigger.parentElement;
+      parent.classList.toggle("open");
+
+      const panel = parent.querySelector(".mobile-accordion-panel");
+      panel.style.display = parent.classList.contains("open") ? "flex" : "none";
+    });
+  });
+});
+</script>
