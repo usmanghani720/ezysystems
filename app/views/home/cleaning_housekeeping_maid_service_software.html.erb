@@ -1,0 +1,815 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Cleaning, Housekeeping & Maid Service Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Cleaning, Housekeeping & Maid Service Software ===== */
+
+    .hk-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .hk-page * {
+      box-sizing: border-box;
+    }
+
+    .hk-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .hk-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .hk-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hk-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .hk-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .hk-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .hk-title span {
+      color: var(--accent-dark);
+    }
+
+    .hk-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .hk-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .hk-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .hk-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .hk-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .hk-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .hk-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .hk-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .hk-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hk-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .hk-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: schedule / roster card */
+
+    .hk-hero-media {
+      position: relative;
+    }
+
+    .hk-roster-card {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hk-roster-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.9), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .hk-roster-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    .hk-roster-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .hk-roster-header-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .hk-roster-header-title span {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .hk-roster-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .hk-roster-list {
+      margin-top: 6px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px;
+    }
+
+    .hk-roster-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr 0.8fr;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .hk-roster-row + .hk-roster-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 3px;
+      padding-top: 5px;
+    }
+
+    .hk-roster-row strong {
+      font-weight: 500;
+    }
+
+    .hk-status-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .hk-status-pill.confirmed {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+
+    .hk-status-pill.cleaning {
+      background: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .hk-status-pill.completed {
+      background: rgba(79, 70, 229, 0.25);
+      color: #c7d2fe;
+    }
+
+    .hk-roster-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .hk-roster-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- SECTION LAYOUT ---------- */
+
+    .hk-section {
+      margin-bottom: 52px;
+    }
+
+    .hk-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .hk-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .hk-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .hk-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .hk-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    .hk-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .hk-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .hk-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+
+    .hk-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .hk-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .hk-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hk-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hk-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .hk-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .hk-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .hk-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .hk-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .hk-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .hk-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hk-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hk-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .hk-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hk-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .hk-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .hk-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .hk-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .hk-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- RESOURCES / ARTICLES ---------- */
+
+    .hk-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .hk-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hk-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hk-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .hk-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .hk-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .hk-article-text {
+      color: var(--text-sub);
+    }
+
+    .hk-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .hk-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hk-article-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="hk-page" id="cleaning-housekeeping-maid-service-software">
+  <div class="hk-shell">
+
+    <!-- HERO -->
+    <section class="hk-hero">
+      <div>
+
+        <h1 class="hk-title">
+          Leading job management software for <span>professional cleaning services.</span>
+        </h1>
+
+        <p class="hk-sub">
+          <%= ENV['WEBSITE_NAME'] %> is the fastest-growing scheduling, planning and invoicing platform for residential and
+          commercial cleaning, housekeeping and maid service businesses. Keep every booking, cleaner and
+          property organised in one system.
+        </p>
+
+        <p class="hk-hero-tagline">
+          The all-in-one platform for busy teams who want less admin and more time to clean.
+        </p>
+
+        <div class="hk-hero-ctas">
+          <a href="/users/sign_up" class="hk-btn hk-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="hk-btn hk-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="hk-hero-trust">
+          <strong>Trusted by growing cleaning companies, housekeeping teams and maid services.</strong>
+          <span class="hk-pill">Apartment blocks · Offices · Homes · Airbnbs</span>
+        </div>
+      </div>
+
+      <!-- Hero media: roster / schedule -->
+      <div class="hk-hero-media">
+        <div class="hk-roster-card">
+          <div class="hk-roster-inner">
+            <div class="hk-roster-header">
+              <div class="hk-roster-header-title">
+                Today · Cleaning Roster
+                <span>12 visits · 4 cleaners</span>
+              </div>
+              <div class="hk-roster-filter">View by cleaner</div>
+            </div>
+
+            <div class="hk-roster-list">
+              <div class="hk-roster-row">
+                <div><strong>Loft Apartments – Weekly clean</strong></div>
+                <div>09:00 → 10:30 · Anna</div>
+                <div><div class="hk-status-pill cleaning">In progress</div></div>
+              </div>
+              <div class="hk-roster-row">
+                <div>Family home · Deep clean</div>
+                <div>11:00 → 13:00 · Sam</div>
+                <div><div class="hk-status-pill confirmed">Confirmed</div></div>
+              </div>
+              <div class="hk-roster-row">
+                <div>Airbnb turnover – 2 bed</div>
+                <div>14:00 → 15:15 · Mia</div>
+                <div><div class="hk-status-pill completed">Completed</div></div>
+              </div>
+            </div>
+
+            <div class="hk-roster-footer">
+              <span>Automatic reminders sent before each visit</span>
+              <span><strong>Invoices &amp; payment links</strong> sent after cleaning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="hk-section">
+      <div class="hk-section-header">
+        <p class="hk-section-kicker">For cleaning, housekeeping &amp; maid services</p>
+        <h2 class="hk-section-title">Scheduling, planning and invoicing for growing cleaning businesses.</h2>
+      </div>
+
+      <div class="hk-body-text">
+        <p>
+          Whether you offer regular weekly cleans, one-off deep cleans or full housekeeping packages,
+          <%= ENV['WEBSITE_NAME'] %> keeps every visit, property and cleaner organised. Handle recurring schedules, special
+          instructions and keys or access codes without relying on paper diaries.
+        </p>
+        <p>
+          Drag-and-drop bookings into your planner, allocate work to the right cleaner and see your day at
+          a glance. Automatically send SMS and email reminders so customers know exactly when you’re due,
+          and mark jobs as complete from any phone or tablet.
+        </p>
+        <p>
+          From solo cleaners to multi-team housekeeping and maid service companies, <%= ENV['WEBSITE_NAME'] %> reduces admin
+          and keeps your schedule, finances and customer communication under control.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="hk-section">
+      <div class="hk-section-header">
+        <p class="hk-section-kicker">Features</p>
+        <h2 class="hk-section-title">Let’s explain the features.</h2>
+      </div>
+      <div class="hk-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate your processes and keep admin time to a minimum. It’s easy for
+          your cleaning crew to use on any mobile device, with real-time updates so dispatch or office
+          staff can keep on top of the daily schedule.
+        </p>
+      </div>
+
+      <div class="hk-feature-grid">
+        <!-- Job scheduling -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Job scheduling</p>
+          <h3 class="hk-feature-title">Flexible job scheduling &amp; rota planning</h3>
+          <p class="hk-feature-text">
+            Create one-off or recurring cleaning visits and assign them to specific cleaners, teams or
+            areas. Drag to reschedule, skip or rebook appointments in seconds without losing track.
+          </p>
+          <div class="hk-feature-pill">Drag, drop, done</div>
+        </article>
+
+        <!-- Customer management -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Customer management</p>
+          <h3 class="hk-feature-title">Customer &amp; property management</h3>
+          <p class="hk-feature-text">
+            Store all customer and property details in one place – access codes, key locations, special
+            instructions, preferred products, room lists and before/after photos. Any cleaner can arrive
+            fully prepared.
+          </p>
+          <div class="hk-feature-pill">Every detail in one system</div>
+        </article>
+
+        <!-- Reminders -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Reminders</p>
+          <h3 class="hk-feature-title">Automatic appointment reminders</h3>
+          <p class="hk-feature-text">
+            Reduce no-shows and last-minute cancellations by sending automated SMS and email reminders
+            before each visit. Configure timing that suits your customers and service pattern.
+          </p>
+          <div class="hk-feature-pill">Fewer gaps in your day</div>
+        </article>
+
+        <!-- Quotes -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Quotes &amp; booking</p>
+          <h3 class="hk-feature-title">Online quotes &amp; bookings</h3>
+          <p class="hk-feature-text">
+            Turn enquiries into booked jobs quickly. Build quotes from your price list, send them for
+            approval online and convert them into scheduled cleans with a couple of taps.
+          </p>
+          <div class="hk-feature-pill">From enquiry to scheduled clean</div>
+        </article>
+
+        <!-- Invoicing & payments -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Invoicing &amp; payments</p>
+          <h3 class="hk-feature-title">Automatic invoicing &amp; payment tracking</h3>
+          <p class="hk-feature-text">
+            Generate and send invoices as soon as a job is marked complete. Track who has paid and who
+            still owes, and send polite reminders – no spreadsheets or manual chasing needed.
+          </p>
+          <div class="hk-feature-pill">Get paid faster</div>
+        </article>
+
+        <!-- Multi-service / add-ons -->
+        <article class="hk-feature-card">
+          <p class="hk-feature-label">Services &amp; add-ons</p>
+          <h3 class="hk-feature-title">Add-ons for deep cleans &amp; extras</h3>
+          <p class="hk-feature-text">
+            Quickly add extras like oven cleaning, inside windows, laundry or linen changes to existing
+            bookings. Keep pricing consistent and see exactly which services each customer receives.
+          </p>
+          <div class="hk-feature-pill">Perfect for upsells &amp; bundles</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="hk-section">
+      <div class="hk-section-header">
+        <p class="hk-section-kicker">What our customers say</p>
+        <h2 class="hk-section-title">See what cleaning businesses think about <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="hk-testimonial-grid">
+        <article class="hk-testimonial-card">
+          <div class="hk-testimonial-inner">
+            <p class="hk-testimonial-tag">Scheduling &amp; growth</p>
+            <p class="hk-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has evolved into the control centre of our cleaning business.”</em> We plan,
+              re-plan and monitor our schedule, send invoices and keep track of payments all from one app.
+              Any device, any time – it’s essential for any appointment-based service.
+            </p>
+            <p class="hk-testimonial-name">
+              <strong>Chris R.</strong>
+              C Rose Cleaning Services
+            </p>
+          </div>
+        </article>
+
+        <article class="hk-testimonial-card">
+          <div class="hk-testimonial-inner">
+            <p class="hk-testimonial-tag">Admin &amp; work-life balance</p>
+            <p class="hk-testimonial-quote">
+              “Before <%= ENV['WEBSITE_NAME'] %> we used paper diaries and manual invoices. Now reminders, invoices and
+              payment links are triggered automatically when cleans are completed. Admin is down, cashflow
+              is up – and evenings are no longer spent chasing customers.”
+            </p>
+            <p class="hk-testimonial-name">
+              <strong>Owner-operator</strong>
+              Domestic cleaning &amp; housekeeping
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- RESOURCES / ARTICLES -->
+    <section class="hk-section">
+      <div class="hk-section-header">
+        <p class="hk-section-kicker">Resources</p>
+        <h2 class="hk-section-title">Useful resources for cleaning &amp; housekeeping businesses.</h2>
+      </div>
+
+      <div class="hk-articles-grid">
+        <article class="hk-article-card">
+          <p class="hk-article-tag">Customer story</p>
+          <h3 class="hk-article-title">A week in the life of a cleaning company</h3>
+          <p class="hk-article-text">
+            Follow a busy cleaning company through a typical week as they use <%= ENV['WEBSITE_NAME'] %> to handle
+            scheduling, customer communication and invoicing – and see how it transforms their workload.
+          </p>
+          <p class="hk-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="hk-article-link">Read more</a>
+        </article>
+
+        <article class="hk-article-card">
+          <p class="hk-article-tag">How-to</p>
+          <h3 class="hk-article-title">How to start (or grow) a cleaning company</h3>
+          <p class="hk-article-text">
+            Step-by-step guidance on structuring your services, building recurring schedules and using
+            <%= ENV['WEBSITE_NAME'] %> to keep on top of jobs, payments and reporting.
+          </p>
+          <p class="hk-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="hk-article-link">Read more</a>
+        </article>
+
+        <article class="hk-article-card">
+          <p class="hk-article-tag">Growth</p>
+          <h3 class="hk-article-title">Marketing ideas for maid services</h3>
+          <p class="hk-article-text">
+            Practical tips for keeping your calendar full – from referral campaigns and upsell packages to
+            using <%= ENV['WEBSITE_NAME'] %>’s bulk messaging tools to stay in touch with your best customers.
+          </p>
+          <p class="hk-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="hk-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

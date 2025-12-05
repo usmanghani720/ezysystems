@@ -68,5 +68,29 @@ class HomeController < ApplicationController
 		def job_records
 
 		end
+
+		def professional_window_cleaner_software
+
+		end
+
+		def bin_cleaning_software
+
+		end
+
+		def carpet_cleaning_software
+
+		end
+
+		def exterior_cleaning
+
+		end
+
+		def cleaning_housekeeping_maid_service_software
+
+		end
+
+		def mobile_cleaning_services
+
+		end
   end
   

@@ -1,0 +1,814 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Carpet Cleaning Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Carpet Cleaning Software ===== */
+
+    .cp-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .cp-page * {
+      box-sizing: border-box;
+    }
+
+    .cp-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .cp-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .cp-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cp-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .cp-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .cp-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .cp-title span {
+      color: var(--accent-dark);
+    }
+
+    .cp-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .cp-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .cp-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .cp-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .cp-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .cp-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .cp-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .cp-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .cp-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .cp-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .cp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: job board mock */
+
+    .cp-hero-media {
+      position: relative;
+    }
+
+    .cp-board {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cp-board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.9), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .cp-board-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    .cp-board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .cp-board-header-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .cp-board-header-title span {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .cp-board-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .cp-board-list {
+      margin-top: 6px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px;
+    }
+
+    .cp-board-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr 0.7fr;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .cp-board-row + .cp-board-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 3px;
+      padding-top: 5px;
+    }
+
+    .cp-board-row strong {
+      font-weight: 500;
+    }
+
+    .cp-status-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .cp-status-pill.booked {
+      background: rgba(249, 115, 22, 0.25);
+      color: #fed7aa;
+    }
+
+    .cp-status-pill.cleaning {
+      background: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .cp-status-pill.completed {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+
+    .cp-board-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .cp-board-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- SECTION LAYOUT ---------- */
+
+    .cp-section {
+      margin-bottom: 52px;
+    }
+
+    .cp-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .cp-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .cp-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .cp-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .cp-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    .cp-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .cp-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .cp-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+
+    .cp-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .cp-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .cp-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .cp-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cp-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .cp-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .cp-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .cp-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .cp-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .cp-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .cp-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cp-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cp-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .cp-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cp-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .cp-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .cp-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .cp-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .cp-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- ARTICLES / RESOURCES ---------- */
+
+    .cp-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .cp-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .cp-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cp-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .cp-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .cp-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .cp-article-text {
+      color: var(--text-sub);
+    }
+
+    .cp-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .cp-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .cp-article-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="cp-page" id="carpet-cleaning-software">
+  <div class="cp-shell">
+
+    <!-- HERO -->
+    <section class="cp-hero">
+      <div>
+
+        <h1 class="cp-title">
+          Manage your <span>carpet cleaning business</span> with <%= ENV['WEBSITE_NAME'] %>.
+        </h1>
+
+        <p class="cp-sub">
+          <%= ENV['WEBSITE_NAME'] %> is the leading scheduling, planning and invoicing platform for growing carpet cleaning
+          businesses. Handle one-off deep cleans and regular maintenance plans – all from a single system.
+        </p>
+
+        <p class="cp-hero-tagline">
+          The scheduling, planning and invoicing platform built specifically for service teams like yours.
+        </p>
+
+        <div class="cp-hero-ctas">
+          <a href="/users/sign_up" class="cp-btn cp-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="cp-btn cp-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="cp-hero-trust">
+          <strong>Trusted by carpet cleaners who want fewer spreadsheets and more booked jobs.</strong>
+          <span class="cp-pill">Built for field teams · Works on any device</span>
+        </div>
+      </div>
+
+      <!-- Hero media: job board -->
+      <div class="cp-hero-media">
+        <div class="cp-board">
+          <div class="cp-board-inner">
+            <div class="cp-board-header">
+              <div class="cp-board-header-title">
+                Today · Carpet Cleaning
+                <span>9 jobs · 3 technicians</span>
+              </div>
+              <div class="cp-board-filter">View by technician</div>
+            </div>
+
+            <div class="cp-board-list">
+              <div class="cp-board-row">
+                <div><strong>City Centre Offices</strong></div>
+                <div>09:00 → 10:30</div>
+                <div><div class="cp-status-pill cleaning">In progress</div></div>
+              </div>
+              <div class="cp-board-row">
+                <div>Parkway Apartments – 2 bed</div>
+                <div>11:00 → 12:00</div>
+                <div><div class="cp-status-pill booked">Booked</div></div>
+              </div>
+              <div class="cp-board-row">
+                <div>Conference Suite · Full clean</div>
+                <div>13:30 → 15:30</div>
+                <div><div class="cp-status-pill completed">Completed</div></div>
+              </div>
+            </div>
+
+            <div class="cp-board-footer">
+              <span>Send reminders to afternoon customers</span>
+              <span><strong>Invoices &amp; payment links</strong> sent automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="cp-section">
+      <div class="cp-section-header">
+        <p class="cp-section-kicker">For carpet cleaning teams</p>
+        <h2 class="cp-section-title"><%= ENV['WEBSITE_NAME'] %> can help your carpet cleaning business grow.</h2>
+      </div>
+
+      <div class="cp-body-text">
+        <p>
+          Whether you’re managing one-off stain removals or routine contracts for offices, hotels and
+          landlords, <%= ENV['WEBSITE_NAME'] %> gives you the flexibility you need. Add jobs, reschedule and apply extras
+          like upholstery or rug cleaning in seconds – even while you’re on-site.
+        </p>
+        <p>
+          Once a job is complete, generate and send the invoice straight from the app. No paperwork, no
+          copying data into separate systems. Your customer gets a professional invoice and secure payment
+          options automatically.
+        </p>
+        <p>
+          From the first enquiry to repeat bookings, <%= ENV['WEBSITE_NAME'] %> keeps your team and your clients on the same
+          page so you can focus on delivering great results and growing your revenue.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="cp-section">
+      <div class="cp-section-header">
+        <p class="cp-section-kicker">Features</p>
+        <h2 class="cp-section-title">Let’s explain the features.</h2>
+      </div>
+      <div class="cp-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate your processes and keep admin time to a minimum. It’s easy to
+          use on any mobile device, with real-time updates so office staff can keep on top of incoming
+          requests and changes to the schedule.
+        </p>
+      </div>
+
+      <div class="cp-feature-grid">
+        <!-- Manage customer details -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Customer management</p>
+          <h3 class="cp-feature-title">Manage customer details</h3>
+          <p class="cp-feature-text">
+            Store, access and manage all of your customer and lead information in one place – from property
+            access details to preferred products, previous work and pricing.
+          </p>
+          <div class="cp-feature-pill">Know every customer’s history</div>
+        </article>
+
+        <!-- Create & send quotes -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Quotes</p>
+          <h3 class="cp-feature-title">Create &amp; send quotes</h3>
+          <p class="cp-feature-text">
+            Turn enquiries into booked jobs faster. Build quotes from your price list, send them online for
+            approval and convert them into scheduled work with a couple of taps.
+          </p>
+          <div class="cp-feature-pill">From enquiry to booking</div>
+        </article>
+
+        <!-- Appointment reminders -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Messaging</p>
+          <h3 class="cp-feature-title">Send appointment reminders</h3>
+          <p class="cp-feature-text">
+            Cut down on no-shows and last-minute cancellations with automated SMS and email reminders.
+            Configure them to go out before each visit, or whenever makes sense for your customers.
+          </p>
+          <div class="cp-feature-pill">More completed jobs</div>
+        </article>
+
+        <!-- Optimised route navigation -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Route optimisation</p>
+          <h3 class="cp-feature-title">Optimised route navigation</h3>
+          <p class="cp-feature-text">
+            Reduce drive time between jobs with intelligent routing. Set unique start and end points for
+            each technician and let <%= ENV['WEBSITE_NAME'] %> create the most efficient route for the day.
+          </p>
+          <div class="cp-feature-pill">Less travel, more cleaning</div>
+        </article>
+
+        <!-- Marketing campaigns -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Marketing</p>
+          <h3 class="cp-feature-title">Send marketing campaigns</h3>
+          <p class="cp-feature-text">
+            Build powerful marketing campaigns and send them via SMS or email to customers and prospects.
+            Promote seasonal offers, package upgrades or reminder campaigns when it’s time for another
+            clean.
+          </p>
+          <div class="cp-feature-pill">Keep your calendar full</div>
+        </article>
+
+        <!-- Email messaging -->
+        <article class="cp-feature-card">
+          <p class="cp-feature-label">Email</p>
+          <h3 class="cp-feature-title">Email messaging</h3>
+          <p class="cp-feature-text">
+            Use built-in email tools to send booking confirmations, invoices, receipts and follow-ups without
+            leaving <%= ENV['WEBSITE_NAME'] %>. Keep a full history of messages alongside each customer record.
+          </p>
+          <div class="cp-feature-pill">Everything in one system</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="cp-section">
+      <div class="cp-section-header">
+        <p class="cp-section-kicker">What our customers say</p>
+        <h2 class="cp-section-title">See what carpet cleaning businesses think about <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="cp-testimonial-grid">
+        <article class="cp-testimonial-card">
+          <div class="cp-testimonial-inner">
+            <p class="cp-testimonial-tag">Scheduling &amp; planning</p>
+            <p class="cp-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has evolved into the control centre of our service business.”</em> We plan and
+              re-plan daily schedules, send quotes and invoices, and track payments all from one place. Any
+              device, any time – it’s essential for any appointment-based team.
+            </p>
+            <p class="cp-testimonial-name">
+              <strong>Chris R.</strong>
+              C Rose Cleaning Services
+            </p>
+          </div>
+        </article>
+
+        <article class="cp-testimonial-card">
+          <div class="cp-testimonial-inner">
+            <p class="cp-testimonial-tag">Admin &amp; cashflow</p>
+            <p class="cp-testimonial-quote">
+              “Before <%= ENV['WEBSITE_NAME'] %> we used spreadsheets and paper invoices. Now I just mark jobs as done on my
+              phone and invoices are sent automatically. Admin is down, cashflow is up – and my evenings are
+              finally free.”
+            </p>
+            <p class="cp-testimonial-name">
+              <strong>Service business owner</strong>
+              Carpet &amp; upholstery cleaning company
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES / RESOURCES -->
+    <section class="cp-section">
+      <div class="cp-section-header">
+        <p class="cp-section-kicker">Resources</p>
+        <h2 class="cp-section-title">Useful articles to support your carpet cleaning business.</h2>
+      </div>
+
+      <div class="cp-articles-grid">
+        <article class="cp-article-card">
+          <p class="cp-article-tag">Customer story</p>
+          <h3 class="cp-article-title">How one carpet cleaner cut admin by 75%</h3>
+          <p class="cp-article-text">
+            Follow a growing carpet cleaning company as they move from paper diaries and manual invoicing
+            to <%= ENV['WEBSITE_NAME'] %>, and see how it changed their day-to-day operations.
+          </p>
+          <p class="cp-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="cp-article-link">Read more</a>
+        </article>
+
+        <article class="cp-article-card">
+          <p class="cp-article-tag">How-to</p>
+          <h3 class="cp-article-title">Setting up recurring carpet care plans</h3>
+          <p class="cp-article-text">
+            Learn how to create recurring visits, manage add-on services and keep track of long-term
+            maintenance contracts inside <%= ENV['WEBSITE_NAME'] %>.
+          </p>
+          <p class="cp-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="cp-article-link">Read more</a>
+        </article>
+
+        <article class="cp-article-card">
+          <p class="cp-article-tag">Growth</p>
+          <h3 class="cp-article-title">Marketing ideas for carpet cleaning businesses</h3>
+          <p class="cp-article-text">
+            Practical tips for filling your calendar using <%= ENV['WEBSITE_NAME'] %>’s marketing tools – from follow-up
+            campaigns to seasonal offers and referral requests.
+          </p>
+          <p class="cp-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="cp-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

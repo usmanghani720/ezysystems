@@ -1,0 +1,1039 @@
+
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Professional Window Cleaning Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Professional Window Cleaner Software ===== */
+
+    .pw-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .pw-page * {
+      box-sizing: border-box;
+    }
+
+    .pw-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .pw-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .pw-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .pw-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .pw-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .pw-title span {
+      color: var(--accent-dark);
+    }
+
+    .pw-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .pw-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .pw-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .pw-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .pw-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .pw-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .pw-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .pw-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .pw-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pw-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .pw-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: phone mock */
+
+    .pw-hero-media {
+      position: relative;
+    }
+
+    .pw-phone {
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      aspect-ratio: 9 / 18;
+      border-radius: 28px;
+      background: radial-gradient(circle at top, #111827, #020617 60%);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 10px;
+      position: relative;
+      overflow: hidden;
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    .pw-phone-notch {
+      width: 40%;
+      height: 10px;
+      background: #020617;
+      border-radius: 0 0 999px 999px;
+      margin: 0 auto 10px;
+    }
+
+    .pw-phone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .pw-phone-tag {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 10px;
+      color: #e5e7eb;
+    }
+
+    .pw-phone-badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.7);
+      color: #bbf7d0;
+      font-size: 10px;
+    }
+
+    .pw-phone-main {
+      border-radius: 16px;
+      background: radial-gradient(circle at top, rgba(79, 70, 229, 0.8), rgba(15, 23, 42, 0.98));
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+
+    .pw-phone-main-title {
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pw-phone-main-title span {
+      font-size: 10px;
+      color: #a5b4fc;
+      font-weight: 400;
+    }
+
+    .pw-phone-job-list {
+      margin-top: 4px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 8px;
+      font-size: 10px;
+    }
+
+    .pw-phone-job-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr 0.7fr;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .pw-phone-job-row + .pw-phone-job-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 3px;
+      padding-top: 5px;
+    }
+
+    .pw-phone-job-row strong {
+      font-weight: 500;
+    }
+
+    .pw-phone-status-pill {
+      padding: 2px 5px;
+      border-radius: 999px;
+      font-size: 9px;
+      background: rgba(22, 163, 74, 0.2);
+      color: #bbf7d0;
+      text-align: center;
+    }
+
+    .pw-phone-status-pill.pending {
+      background: rgba(249, 115, 22, 0.18);
+      color: #fed7aa;
+    }
+
+    .pw-phone-footer {
+      margin-top: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: #9ca3af;
+    }
+
+    .pw-phone-footer span strong {
+      color: #e5e7eb;
+    }
+
+    .pw-phone-shadow {
+      position: absolute;
+      inset: 8px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      pointer-events: none;
+    }
+
+    /* ---------- Generic sections ---------- */
+
+    .pw-section {
+      margin-bottom: 52px;
+    }
+
+    .pw-section-header {
+      max-width: 760px;
+      margin-bottom: 18px;
+    }
+
+    .pw-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .pw-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .pw-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .pw-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    /* ---------- “Only solution” block ---------- */
+
+    .pw-two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 30px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .pw-two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-body-text p {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .pw-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pw-stat-card {
+      border-radius: var(--radius-md);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 18px 18px 16px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pw-stat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.7), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .pw-stat-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .pw-stat-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .pw-stat-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .pw-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .pw-stat-item h4 {
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .pw-stat-item p {
+      font-size: 11px;
+      color: #cbd5f5;
+    }
+
+    /* ---------- Features grid ---------- */
+
+    .pw-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .pw-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .pw-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .pw-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .pw-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .pw-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .pw-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .pw-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- Testimonials ---------- */
+
+    .pw-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .pw-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .pw-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pw-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .pw-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .pw-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .pw-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .pw-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .pw-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .pw-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- Articles ---------- */
+
+    .pw-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .pw-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .pw-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .pw-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .pw-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .pw-article-text {
+      color: var(--text-sub);
+    }
+
+    .pw-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .pw-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .pw-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- Newsletter strip ---------- */
+
+    .pw-newsletter {
+      margin-top: 24px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #111827, #020617);
+      color: #e5e7eb;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .pw-newsletter {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pw-newsletter h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .pw-newsletter p {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .pw-newsletter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .pw-newsletter-input {
+      flex: 1 1 180px;
+      min-width: 0;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #e5e7eb;
+      outline: none;
+    }
+
+    .pw-newsletter-input::placeholder {
+      color: #6b7280;
+    }
+
+    .pw-newsletter-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #f9fafb;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.6);
+      white-space: nowrap;
+    }
+
+    .pw-newsletter-btn:hover {
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="pw-page" id="window-cleaning-software">
+  <div class="pw-shell">
+
+    <!-- HERO -->
+    <section class="pw-hero">
+      <div>
+        <h1 class="pw-title">
+          Join thousands of <span>window cleaning businesses</span> powered by <%= ENV['WEBSITE_NAME'] %>.
+        </h1>
+
+        <p class="pw-sub">
+          <%= ENV['WEBSITE_NAME'] %> is the all-in-one job management platform built for modern window cleaners. Plan
+          routes, schedule repeat rounds, send invoices and collect payments – all from one place.
+        </p>
+
+        <p class="pw-hero-tagline">
+          The leading scheduling, invoicing and payments platform for professional window cleaners.
+        </p>
+
+        <div class="pw-hero-ctas">
+          <a href="/users/sign_up" class="pw-btn pw-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="pw-btn pw-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="pw-hero-trust">
+          <strong>Designed for window cleaning from day one.</strong>
+          <span class="pw-pill">Built for rounds · Works on any device</span>
+        </div>
+      </div>
+
+      <!-- phone mockup -->
+      <div class="pw-hero-media">
+        <div class="pw-phone">
+          <div class="pw-phone-notch"></div>
+
+          <div class="pw-phone-header">
+            <span>Today · Route A</span>
+            <span class="pw-phone-tag"><%= ENV['WEBSITE_NAME'] %></span>
+          </div>
+
+          <div class="pw-phone-main">
+            <div class="pw-phone-main-title">
+              <div>Window Cleaning · 14 stops</div>
+              <span>Admin time: ↓ 60%</span>
+            </div>
+
+            <div class="pw-phone-job-list">
+              <div class="pw-phone-job-row">
+                <div><strong>High Street · Shopfronts</strong></div>
+                <div>10:00 → 11:15</div>
+                <div><div class="pw-phone-status-pill">In progress</div></div>
+              </div>
+              <div class="pw-phone-job-row">
+                <div>Riverside Apartments · Block B</div>
+                <div>11:30 → 12:10</div>
+                <div><div class="pw-phone-status-pill pending">Next</div></div>
+              </div>
+              <div class="pw-phone-job-row">
+                <div>Oakview Estate · 12 houses</div>
+                <div>PM round</div>
+                <div><div class="pw-phone-status-pill">Scheduled</div></div>
+              </div>
+            </div>
+
+            <div class="pw-phone-footer">
+              <span>Swipe → <strong>Mark as done</strong></span>
+              <span>Invoice &amp; reminder sent automatically</span>
+            </div>
+          </div>
+
+          <div class="pw-phone-footer" style="margin-top: 8px;">
+            <span>Works offline · Syncs when back online</span>
+          </div>
+
+          <div class="pw-phone-shadow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONLY SOLUTION -->
+    <section class="pw-section">
+      <div class="pw-section-header">
+        <p class="pw-section-kicker">Why <%= ENV['WEBSITE_NAME'] %></p>
+        <h2 class="pw-section-title">The complete solution for window cleaning businesses.</h2>
+      </div>
+
+      <div class="pw-two-col">
+        <div class="pw-body-text">
+          <p>
+            <%= ENV['WEBSITE_NAME'] %> was shaped around the way window cleaners actually work: repeat rounds, bad-weather
+            days, front-only or full cleans, and customers spread over different areas. Instead of forcing
+            your business into a generic field-service system, <%= ENV['WEBSITE_NAME'] %> fits the way you already operate.
+          </p>
+          <p>
+            From adding a new lead in under a minute to raising detailed reports on your income, debtors
+            and round performance, <%= ENV['WEBSITE_NAME'] %> handles the whole workflow. Schedules, messaging, invoicing,
+            payments and reporting are all linked together so you don’t have to jump between apps.
+          </p>
+          <p>
+            Our product team works side by side with real window cleaners. Many of the features you’ll find
+            in <%= ENV['WEBSITE_NAME'] %> started as customer suggestions – from specialist recurring schedule options to
+            the small details that make route planning less painful.
+          </p>
+        </div>
+
+        <aside class="pw-stat-card">
+          <div class="pw-stat-inner">
+            <div class="pw-stat-tag">Built for growth</div>
+            <div class="pw-stat-title">Window cleaners who use <%= ENV['WEBSITE_NAME'] %> tell us:</div>
+            <div class="pw-stat-grid">
+              <div class="pw-stat-item">
+                <h4>30+ min</h4>
+                <p>Average admin saved per worker, per day.</p>
+              </div>
+              <div class="pw-stat-item">
+                <h4>Fewer no-shows</h4>
+                <p>Automated reminders reduce missed appointments.</p>
+              </div>
+              <div class="pw-stat-item">
+                <h4>Faster pay</h4>
+                <p>Invoices and card payments sent instantly.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FEATURES OVERVIEW -->
+    <section class="pw-section">
+      <div class="pw-section-header">
+        <p class="pw-section-kicker">Features</p>
+        <h2 class="pw-section-title">Let’s explain what <%= ENV['WEBSITE_NAME'] %> does for window cleaners.</h2>
+      </div>
+      <div class="pw-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate your busywork so you can spend more time on the glass, not the
+          admin. Your crew can run everything from their phones while the office team sees changes in real
+          time – bookings, reschedules, payments and more.
+        </p>
+      </div>
+
+      <div class="pw-feature-grid">
+        <!-- Appointment reminders -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">Customer Messaging</p>
+          <h3 class="pw-feature-title">Send appointment reminders</h3>
+          <p class="pw-feature-text">
+            Reduce no-shows and last-minute cancellations with automatic SMS or email reminders. Set them
+            to go out a day before, a few hours before, or whenever works best for your rounds.
+          </p>
+          <div class="pw-feature-pill">Fewer wasted trips</div>
+        </article>
+
+        <!-- Auto invoices -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">Invoicing</p>
+          <h3 class="pw-feature-title">Send invoices automatically</h3>
+          <p class="pw-feature-text">
+            Mark a job as done and <%= ENV['WEBSITE_NAME'] %> can raise and send the invoice in seconds. No re-typing, no
+            paperwork on the sofa at night – just accurate invoices that match the work you’ve completed.
+          </p>
+          <div class="pw-feature-pill">One swipe per job</div>
+        </article>
+
+        <!-- Route optimisation -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">Route planning</p>
+          <h3 class="pw-feature-title">Optimised route navigation</h3>
+          <p class="pw-feature-text">
+            Choose unique start and end points for each worker and let <%= ENV['WEBSITE_NAME'] %> order their stops. Cut
+            down on backtracking, fuel and travel time while still keeping customers happy.
+          </p>
+          <div class="pw-feature-pill">Smarter rounds</div>
+        </article>
+
+        <!-- Customer details -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">CRM</p>
+          <h3 class="pw-feature-title">Manage customer details</h3>
+          <p class="pw-feature-text">
+            Keep everything in one place: property notes, gate codes, access instructions, pricing, visit
+            history and outstanding balance. Whoever turns up to clean has the full story.
+          </p>
+          <div class="pw-feature-pill">No more lost notebooks</div>
+        </article>
+
+        <!-- Auto payments -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">Payments</p>
+          <h3 class="pw-feature-title">Take payments automatically</h3>
+          <p class="pw-feature-text">
+            Invite customers to set up card or bank payments so future cleans are collected automatically
+            when you mark the job complete. Spend less time chasing, more time earning.
+          </p>
+          <div class="pw-feature-pill">Cashflow that just works</div>
+        </article>
+
+        <!-- Quotes -->
+        <article class="pw-feature-card">
+          <p class="pw-feature-label">Sales</p>
+          <h3 class="pw-feature-title">Create &amp; send quotes</h3>
+          <p class="pw-feature-text">
+            Capture new leads quickly, build professional quotes from your price list and send them online
+            for approval. When the quote is accepted, turn it into a job or recurring schedule in a click.
+          </p>
+          <div class="pw-feature-pill">From enquiry to first clean</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="pw-section">
+      <div class="pw-section-header">
+        <p class="pw-section-kicker">What customers say</p>
+        <h2 class="pw-section-title">See how other window cleaners use <%= ENV['WEBSITE_NAME'] %>.</h2>
+        <p class="pw-section-lead">
+          Here’s how real teams use <%= ENV['WEBSITE_NAME'] %> every day to manage rounds, cashflow and communication with
+          customers.
+        </p>
+      </div>
+
+      <div class="pw-testimonial-grid">
+        <article class="pw-testimonial-card">
+          <div class="pw-testimonial-inner">
+            <p class="pw-testimonial-tag">Multi-van operation</p>
+            <p class="pw-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has grown into the control centre of our business.</em> We plan and re-plan
+              routes, send invoices and track payments all in one place. Any device, any time – the team
+              knows exactly what’s next.”
+            </p>
+            <p class="pw-testimonial-name">
+              <strong>Chris R.</strong>
+              C Rose Cleaning Services
+            </p>
+          </div>
+        </article>
+
+        <article class="pw-testimonial-card">
+          <div class="pw-testimonial-inner">
+            <p class="pw-testimonial-tag">Faster payments</p>
+            <p class="pw-testimonial-quote">
+              “The automatic invoicing and payment collection has changed everything. Jobs are ticked off,
+              customers are charged and we barely have to think about the admin. Late payments have dropped
+              massively.”
+            </p>
+            <p class="pw-testimonial-name">
+              <strong>Steve B.</strong>
+              Oakley Window Cleaning Services
+            </p>
+          </div>
+        </article>
+
+        <article class="pw-testimonial-card">
+          <div class="pw-testimonial-inner">
+            <p class="pw-testimonial-tag">Growing rounds</p>
+            <p class="pw-testimonial-quote">
+              “I started using <%= ENV['WEBSITE_NAME'] %> when I was still on paper. Now I couldn’t imagine running the
+              business without it. The app takes care of the boring paperwork so I can focus on growing
+              my rounds and looking after customers.”
+            </p>
+            <p class="pw-testimonial-name">
+              <strong>Ash W.</strong>
+              Wicked Window Cleaning
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ARTICLES -->
+    <section class="pw-section">
+      <div class="pw-section-header">
+        <p class="pw-section-kicker">Resources</p>
+        <h2 class="pw-section-title">Helpful articles for window cleaning businesses.</h2>
+      </div>
+
+      <div class="pw-articles-grid">
+        <article class="pw-article-card">
+          <p class="pw-article-tag">Customer Story</p>
+          <h3 class="pw-article-title">How one window cleaner cut admin by an hour a day</h3>
+          <p class="pw-article-text">
+            Follow a real business owner as they move from paper diaries and spreadsheets to <%= ENV['WEBSITE_NAME'] %>,
+            and see the impact on their time, cashflow and customer service.
+          </p>
+          <p class="pw-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="pw-article-link">Read more</a>
+        </article>
+
+        <article class="pw-article-card">
+          <p class="pw-article-tag">How-to</p>
+          <h3 class="pw-article-title">Getting started with repeat rounds in <%= ENV['WEBSITE_NAME'] %></h3>
+          <p class="pw-article-text">
+            Learn how to set up recurring schedules that match the way you already work: four-weekly
+            rounds, mixed frequencies, and seasonal jobs.
+          </p>
+          <p class="pw-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="pw-article-link">Read more</a>
+        </article>
+
+        <article class="pw-article-card">
+          <p class="pw-article-tag">Growth</p>
+          <h3 class="pw-article-title">5 ways software helps grow a window cleaning business</h3>
+          <p class="pw-article-text">
+            From winning more quotes to getting paid faster, discover the small improvements that add up
+            when you run your business through <%= ENV['WEBSITE_NAME'] %>.
+          </p>
+          <p class="pw-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="pw-article-link">Read more</a>
+        </article>
+      </div>
+
+      <div class="pw-newsletter">
+        <div>
+          <h3>Get tips for running a smoother window cleaning business.</h3>
+          <p>
+            Occasional emails with practical advice, new feature updates and stories from other <%= ENV['WEBSITE_NAME'] %>
+            users. No spam, just useful ideas.
+          </p>
+        </div>
+        <form class="pw-newsletter-form">
+          <input class="pw-newsletter-input" type="email" placeholder="you@example.com" />
+          <button type="submit" class="pw-newsletter-btn">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

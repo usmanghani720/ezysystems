@@ -63,7 +63,12 @@ Rails.application.routes.draw do
   get "/jobs", to: "home#jobs", as: :jobs
   get "/assignment_scheduling", to: "home#assignment_scheduling", as: :assignment_scheduling
   get "/job_records", to: "home#job_records", as: :job_records
-  
+  get "/professional_window_cleaner_software", to: "home#professional_window_cleaner_software", as: :professional_window_cleaner_software
+  get "/bin_cleaning_software", to: "home#bin_cleaning_software", as: :bin_cleaning_software
+  get "/carpet_cleaning_software", to: "home#carpet_cleaning_software", as: :carpet_cleaning_software
+  get "/exterior_cleaning", to: "home#exterior_cleaning", as: :exterior_cleaning
+  get "/cleaning_housekeeping_maid_service_software", to: "home#cleaning_housekeeping_maid_service_software", as: :cleaning_housekeeping_maid_service_software
+  get "/mobile_cleaning_services", to: "home#mobile_cleaning_services", as: :mobile_cleaning_services
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
   

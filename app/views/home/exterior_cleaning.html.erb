@@ -1,0 +1,816 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Exterior Cleaning Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Exterior Cleaning Software ===== */
+
+    .ex-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .ex-page * {
+      box-sizing: border-box;
+    }
+
+    .ex-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .ex-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .ex-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .ex-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .ex-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .ex-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .ex-title span {
+      color: var(--accent-dark);
+    }
+
+    .ex-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .ex-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .ex-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .ex-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .ex-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .ex-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .ex-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .ex-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .ex-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .ex-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .ex-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: schedule / route card */
+
+    .ex-hero-media {
+      position: relative;
+    }
+
+    .ex-schedule-card {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ex-schedule-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.9), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .ex-schedule-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    .ex-schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .ex-schedule-header-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .ex-schedule-header-title span {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .ex-schedule-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .ex-schedule-list {
+      margin-top: 6px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px;
+    }
+
+    .ex-schedule-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.8fr 0.7fr;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .ex-schedule-row + .ex-schedule-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 3px;
+      padding-top: 5px;
+    }
+
+    .ex-schedule-row strong {
+      font-weight: 500;
+    }
+
+    .ex-status-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .ex-status-pill.scheduled {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+
+    .ex-status-pill.in-progress {
+      background: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .ex-status-pill.completed {
+      background: rgba(79, 70, 229, 0.25);
+      color: #c7d2fe;
+    }
+
+    .ex-schedule-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .ex-schedule-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- SECTION LAYOUT ---------- */
+
+    .ex-section {
+      margin-bottom: 52px;
+    }
+
+    .ex-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .ex-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .ex-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .ex-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .ex-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    .ex-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .ex-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .ex-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+
+    .ex-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .ex-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .ex-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .ex-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .ex-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .ex-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .ex-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .ex-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .ex-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- RESOURCES / ARTICLES ---------- */
+
+    .ex-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .ex-articles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .ex-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .ex-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .ex-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .ex-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .ex-article-text {
+      color: var(--text-sub);
+    }
+
+    .ex-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .ex-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .ex-article-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .ex-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .ex-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .ex-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ex-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .ex-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .ex-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .ex-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .ex-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .ex-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .ex-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="ex-page" id="exterior-cleaning-software">
+  <div class="ex-shell">
+
+    <!-- HERO -->
+    <section class="ex-hero">
+      <div>
+
+        <h1 class="ex-title">
+          Streamline your <span>exterior cleaning business</span> with <%= ENV['WEBSITE_NAME'] %>.
+        </h1>
+
+        <p class="ex-sub">
+          Running an exterior cleaning business means juggling jobs, teams, vehicles, payments and
+          communication – often while you’re out on-site. <%= ENV['WEBSITE_NAME'] %> brings it all together in one place so
+          you can work smarter, not harder.
+        </p>
+
+        <p class="ex-hero-tagline">
+          The scheduling, invoicing and payments platform designed for pressure washing, soft washing and
+          exterior cleaning companies.
+        </p>
+
+        <div class="ex-hero-ctas">
+          <a href="/users/sign_up" class="ex-btn ex-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="ex-btn ex-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="ex-hero-trust">
+          <strong><%= ENV['WEBSITE_NAME'] %> takes care of the admin so you can focus on the work.</strong>
+          <span class="ex-pill">Built for field teams · Works on any device</span>
+        </div>
+      </div>
+
+      <!-- Hero media: exterior job schedule -->
+      <div class="ex-hero-media">
+        <div class="ex-schedule-card">
+          <div class="ex-schedule-inner">
+            <div class="ex-schedule-header">
+              <div class="ex-schedule-header-title">
+                Today · Exterior Cleaning
+                <span>8 jobs · 2 crews</span>
+              </div>
+              <div class="ex-schedule-filter">View by crew</div>
+            </div>
+
+            <div class="ex-schedule-list">
+              <div class="ex-schedule-row">
+                <div><strong>Retail Park · Pressure wash</strong></div>
+                <div>08:30 → 10:30</div>
+                <div><div class="ex-status-pill in-progress">In progress</div></div>
+              </div>
+              <div class="ex-schedule-row">
+                <div>Townhouses · Soft wash fronts</div>
+                <div>11:00 → 13:00</div>
+                <div><div class="ex-status-pill scheduled">Scheduled</div></div>
+              </div>
+              <div class="ex-schedule-row">
+                <div>Apartment block · Cladding clean</div>
+                <div>14:00 → 17:00</div>
+                <div><div class="ex-status-pill completed">Completed</div></div>
+              </div>
+            </div>
+
+            <div class="ex-schedule-footer">
+              <span>Send reminders to afternoon customers</span>
+              <span><strong>Invoices &amp; payment links</strong> sent automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="ex-section">
+      <div class="ex-section-header">
+        <p class="ex-section-kicker">For exterior cleaning companies</p>
+        <h2 class="ex-section-title">Your exterior cleaning jobs planned, organised and in one place.</h2>
+      </div>
+
+      <div class="ex-body-text">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> gives you everything you need to keep your exterior cleaning business running smoothly.
+          Book jobs, allocate crews, add notes and photos, and keep customers updated at every stage –
+          without relying on paper diaries or scattered messages.
+        </p>
+        <p>
+          Plan your day with drag-and-drop scheduling, then automatically send appointment reminders so
+          customers are ready when you arrive. When the job is complete, mark it done in the app to trigger
+          invoicing and payment requests.
+        </p>
+        <p>
+          Whether you’re pressure washing driveways, cleaning roofs and gutters, or taking on large
+          commercial exteriors, <%= ENV['WEBSITE_NAME'] %> scales with you – from solo operators to multi-van teams.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="ex-section">
+      <div class="ex-section-header">
+        <p class="ex-section-kicker">Features</p>
+        <h2 class="ex-section-title">Features you’ll love.</h2>
+      </div>
+      <div class="ex-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate your processes and keep admin time to a minimum. It’s easy for
+          your crews to use on any mobile device, with real-time updates so office staff can keep on top
+          of daily work.
+        </p>
+      </div>
+
+      <div class="ex-feature-grid">
+        <!-- Effortless job scheduling -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Job scheduling</p>
+          <h3 class="ex-feature-title">Effortless job scheduling</h3>
+          <p class="ex-feature-text">
+            Plan and adjust jobs using a clear visual planner. Quickly move work between crews, reschedule
+            due to weather and keep recurring maintenance cleans organised so nothing gets missed.
+          </p>
+          <div class="ex-feature-pill">Drag, drop, done</div>
+        </article>
+
+        <!-- Automated invoicing & payments -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Invoicing &amp; payments</p>
+          <h3 class="ex-feature-title">Automated invoicing &amp; payments</h3>
+          <p class="ex-feature-text">
+            Create and send invoices in seconds when a job is marked complete. Track who has paid, who
+            still owes and send polite reminders – without manually chasing every single job.
+          </p>
+          <div class="ex-feature-pill">Get paid faster</div>
+        </article>
+
+        <!-- Route management -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Route management</p>
+          <h3 class="ex-feature-title">Route management &amp; optimisation</h3>
+          <p class="ex-feature-text">
+            Assign jobs to specific vehicles or teams, then optimise routes to reduce drive time and fuel
+            costs. Crews can navigate directly from the app and update job status as they go.
+          </p>
+          <div class="ex-feature-pill">Less driving, more cleaning</div>
+        </article>
+
+        <!-- Customer management -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Customer management</p>
+          <h3 class="ex-feature-title">Customer management</h3>
+          <p class="ex-feature-text">
+            Store all your customer details in one place – property information, access notes, past work,
+            photos and price history – so any crew member can arrive fully prepared.
+          </p>
+          <div class="ex-feature-pill">Every detail recorded</div>
+        </article>
+
+        <!-- Appointment reminders -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Messaging</p>
+          <h3 class="ex-feature-title">Appointment reminders</h3>
+          <p class="ex-feature-text">
+            Cut down on no-shows and last-minute cancellations by sending SMS and email reminders at just
+            the right time. Keep customers informed about arrival windows, weather delays and follow-up
+            visits.
+          </p>
+          <div class="ex-feature-pill">Fewer wasted visits</div>
+        </article>
+
+        <!-- Real-time progress -->
+        <article class="ex-feature-card">
+          <p class="ex-feature-label">Live tracking</p>
+          <h3 class="ex-feature-title">Real-time progress tracking</h3>
+          <p class="ex-feature-text">
+            See which jobs are not started, in progress or complete across all your crews in real time.
+            Spot delays early, reassign work and keep customers updated with accurate ETAs.
+          </p>
+          <div class="ex-feature-pill">Stay one step ahead</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="ex-section">
+      <div class="ex-section-header">
+        <p class="ex-section-kicker">What our customers say</p>
+        <h2 class="ex-section-title">See how exterior cleaners use <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="ex-testimonial-grid">
+        <article class="ex-testimonial-card">
+          <div class="ex-testimonial-inner">
+            <p class="ex-testimonial-tag">Admin &amp; growth</p>
+            <p class="ex-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has evolved into the control centre of our business.”</em> We plan and re-plan
+              jobs, send invoices and track payments all in one place. Any device, any time – it’s
+              essential for any appointment-based exterior cleaning company.
+            </p>
+            <p class="ex-testimonial-name">
+              <strong>Service business owner</strong>
+              Exterior cleaning &amp; pressure washing
+            </p>
+          </div>
+        </article>
+
+        <article class="ex-testimonial-card">
+          <div class="ex-testimonial-inner">
+            <p class="ex-testimonial-tag">Work-life balance</p>
+            <p class="ex-testimonial-quote">
+              “Before <%= ENV['WEBSITE_NAME'] %> we were using paper diaries and chasing payments manually. Now reminders,
+              invoices and payment links are sent automatically when work is completed. We’ve cut down on
+              admin and late payments – and evenings are finally free again.”
+            </p>
+            <p class="ex-testimonial-name">
+              <strong>Owner-operator</strong>
+              Exterior cleaning &amp; soft washing
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- RESOURCES / ARTICLES -->
+    <section class="ex-section">
+      <div class="ex-section-header">
+        <p class="ex-section-kicker">Resources</p>
+        <h2 class="ex-section-title">Useful resources for exterior cleaning businesses.</h2>
+      </div>
+
+      <div class="ex-articles-grid">
+        <article class="ex-article-card">
+          <p class="ex-article-tag">Customer story</p>
+          <h3 class="ex-article-title">How software helped an exterior cleaner grow faster</h3>
+          <p class="ex-article-text">
+            Follow an exterior cleaning business as they move from paper admin to an all-in-one platform
+            for scheduling, invoicing and payments – and the impact it had on their growth.
+          </p>
+          <p class="ex-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="ex-article-link">Read more</a>
+        </article>
+
+        <article class="ex-article-card">
+          <p class="ex-article-tag">How-to</p>
+          <h3 class="ex-article-title">Building repeat exterior cleaning schedules</h3>
+          <p class="ex-article-text">
+            Learn how to set up recurring maintenance cleans, manage seasonal work and keep track of long
+            term exterior cleaning contracts inside <%= ENV['WEBSITE_NAME'] %>.
+          </p>
+          <p class="ex-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="ex-article-link">Read more</a>
+        </article>
+
+        <article class="ex-article-card">
+          <p class="ex-article-tag">Growth</p>
+          <h3 class="ex-article-title">Marketing ideas for exterior cleaning companies</h3>
+          <p class="ex-article-text">
+            Practical ideas for keeping your calendar full – from seasonal campaigns and referral offers
+            to using <%= ENV['WEBSITE_NAME'] %>’s messaging tools to stay in touch with customers.
+          </p>
+          <p class="ex-article-meta">Reading time · 7 minutes</p>
+          <a href="#" class="ex-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

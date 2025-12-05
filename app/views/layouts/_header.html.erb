@@ -137,7 +137,62 @@
       </div><!-- /.nav-item.has-mega -->
 
       <a href="/pricing" data-turbo="false">Pricing</a>
-      <a href="#industries">Industries</a>
+
+      <!-- Industries dropdown (desktop) -->
+      <div class="nav-item has-industries">
+        <a href="#industries" class="nav-link">Industries</a>
+
+        <div class="industries-menu">
+          <div class="industries-inner">
+            <div class="industries-header">
+              <p class="industries-eyebrow">Industries</p>
+              <p class="industries-sub">
+                Join thousands of <%= ENV['WEBSITE_NAME'] %> users across the world from all kinds of service businesses.
+              </p>
+            </div>
+
+            <ul class="industries-list">
+              <li>
+                <a href="/professional_window_cleaner_software">
+                  <span>Window Cleaning</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+              <li>
+                <a href="/bin_cleaning_software">
+                  <span>Bin Cleaning</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+              <li>
+                <a href="/carpet_cleaning_software">
+                  <span>Carpet Cleaning</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+              <li>
+                <a href="/exterior_cleaning">
+                  <span>Exterior Cleaning</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+              <li>
+                <a href="/cleaning_housekeeping_maid_service_software">
+                  <span>Professional Cleaning</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+              <li>
+                <a href="/mobile_cleaning_services">
+                  <span>Mobile Cleaning Services</span>
+                  <span class="industries-chevron">›</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div><!-- /.industries-menu -->
+      </div><!-- /.nav-item.has-industries -->
+
       <a href="#news">News &amp; Updates</a>
     </nav>
 
@@ -155,6 +210,8 @@
         <%= image_tag ENV['LOGO_NAME'], alt: ENV['WEBSITE_NAME'], class: "logo small" %>
         <button class="close" aria-label="Close menu" data-close>&times;</button>
       </div>
+
+      <!-- Features accordion -->
       <div class="mobile-accordion">
         <button class="mobile-accordion-trigger">
           Features
@@ -162,7 +219,6 @@
         </button>
 
         <div class="mobile-accordion-panel">
-          
           <p class="mobile-accordion-heading">Customer Services</p>
           <a href="/custom_portal">Customer Portal</a>
           <a href="/customer_messaging">Customer Messaging</a>
@@ -173,20 +229,37 @@
           <a href="/payment">Payments</a>
           <a href="/invoicing">Invoicing</a>
           <a href="/expenses">Expenses</a>
-          <a href="/bookkeeping">Financials & Reporting</a>
+          <a href="/bookkeeping">Financials &amp; Reporting</a>
 
           <p class="mobile-accordion-heading">Job Management</p>
           <a href="/customer_management">Customer Management</a>
-          <a href="/jobs">Add & Edit Jobs</a>
-          <a href="/assignment_scheduling">Work Assignment & Scheduling</a>
-          <a href="/job_records">Job Records & Tracking</a>
-
+          <a href="/jobs">Add &amp; Edit Jobs</a>
+          <a href="/assignment_scheduling">Work Assignment &amp; Scheduling</a>
+          <a href="/job_records">Job Records &amp; Tracking</a>
         </div>
       </div>
 
       <a href="/pricing" data-close data-turbo="false">Pricing</a>
-      <a href="#industries" data-close>Industries</a>
+
+      <!-- Industries accordion (mobile) -->
+      <div class="mobile-accordion">
+        <button class="mobile-accordion-trigger">
+          Industries
+          <span class="chevron">›</span>
+        </button>
+
+        <div class="mobile-accordion-panel">
+          <a href="/professional_window_cleaner_software">Window Cleaning</a>
+          <a href="/bin_cleaning_software">Bin Cleaning</a>
+          <a href="/carpet_cleaning_software">Carpet Cleaning</a>
+          <a href="/exterior_cleaning">Exterior Cleaning</a>
+          <a href="/cleaning_housekeeping_maid_service_software">Professional Cleaning</a>
+          <a href="/mobile_cleaning_services">Mobile Cleaning Services</a>
+        </div>
+      </div>
+
       <a href="#news" data-close>News &amp; Updates</a>
+
       <div class="panel-actions">
         <a class="btn btn-outline" style="color: white;" href="/users/sign_in">Sign In</a>
         <a class="btn btn-primary" href="/users/sign_up">Sign Up</a>
@@ -196,7 +269,7 @@
 </header>
 
 <style>
-/* Mobile accordion (for Features inside mobile menu) */
+/* Mobile accordion (for Features & Industries inside mobile menu) */
 .mobile-accordion {
   width: 100%;
 }
@@ -244,14 +317,12 @@
   letter-spacing: 0.05em;
 }
 
-/* --- Mega menu (desktop) --- */
+/* --- Mega menu (desktop Features) --- */
 
-/* parent wrapper for "Features" */
 .nav-item.has-mega {
   position: relative;
 }
 
-/* dropdown panel (absolute under Features link) */
 .nav-item.has-mega .mega-menu {
   position: absolute;
   top: 100%;
@@ -262,13 +333,10 @@
   visibility: hidden;
   pointer-events: none;
   transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
-
-  /* FIX: give it a real width so it doesn't shrink */
   width: 1040px;
   max-width: calc(100vw - 48px);
 }
 
-/* show on hover / focus */
 .nav-item.has-mega:hover .mega-menu,
 .nav-item.has-mega:focus-within .mega-menu {
   opacity: 1;
@@ -277,7 +345,6 @@
   transform: translate(-50%, 0);
 }
 
-/* inner layout */
 .mega-inner {
   width: 100%;
   border-radius: 16px;
@@ -291,7 +358,6 @@
   gap: 32px;
 }
 
-/* column styling */
 .mega-column {
   min-width: 0;
 }
@@ -327,7 +393,6 @@
   color: #9ca3af;
 }
 
-/* links list */
 .mega-links {
   list-style: none;
   padding: 0;
@@ -363,7 +428,6 @@
   transform: translateX(2px);
 }
 
-/* optional chevron */
 .mega-links li a::after {
   content: "›";
   float: right;
@@ -378,9 +442,94 @@
   color: #4f46e5;
 }
 
-/* hide mega menu on small screens (mobile uses slide-out menu) */
+/* --- Industries dropdown (desktop) --- */
+
+.nav-item.has-industries {
+  position: relative;
+}
+
+.nav-item.has-industries .industries-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  width: 840px;
+  max-width: calc(100vw - 48px);
+}
+
+.nav-item.has-industries:hover .industries-menu,
+.nav-item.has-industries:focus-within .industries-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.industries-inner {
+  background: #ffffff;
+  border-radius: 0 0 16px 16px;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(226, 232, 240, 0.9);
+  padding: 20px 32px 24px;
+}
+
+.industries-header {
+  margin-bottom: 8px;
+}
+
+.industries-eyebrow {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.industries-sub {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.industries-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.industries-list li + li {
+  border-top: 1px solid #e5e7eb;
+}
+
+.industries-list li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.industries-list li a:hover {
+  color: #111827;
+  background: #f9fafb;
+}
+
+.industries-chevron {
+  font-size: 16px;
+  color: #d1d5db;
+}
+
+/* hide dropdowns on small screens (mobile uses slide-out menu) */
 @media (max-width: 1000px) {
-  .nav-item.has-mega .mega-menu {
+  .nav-item.has-mega .mega-menu,
+  .nav-item.has-industries .industries-menu {
     display: none;
   }
 }

@@ -1,0 +1,821 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Mobile Cleaning Services Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Mobile Cleaning Services Software ===== */
+
+    .mc-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .mc-page * {
+      box-sizing: border-box;
+    }
+
+    .mc-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .mc-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .mc-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mc-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .mc-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .mc-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .mc-title span {
+      color: var(--accent-dark);
+    }
+
+    .mc-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .mc-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .mc-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .mc-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .mc-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .mc-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .mc-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .mc-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .mc-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mc-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .mc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: mobile job list */
+
+    .mc-hero-media {
+      position: relative;
+    }
+
+    .mc-mobile-card {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: 32px;
+      background: #020617;
+      padding: 14px 14px 18px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .mc-mobile-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top, rgba(79, 70, 229, 0.7), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(248, 250, 252, 0.04), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .mc-mobile-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .mc-mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .mc-mobile-header-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .mc-mobile-header-title span {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .mc-mobile-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .mc-mobile-list {
+      margin-top: 8px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 8px 10px;
+    }
+
+    .mc-mobile-row {
+      display: grid;
+      grid-template-columns: 1.5fr 0.9fr 0.8fr;
+      gap: 4px;
+      align-items: center;
+      padding: 5px 4px;
+      font-size: 11px;
+    }
+
+    .mc-mobile-row + .mc-mobile-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 4px;
+      padding-top: 6px;
+    }
+
+    .mc-mobile-row strong {
+      font-weight: 500;
+    }
+
+    .mc-status-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .mc-status-pill.assigned {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+    }
+
+    .mc-status-pill.enroute {
+      background: rgba(234, 179, 8, 0.26);
+      color: #facc15;
+    }
+
+    .mc-status-pill.complete {
+      background: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .mc-mobile-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .mc-mobile-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- SECTION LAYOUT ---------- */
+
+    .mc-section {
+      margin-bottom: 52px;
+    }
+
+    .mc-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .mc-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .mc-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .mc-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .mc-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    .mc-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .mc-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .mc-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+
+    .mc-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .mc-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .mc-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .mc-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mc-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .mc-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .mc-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .mc-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .mc-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .mc-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .mc-testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .mc-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mc-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mc-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .mc-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .mc-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .mc-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .mc-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .mc-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .mc-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- RESOURCES / ARTICLES ---------- */
+
+    .mc-articles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 720px) {
+      .mc-articles-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .mc-article-card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .mc-article-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .mc-article-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .mc-article-text {
+      color: var(--text-sub);
+    }
+
+    .mc-article-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .mc-article-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .mc-article-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="mc-page" id="mobile-cleaning-services-software">
+  <div class="mc-shell">
+
+    <!-- HERO -->
+    <section class="mc-hero">
+      <div>
+
+        <h1 class="mc-title">
+          Join thousands of <span>mobile cleaning businesses</span> using <%= ENV['WEBSITE_NAME'] %>.
+        </h1>
+
+        <p class="mc-sub">
+          <%= ENV['WEBSITE_NAME'] %> is the leading job management platform for professional mobile service cleaners. It gives
+          you the tools to schedule, plan and invoice from any device – whether you’re on the road, on-site or
+          in the office.
+        </p>
+
+        <p class="mc-hero-tagline">
+          The scheduling, planning and invoicing platform built specifically for mobile service teams.
+        </p>
+
+        <div class="mc-hero-ctas">
+          <a href="/users/sign_up" class="mc-btn mc-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="mc-btn mc-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="mc-hero-trust">
+          <strong>Trusted by mobile cleaners, detailers and other field service businesses.</strong>
+          <span class="mc-pill">Real-time updates · Works on any device</span>
+        </div>
+      </div>
+
+      <!-- Hero media: mobile job list -->
+      <div class="mc-hero-media">
+        <div class="mc-mobile-card">
+          <div class="mc-mobile-inner">
+            <div class="mc-mobile-header">
+              <div class="mc-mobile-header-title">
+                Today · Mobile Cleaning
+                <span>7 jobs · 3 technicians</span>
+              </div>
+              <div class="mc-mobile-filter">Filter by status</div>
+            </div>
+
+            <div class="mc-mobile-list">
+              <div class="mc-mobile-row">
+                <div><strong>Office park · Fleet clean</strong></div>
+                <div>09:00 → 10:30</div>
+                <div><div class="mc-status-pill enroute">En route</div></div>
+              </div>
+              <div class="mc-mobile-row">
+                <div>Retail store · Exterior wash</div>
+                <div>11:00 → 12:00</div>
+                <div><div class="mc-status-pill assigned">Assigned</div></div>
+              </div>
+              <div class="mc-mobile-row">
+                <div>Apartment complex · Car park</div>
+                <div>13:30 → 15:00</div>
+                <div><div class="mc-status-pill complete">Complete</div></div>
+              </div>
+            </div>
+
+            <div class="mc-mobile-footer">
+              <span>Route optimised for travel time</span>
+              <span><strong>Invoices &amp; payment links</strong> sent automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="mc-section">
+      <div class="mc-section-header">
+        <p class="mc-section-kicker">For mobile service teams</p>
+        <h2 class="mc-section-title"><%= ENV['WEBSITE_NAME'] %> can help your mobile cleaning service business.</h2>
+      </div>
+
+      <div class="mc-body-text">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> has been developed to automate the admin side of your business so you can focus on
+          delivering great cleaning services on the move. Whether your jobs are one-off visits or part of a
+          recurring schedule, you can keep on top of your work easily with the visual planner.
+        </p>
+        <p>
+          Plan your day, locate customer information and navigate to the next appointment using the
+          built-in views and route optimisation tools. When it’s time to head out, your mobile team can see
+          everything they need in the app – job details, notes, photos and directions.
+        </p>
+        <p>
+          When a job is done, send invoices in a couple of taps or log cash payments on-site. <%= ENV['WEBSITE_NAME'] %>
+          keeps your schedule, customers and finances in sync wherever you’re working.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="mc-section">
+      <div class="mc-section-header">
+        <p class="mc-section-kicker">Features</p>
+        <h2 class="mc-section-title">Let’s explain the features.</h2>
+      </div>
+      <div class="mc-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate processes and keep admin time to a minimum. It’s simple for your
+          cleaning crew to use on any mobile device, with real-time updates so the office can keep on top of
+          the daily schedule.
+        </p>
+      </div>
+
+      <div class="mc-feature-grid">
+        <!-- Assign work to users & teams -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Work assignment</p>
+          <h3 class="mc-feature-title">Assign work to users &amp; teams</h3>
+          <p class="mc-feature-text">
+            Allocate jobs to individual technicians or teams in seconds. React quickly to last-minute
+            changes, reassign work and keep everyone updated on their route and schedule.
+          </p>
+          <div class="mc-feature-pill">Quick &amp; flexible planning</div>
+        </article>
+
+        <!-- Manage customer details -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Customer management</p>
+          <h3 class="mc-feature-title">Manage customer details</h3>
+          <p class="mc-feature-text">
+            Store, access and manage all of your customer and lead information in one place – from contact
+            details and addresses to service history and notes from the field.
+          </p>
+          <div class="mc-feature-pill">Know every customer</div>
+        </article>
+
+        <!-- Appointment reminders -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Reminders</p>
+          <h3 class="mc-feature-title">Send appointment reminders</h3>
+          <p class="mc-feature-text">
+            Cut down on no-shows and last-minute cancellations by sending automated email and SMS reminders
+            when mobile appointments are due. Configure the timing to suit your customers.
+          </p>
+          <div class="mc-feature-pill">Fewer missed visits</div>
+        </article>
+
+        <!-- Automatic payments -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Payments</p>
+          <h3 class="mc-feature-title">Take payments automatically</h3>
+          <p class="mc-feature-text">
+            Invite customers to set up automatic payments for regular services, or pay securely for
+            one-off jobs. Reduce manual chasing and improve cash flow with integrated payment tools.
+          </p>
+          <div class="mc-feature-pill">Cash flow made simple</div>
+        </article>
+
+        <!-- Route optimisation -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Routing</p>
+          <h3 class="mc-feature-title">Optimised route navigation</h3>
+          <p class="mc-feature-text">
+            Set unique start and end points for each worker and let <%= ENV['WEBSITE_NAME'] %> optimise daily routes. Spend
+            less time driving and more time delivering services to your customers.
+          </p>
+          <div class="mc-feature-pill">Less travel, more work</div>
+        </article>
+
+        <!-- VAT & reporting (optional) -->
+        <article class="mc-feature-card">
+          <p class="mc-feature-label">Reporting</p>
+          <h3 class="mc-feature-title">Financials &amp; reporting</h3>
+          <p class="mc-feature-text">
+            Track revenue, customer balances and service performance with clear reports. Keep on top of
+            tax and accounting requirements with accurate digital records for each job.
+          </p>
+          <div class="mc-feature-pill">Stay on top of numbers</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="mc-section">
+      <div class="mc-section-header">
+        <p class="mc-section-kicker">What our customers say</p>
+        <h2 class="mc-section-title">See what mobile service businesses think about <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="mc-testimonial-grid">
+        <article class="mc-testimonial-card">
+          <div class="mc-testimonial-inner">
+            <p class="mc-testimonial-tag">Scheduling &amp; growth</p>
+            <p class="mc-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has evolved into the control centre of our business.”</em> From customer service
+              to planning and replanning, quotes, invoicing, billing and payments – it does it all. Any
+              device, any time, one app. It’s essential for any appointment-based mobile service.
+            </p>
+            <p class="mc-testimonial-name">
+              <strong>Service business owner</strong>
+              Mobile cleaning &amp; maintenance
+            </p>
+          </div>
+        </article>
+
+        <article class="mc-testimonial-card">
+          <div class="mc-testimonial-inner">
+            <p class="mc-testimonial-tag">Franchises &amp; teams</p>
+            <p class="mc-testimonial-quote">
+              “We manage multiple micro-businesses under one brand. <%= ENV['WEBSITE_NAME'] %> keeps everything segregated and
+              organised, with each unit seeing only their own work while head office keeps overall control.
+              It’s perfect for mobile service franchises.”
+            </p>
+            <p class="mc-testimonial-name">
+              <strong>Franchise owner</strong>
+              Mobile field service network
+            </p>
+          </div>
+        </article>
+
+        <article class="mc-testimonial-card">
+          <div class="mc-testimonial-inner">
+            <p class="mc-testimonial-tag">Support &amp; onboarding</p>
+            <p class="mc-testimonial-quote">
+              “I was nervous about changing systems, but the <%= ENV['WEBSITE_NAME'] %> team made set-up and migration easy.
+              The software is intuitive, powerful and the support is the best I’ve experienced for any app
+              or service.”
+            </p>
+            <p class="mc-testimonial-name">
+              <strong>Owner-operator</strong>
+              Mobile cleaning business
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- RESOURCES / ARTICLES -->
+    <section class="mc-section">
+      <div class="mc-section-header">
+        <p class="mc-section-kicker">Resources</p>
+        <h2 class="mc-section-title">Useful articles to support your mobile cleaning business.</h2>
+      </div>
+
+      <div class="mc-articles-grid">
+        <article class="mc-article-card">
+          <p class="mc-article-tag">Growth</p>
+          <h3 class="mc-article-title">5 tips for seamless growth in the mobile service industry</h3>
+          <p class="mc-article-text">
+            Learn how to kickstart and grow your mobile service business with proven strategies around
+            scheduling, automation and customer experience – all supported by <%= ENV['WEBSITE_NAME'] %>.
+          </p>
+          <p class="mc-article-meta">Reading time · 6 minutes</p>
+          <a href="#" class="mc-article-link">Read more</a>
+        </article>
+
+        <article class="mc-article-card">
+          <p class="mc-article-tag">Financials</p>
+          <h3 class="mc-article-title">Forecasting income with <%= ENV['WEBSITE_NAME'] %></h3>
+          <p class="mc-article-text">
+            Use reports to forecast income from recurring schedules and one-off jobs, so you always know
+            what’s around the corner and can plan resources with confidence.
+          </p>
+          <p class="mc-article-meta">Reading time · 5 minutes</p>
+          <a href="#" class="mc-article-link">Read more</a>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

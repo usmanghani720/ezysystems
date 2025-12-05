@@ -1,0 +1,803 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Professional Bin Cleaning Software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Professional Bin Cleaning Software ===== */
+
+    .bin-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .bin-page * {
+      box-sizing: border-box;
+    }
+
+    .bin-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .bin-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .bin-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bin-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .bin-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .bin-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .bin-title span {
+      color: var(--accent-dark);
+    }
+
+    .bin-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .bin-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .bin-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .bin-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .bin-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .bin-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .bin-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .bin-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .bin-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bin-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .bin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: planner / route mock */
+
+    .bin-hero-media {
+      position: relative;
+    }
+
+    .bin-planner-card {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bin-planner-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.9), transparent 65%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .bin-planner-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    .bin-planner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .bin-planner-header-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .bin-planner-header span {
+      font-size: 11px;
+      color: #cbd5f5;
+    }
+
+    .bin-planner-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .bin-planner-list {
+      margin-top: 6px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px;
+    }
+
+    .bin-planner-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr 0.7fr;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .bin-planner-row + .bin-planner-row {
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      margin-top: 3px;
+      padding-top: 5px;
+    }
+
+    .bin-planner-row strong {
+      font-weight: 500;
+    }
+
+    .bin-status-pill {
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .bin-status-pill.due {
+      background: rgba(249, 115, 22, 0.25);
+      color: #fed7aa;
+    }
+
+    .bin-status-pill.done {
+      background: rgba(22, 163, 74, 0.25);
+      color: #bbf7d0;
+    }
+
+    .bin-status-pill.overdue {
+      background: rgba(239, 68, 68, 0.27);
+      color: #fecaca;
+    }
+
+    .bin-planner-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #cbd5f5;
+    }
+
+    .bin-planner-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- BASIC SECTION LAYOUT ---------- */
+
+    .bin-section {
+      margin-bottom: 52px;
+    }
+
+    .bin-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .bin-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bin-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .bin-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .bin-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    /* ---------- MAIN COPY BLOCK ---------- */
+
+    .bin-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .bin-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .bin-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- FEATURES GRID ---------- */
+
+    .bin-feature-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .bin-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .bin-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .bin-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bin-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .bin-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .bin-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .bin-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .bin-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- “Powered by <%= ENV['WEBSITE_NAME'] %>” STORIES ---------- */
+
+    .bin-stories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .bin-stories-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bin-story-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      font-size: 14px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+    }
+
+    .bin-story-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .bin-story-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .bin-story-text {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .bin-story-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .bin-story-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .bin-story-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .bin-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .bin-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .bin-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bin-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .bin-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bin-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .bin-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .bin-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .bin-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .bin-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="bin-page" id="bin-cleaning-software">
+  <div class="bin-shell">
+
+    <!-- HERO -->
+    <section class="bin-hero">
+      <div>
+
+        <h1 class="bin-title">
+          The top job management software for <span>bin cleaners.</span>
+        </h1>
+
+        <p class="bin-sub">
+          <%= ENV['WEBSITE_NAME'] %> is the central hub for wheelie-bin and commercial bin cleaning businesses. Plan your
+          rounds, optimise routes, send reminders and collect payments – all from one app.
+        </p>
+
+        <p class="bin-hero-tagline">
+          The fastest growing software choice for effortless and efficient bin-cleaning job management.
+        </p>
+
+        <div class="bin-hero-ctas">
+          <a href="/users/sign_up" class="bin-btn bin-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="bin-btn bin-btn-secondary">Which plan?</a>
+        </div>
+
+        <div class="bin-hero-trust">
+          <strong><%= ENV['WEBSITE_NAME'] %> takes care of the admin, so you can focus on delivering great service.</strong>
+          <span class="bin-pill">Built for rounds · Works on any device</span>
+        </div>
+      </div>
+
+      <!-- Planner / route mock -->
+      <div class="bin-hero-media">
+        <div class="bin-planner-card">
+          <div class="bin-planner-inner">
+            <div class="bin-planner-header">
+              <div class="bin-planner-header-title">
+                Today · Bin Cleaning Route
+                <div style="font-size:10px;color:#9ca3af;">14 jobs · 3 areas</div>
+              </div>
+              <div class="bin-planner-filter">Optimised route · Worker A</div>
+            </div>
+
+            <div class="bin-planner-list">
+              <div class="bin-planner-row">
+                <div><strong>Estate Drive – 32 bins</strong></div>
+                <div>09:00 → 10:15</div>
+                <div><div class="bin-status-pill done">Completed</div></div>
+              </div>
+              <div class="bin-planner-row">
+                <div>Highfield Crescent – 18 bins</div>
+                <div>10:30 → 11:10</div>
+                <div><div class="bin-status-pill due">In progress</div></div>
+              </div>
+              <div class="bin-planner-row">
+                <div>Industrial Park – 24 bins</div>
+                <div>11:30 → 13:00</div>
+                <div><div class="bin-status-pill overdue">Due today</div></div>
+              </div>
+            </div>
+
+            <div class="bin-planner-footer">
+              <span>Send SMS reminder to remaining customers</span>
+              <span><strong>Invoices &amp; payments</strong> sent automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="bin-section">
+      <div class="bin-section-header">
+        <p class="bin-section-kicker">Work planner</p>
+        <h2 class="bin-section-title"><%= ENV['WEBSITE_NAME'] %> helps bin cleaning businesses stay organised and profitable.</h2>
+      </div>
+
+      <div class="bin-body-text">
+        <p>
+          Whether jobs are one-off cleans or repeating rounds, you can keep on top of your schedule quickly
+          and easily with the <%= ENV['WEBSITE_NAME'] %> work planner. Plan your day, see which areas you’re visiting and
+          locate your clients with different planner views.
+        </p>
+        <p>
+          When it’s time to head out, use route optimisation to efficiently travel between stops and follow
+          the routes that work for your team – including working alongside waste collection lorries if you
+          need to.
+        </p>
+        <p>
+          When your customers have appointments, send email and SMS reminders that their clean is due. Once
+          the job is complete, raise and send an invoice or record a cash payment directly in the app.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="bin-section">
+      <div class="bin-section-header">
+        <p class="bin-section-kicker">Features</p>
+        <h2 class="bin-section-title">Let’s explain the features.</h2>
+      </div>
+      <div class="bin-feature-intro">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is designed to automate your processes and keep admin time to a minimum. It’s easy for
+          your cleaning crew to use on any mobile device, with real-time updates so dispatch admins can keep
+          on top of daily requests.
+        </p>
+      </div>
+
+      <div class="bin-feature-grid">
+        <!-- Financial history -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Financial history</p>
+          <h3 class="bin-feature-title">Full financial history with pay balance button</h3>
+          <p class="bin-feature-text">
+            View each customer’s full statement – cleans, invoices, payments and outstanding balance – in
+            one place. Use the “Pay balance” button to quickly collect everything they owe in one go.
+          </p>
+          <div class="bin-feature-pill">Clarity at a glance</div>
+        </article>
+
+        <!-- Route optimisation -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Route optimisation</p>
+          <h3 class="bin-feature-title">Day planner &amp; route optimisation</h3>
+          <p class="bin-feature-text">
+            Plan efficient days with intelligent route optimisation or set your own manual order – ideal
+            when you’re following the bin lorry. Live updates mirror across planners when work is reassigned
+            or skipped.
+          </p>
+          <div class="bin-feature-pill">Less fuel, more jobs</div>
+        </article>
+
+        <!-- Messaging -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Messaging</p>
+          <h3 class="bin-feature-title">Built-in customer messaging</h3>
+          <p class="bin-feature-text">
+            Send appointment reminders, invoice alerts and payment links by SMS or email. Keep two-way
+            conversations inside <%= ENV['WEBSITE_NAME'] %> instead of scattered across different apps.
+          </p>
+          <div class="bin-feature-pill">Fewer missed cleans</div>
+        </article>
+
+        <!-- Bulk messaging / prepayment -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Bulk messaging</p>
+          <h3 class="bin-feature-title">Contact specific customer groups in bulk</h3>
+          <p class="bin-feature-text">
+            Filter by route, balance or status and send one message to many customers at once. Include
+            secure pre-payment links so accounts are topped up before the next round.
+          </p>
+          <div class="bin-feature-pill">Perfect for top-up reminders</div>
+        </article>
+
+        <!-- Real-time data -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Real-time data</p>
+          <h3 class="bin-feature-title">Live view of today’s progress</h3>
+          <p class="bin-feature-text">
+            See which jobs are not started, in progress or completed as the day unfolds. Step in quickly
+            to handle delays, reassign work or keep customers updated.
+          </p>
+          <div class="bin-feature-pill">Stay one step ahead</div>
+        </article>
+
+        <!-- Payments -->
+        <article class="bin-feature-card">
+          <p class="bin-feature-label">Payments</p>
+          <h3 class="bin-feature-title">Flexible payment collection</h3>
+          <p class="bin-feature-text">
+            Let customers pay by card, direct debit or bank transfer. Take one-off payments or set up
+            automatic collection so future rounds are paid for as soon as they’re done.
+          </p>
+          <div class="bin-feature-pill">Healthier cashflow</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- POWERED BY EZYSYSTEM / STORIES -->
+    <section class="bin-section">
+      <div class="bin-section-header">
+        <p class="bin-section-kicker">Powered by <%= ENV['WEBSITE_NAME'] %></p>
+        <h2 class="bin-section-title">Bin cleaners who use <%= ENV['WEBSITE_NAME'] %> to stay organised.</h2>
+        <p class="bin-section-lead">
+          <%= ENV['WEBSITE_NAME'] %> helps bin-cleaning companies from solo operators to established teams, keeping their
+          schedules, cashflow and customer communication under control.
+        </p>
+      </div>
+
+      <div class="bin-stories-grid">
+        <article class="bin-story-card">
+          <p class="bin-story-tag">Customer story</p>
+          <h3 class="bin-story-title">GreenClean North – growing a wheelie-bin business</h3>
+          <p class="bin-story-text">
+            See how a busy wheelie-bin cleaning company uses <%= ENV['WEBSITE_NAME'] %> to manage thousands of regular
+            cleans, automatic reminders and payments – without getting buried in admin.
+          </p>
+          <p class="bin-story-meta">Customer story · Bin cleaning franchise</p>
+          <a href="#" class="bin-story-link">Read the full story</a>
+        </article>
+
+        <article class="bin-story-card">
+          <p class="bin-story-tag">Customer story</p>
+          <h3 class="bin-story-title">Bathurst Bin Cleaning – 30-year business, new tools</h3>
+          <p class="bin-story-text">
+            Discover how an established bin-cleaning business modernised operations with <%= ENV['WEBSITE_NAME'] %>, giving
+            new owners a clear view of rounds, revenue and growth opportunities.
+          </p>
+          <p class="bin-story-meta">Customer story · Family business</p>
+          <a href="#" class="bin-story-link">Read the full story</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="bin-section">
+      <div class="bin-section-header">
+        <p class="bin-section-kicker">What our customers say</p>
+        <h2 class="bin-section-title">See what bin-cleaning businesses think about <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+
+      <div class="bin-testimonial-grid">
+        <article class="bin-testimonial-card">
+          <div class="bin-testimonial-inner">
+            <p class="bin-testimonial-tag">Work-life balance</p>
+            <p class="bin-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has saved me hours of admin and helped me get a better work–life balance.”</em>
+              Before, we were sending individual texts and emails every day and hand posting invoices. Now
+              notifications go out in one batch and invoices are sent automatically. It’s changed the way
+              we run the business.
+            </p>
+            <p class="bin-testimonial-name">
+              <strong>Tanya – GreenClean North</strong>
+              Wheelie bin cleaning services
+            </p>
+          </div>
+        </article>
+
+        <article class="bin-testimonial-card">
+          <div class="bin-testimonial-inner">
+            <p class="bin-testimonial-tag">Automation</p>
+            <p class="bin-testimonial-quote">
+              “<%= ENV['WEBSITE_NAME'] %> has become the brain of our operation – from planning rounds and sending bulk
+              messages to collecting payments. Any device, any time, one system. It’s essential for any
+              appointment-based bin-cleaning business.”
+            </p>
+            <p class="bin-testimonial-name">
+              <strong>Franchise owner</strong>
+              Multi-van bin-cleaning business
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>
