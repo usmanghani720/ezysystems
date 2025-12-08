@@ -170,7 +170,7 @@ class PaymentsController < ApplicationController
           },
           stripe_account: @user.try(:stripe_user_id)
         )
-
+        redirect_to authenticated_root_path
       rescue Stripe::CardError => e
         flash[:error] = e.message
         redirect_to authenticated_root_path
