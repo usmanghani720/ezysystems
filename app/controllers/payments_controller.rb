@@ -153,44 +153,50 @@ class PaymentsController < ApplicationController
   end
 
   def set_minimum_balance 
-    begin 
-      client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
+    @user = User.find_by(id: params[:id])
+    if @user.try(:stripe_user_id).present?
+      begin 
+        client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
 
-      client.v1.balance_settings.update(
-        {
-          payments: {
-            payouts: {
-              minimum_balance_by_currency: {
-                "usd" => ((params[:amount].to_f * 100).to_i)
+        client.v1.balance_settings.update(
+          {
+            payments: {
+              payouts: {
+                minimum_balance_by_currency: {
+                  "usd" => ((params[:amount].to_f * 100).to_i)
+                }
               }
             }
-          }
-        },
-        stripe_account: current_user.try(:stripe_user_id)
-      )
+          },
+          stripe_account: @user.try(:stripe_user_id)
+        )
 
-    rescue Stripe::CardError => e
-      flash[:error] = e.message
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::APIConnectionError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to authenticated_root_path
+      end 
+    else   
+      flash[:error] = "No connected account"
       redirect_to authenticated_root_path
-    rescue Stripe::InvalidRequestError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::RateLimitError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::AuthenticationError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::APIConnectionError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::StripeError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue => e
-      flash[:error] = "System Error"
-      redirect_to authenticated_root_path
-    end 
+    end
   end
 
   def customers
