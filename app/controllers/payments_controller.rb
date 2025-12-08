@@ -607,13 +607,18 @@ class PaymentsController < ApplicationController
   def payouts
     @payouts = Payout.where(user_id: current_user.try(:id)).order('created_at desc')
     begin
-      # Retrieve the current balance from Stripe
-      balance = Stripe::Balance.retrieve({}, { stripe_account: current_user.try(:stripe_user_id) })
+      if current_user.try(:stripe_user_id).present?
+        # Retrieve the current balance from Stripe
+        balance = Stripe::Balance.retrieve({}, { stripe_account: current_user.try(:stripe_user_id) })
 
-      # Pass the balance to the view
-      @available_balance = balance.available.first.amount / 100.0  # Available balance in the default currency
-      @pending_balance = balance.pending.first.amount / 100.0  # Pending balance in the default currency
-      @currency = balance.pending.first.currency
+        # Pass the balance to the view
+        @available_balance = balance.available.first.amount / 100.0  # Available balance in the default currency
+        @pending_balance = balance.pending.first.amount / 100.0  # Pending balance in the default currency
+        @currency = balance.pending.first.currency
+      else 
+        @available_balance = 0  # Available balance in the default currency
+        @pending_balance = 0  # Pending balance in the default currency
+      end
 
     rescue Stripe::StripeError => e
       flash[:alert] = "Error retrieving balance: #{e.message}"
@@ -626,52 +631,57 @@ class PaymentsController < ApplicationController
   end
 
   def create_small_payout
-    begin
-      balance = Stripe::Balance.retrieve({}, { stripe_account: current_user.try(:stripe_user_id) })
-      Stripe::Payout.create({
-        amount: (params[:amount].to_i) * 100,
-        currency: balance.available.first.currency,
-      },
-      { stripe_account: current_user.try(:user_id) })
-      Payout.create(amount: params[:amount].to_i, user_id: current_user.try(:id))
-      flash[:success] = "Payout completed"
-    rescue Stripe::CardError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue Stripe::InvalidRequestError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue Stripe::RateLimitError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue Stripe::AuthenticationError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue Stripe::APIConnectionError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue Stripe::StripeError => e
-      puts "***************"
-      puts e.message
-      puts "***************"
-      flash[:error] = e.message
-    rescue => e
-      flash[:error] = "System Error"
+    if current_user.try(:stripe_user_id).present?
+      begin
+        balance = Stripe::Balance.retrieve({}, { stripe_account: current_user.try(:stripe_user_id) })
+        Stripe::Payout.create({
+          amount: (params[:amount].to_i) * 100,
+          currency: balance.available.first.currency,
+        },
+        { stripe_account: current_user.try(:user_id) })
+        Payout.create(amount: params[:amount].to_i, user_id: current_user.try(:id))
+        flash[:success] = "Payout completed"
+      rescue Stripe::CardError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue Stripe::InvalidRequestError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue Stripe::RateLimitError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue Stripe::AuthenticationError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue Stripe::APIConnectionError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue Stripe::StripeError => e
+        puts "***************"
+        puts e.message
+        puts "***************"
+        flash[:error] = e.message
+      rescue => e
+        flash[:error] = "System Error"
+      end
+    else   
+      flash[:error] = "No balance available"
     end
     redirect_to payouts_path
   end
 
   def create_payout
+    if current_user.try(:stripe_user_id).present?
       @balance = Stripe::Balance.retrieve({}, { stripe_account: current_user.try(:stripe_user_id) })
       @available_balance = balance.available.first.amount
       if @balance > 0
@@ -717,6 +727,9 @@ class PaymentsController < ApplicationController
           flash[:error] = "System Error"
         end
       end
+    else   
+      flash[:error] = "No balance available"
+    end
   end
 
   private
