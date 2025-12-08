@@ -25,7 +25,11 @@ Rails.application.routes.draw do
   get 'customer_creation_success', to: 'payments#customer_creation_success', as: 'customer_creation_success'
   post 'payment/create_small_payout', to: 'payments#create_small_payout', as: 'create_small_payout' 
   post 'payment/update_user_status', to: 'payments#update_user_status', as: 'update_user_status' 
+  post 'payment/update_user_3d', to: 'payments#update_user_3d', as: 'update_user_3d' 
   post 'payment/remove_customer', to: 'payments#remove_customer', as: 'remove_customer' 
+
+  get 'balance/:id', to: 'payments#balance', as: 'balance'
+  post 'set_minimum_balance', to: 'payments#set_minimum_balance', as: 'set_minimum_balance' 
 
   get 'new_payment_link', to: 'payments#new_payment_link', as: 'new_payment_link'
   post 'create_custom_payment_link', to: 'payments#create_custom_payment_link', as: 'create_custom_payment_link' 
@@ -69,6 +73,7 @@ Rails.application.routes.draw do
   get "/exterior_cleaning", to: "home#exterior_cleaning", as: :exterior_cleaning
   get "/cleaning_housekeeping_maid_service_software", to: "home#cleaning_housekeeping_maid_service_software", as: :cleaning_housekeeping_maid_service_software
   get "/mobile_cleaning_services", to: "home#mobile_cleaning_services", as: :mobile_cleaning_services
+  get "/blog", to: "home#blog", as: :blog
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
   

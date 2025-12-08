@@ -1,0 +1,875 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> Blog – News, Updates & Resources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> Blog Page ===== */
+
+    .blog-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --bg-soft: #f9fafb;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --border-strong: #cbd5f5;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.12);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .blog-page * {
+      box-sizing: border-box;
+    }
+
+    .blog-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .blog-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .blog-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .blog-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .blog-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .blog-title {
+      font-size: clamp(30px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .blog-title span {
+      color: var(--accent-dark);
+    }
+
+    .blog-subtitle {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 620px;
+      margin-bottom: 18px;
+    }
+
+    .blog-hero-meta {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .blog-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.05);
+      color: var(--accent-dark);
+      border: 1px solid rgba(191, 219, 254, 0.9);
+    }
+
+    .blog-hero-right {
+      align-self: stretch;
+    }
+
+    .blog-latest-card {
+      background: #0b1020;
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-soft);
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-latest-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, 0.75), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.18), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .blog-latest-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .blog-latest-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+    }
+
+    .blog-latest-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .blog-latest-meta {
+      font-size: 11px;
+      color: #cbd5f5;
+      margin-bottom: 6px;
+    }
+
+    .blog-latest-excerpt {
+      font-size: 13px;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .blog-latest-link {
+      font-size: 12px;
+      color: #c7d2fe;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .blog-latest-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- FILTER BAR ---------- */
+
+    .blog-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 720px) {
+      .blog-filter-bar {
+        border-radius: 18px;
+        padding: 10px 12px;
+      }
+    }
+
+    .blog-filter-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .blog-filter-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-right: 2px;
+    }
+
+    .blog-filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .blog-chip {
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      padding: 5px 10px;
+      border: 1px solid var(--border-soft);
+      background: #f9fafb;
+      color: var(--text-sub);
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .blog-chip.active {
+      background: var(--accent-soft);
+      border-color: var(--border-strong);
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+
+    .blog-filter-search {
+      position: relative;
+      flex: 0 0 220px;
+      max-width: 100%;
+    }
+
+    @media (max-width: 720px) {
+      .blog-filter-search {
+        flex: 1 1 100%;
+      }
+    }
+
+    .blog-filter-search input {
+      width: 100%;
+      padding: 7px 28px 7px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      font-size: 13px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+
+    .blog-filter-search input::placeholder {
+      color: #9ca3af;
+    }
+
+    .blog-search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    /* ---------- LAYOUT: MAIN + SIDEBAR ---------- */
+
+    .blog-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 960px) {
+      .blog-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* ---------- MAIN LIST ---------- */
+
+    .blog-main {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .blog-feature {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.1fr);
+      gap: 18px;
+      box-shadow: 0 16px 38px rgba(15, 23, 42, 0.06);
+    }
+
+    @media (max-width: 720px) {
+      .blog-feature {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .blog-feature-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .blog-feature-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .blog-feature-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .blog-feature-excerpt {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .blog-feature-link {
+      font-size: 13px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .blog-feature-link:hover {
+      text-decoration: underline;
+    }
+
+    .blog-feature-thumb {
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #eef2ff 0, #e5e7eb 50%, #d1d5db 100%);
+      position: relative;
+      overflow: hidden;
+      min-height: 160px;
+    }
+
+    .blog-feature-thumb-inner {
+      position: absolute;
+      inset: 0;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #111827;
+    }
+
+    .blog-feature-thumb-badge {
+      align-self: flex-start;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(79, 70, 229, 0.1);
+      font-weight: 500;
+      color: #312e81;
+      font-size: 11px;
+    }
+
+    .blog-feature-thumb-label {
+      align-self: flex-start;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    /* Blog post list */
+
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .blog-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 12px 16px 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.9fr);
+      gap: 12px;
+      font-size: 14px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+    }
+
+    .blog-card:hover {
+      border-color: var(--border-strong);
+    }
+
+    @media (max-width: 720px) {
+      .blog-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .blog-card-main {
+      min-width: 0;
+    }
+
+    .blog-card-tag-date {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .blog-card-tag {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .blog-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .blog-card-excerpt {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .blog-card-link {
+      font-size: 12px;
+      color: var(--accent-dark);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .blog-card-link:hover {
+      text-decoration: underline;
+    }
+
+    .blog-card-meta {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    @media (max-width: 720px) {
+      .blog-card-meta {
+        text-align: left;
+      }
+    }
+
+    .blog-card-meta span {
+      display: block;
+    }
+
+    /* Pagination (static markup) */
+
+    .blog-pagination {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      align-items: center;
+    }
+
+    .blog-page-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      background: #ffffff;
+    }
+
+    .blog-page-pill.active {
+      background: var(--accent-soft);
+      border-color: var(--border-strong);
+      color: var(--accent-dark);
+      font-weight: 500;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+
+    .blog-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .blog-sidebar-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      font-size: 13px;
+    }
+
+    .blog-sidebar-title {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .blog-sidebar-heading {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .blog-sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-sidebar-list li a {
+      text-decoration: none;
+      font-size: 13px;
+      color: var(--accent-dark);
+      display: block;
+    }
+
+    .blog-sidebar-list li span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .blog-sidebar-list li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Newsletter form */
+
+    .blog-newsletter-text {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .blog-newsletter-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .blog-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .blog-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.45);
+    }
+
+    .blog-btn:hover {
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.6);
+    }
+
+    .blog-newsletter-caption {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="blog-page" id="ezysystem-blog">
+  <div class="blog-shell">
+
+    <!-- HERO -->
+    <section class="blog-hero">
+      <div>
+
+        <h1 class="blog-title">
+          News, product updates &amp; <span>resources for service businesses.</span>
+        </h1>
+
+        <p class="blog-subtitle">
+          Learn how to run a more efficient, profitable service business with <%= ENV['WEBSITE_NAME'] %> – from product
+          announcements and feature guides to customer stories and growth tips.
+        </p>
+
+        <div class="blog-hero-meta">
+          <span>Articles on scheduling, payments, marketing, customer portals and more.</span>
+          <span class="blog-hero-pill">New posts added regularly</span>
+        </div>
+      </div>
+
+      <div class="blog-hero-right">
+        <div class="blog-latest-card">
+          <div class="blog-latest-inner">
+            <p class="blog-latest-label">Latest article</p>
+            <h2 class="blog-latest-title">Using <%= ENV['WEBSITE_NAME'] %> on desktop: setup &amp; best practices</h2>
+            <p class="blog-latest-meta">10th October 2025 · Product guide</p>
+            <p class="blog-latest-excerpt">
+              Get a step-by-step walkthrough of <%= ENV['WEBSITE_NAME'] %> on desktop – including browser tips, performance
+              settings and how to keep everything in sync with your mobile app.
+            </p>
+            <a href="/blog/post/using-ezysystem-on-desktop" class="blog-latest-link">
+              Read guide →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER BAR -->
+    <section class="blog-filter-bar" aria-label="Blog filters">
+      <div class="blog-filter-left">
+        <span class="blog-filter-label">Filter by topic:</span>
+        <div class="blog-filter-chips">
+          <button type="button" class="blog-chip active">All</button>
+          <button type="button" class="blog-chip">Product updates</button>
+          <button type="button" class="blog-chip">How-to guides</button>
+          <button type="button" class="blog-chip">Customer stories</button>
+          <button type="button" class="blog-chip">Marketing</button>
+        </div>
+      </div>
+
+      <div class="blog-filter-search">
+        <span class="blog-search-icon">🔍</span>
+        <input type="search" placeholder="Search articles (non-functional demo)" />
+      </div>
+    </section>
+
+    <!-- MAIN + SIDEBAR -->
+    <section class="blog-layout">
+      <!-- MAIN -->
+      <main class="blog-main">
+        <!-- Feature post -->
+        <article class="blog-feature">
+          <div>
+            <p class="blog-feature-tag">Product update</p>
+            <h2 class="blog-feature-title">Making <%= ENV['WEBSITE_NAME'] %> even better: what we’re working on next</h2>
+            <p class="blog-feature-meta">29th October 2025 · Roadmap &amp; improvements</p>
+            <p class="blog-feature-excerpt">
+              See which features the <%= ENV['WEBSITE_NAME'] %> team is developing right now, what’s recently shipped and
+              how we prioritise improvements based on customer feedback.
+            </p>
+            <a href="/blog/post/ezysystem-roadmap" class="blog-feature-link">Read article →</a>
+          </div>
+          <div class="blog-feature-thumb" aria-hidden="true">
+            <div class="blog-feature-thumb-inner">
+              <span class="blog-feature-thumb-badge">In development</span>
+              <span class="blog-feature-thumb-label">Roadmap · Q4 2025</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- List of posts (static examples) -->
+        <div class="blog-list">
+          <!-- Post 1 -->
+          <article class="blog-card">
+            <div class="blog-card-main">
+              <div class="blog-card-tag-date">
+                <span class="blog-card-tag">Marketing</span>
+                <span>2nd October 2025</span>
+              </div>
+              <h3 class="blog-card-title">Easy-to-use marketing tools, built into <%= ENV['WEBSITE_NAME'] %></h3>
+              <p class="blog-card-excerpt">
+                Discover how <%= ENV['WEBSITE_NAME'] %>’s built-in email and SMS tools help you send professional campaigns,
+                without exporting lists or learning another platform.
+              </p>
+              <a href="/blog/post/ezysystem-marketing-tools" class="blog-card-link">Read article →</a>
+            </div>
+            <div class="blog-card-meta">
+              <span>Category: Product &amp; marketing</span>
+              <span>Approx. 5 min read</span>
+            </div>
+          </article>
+
+          <!-- Post 2 -->
+          <article class="blog-card">
+            <div class="blog-card-main">
+              <div class="blog-card-tag-date">
+                <span class="blog-card-tag">Automation</span>
+                <span>24th July 2025</span>
+              </div>
+              <h3 class="blog-card-title">Automate invoices &amp; payments with <%= ENV['WEBSITE_NAME'] %></h3>
+              <p class="blog-card-excerpt">
+                Learn how automatic invoicing and card-on-file payments can reduce admin, cut late payments
+                and improve cash flow for your service business.
+              </p>
+              <a href="/blog/post/automatic-invoices-and-payments" class="blog-card-link">Read article →</a>
+            </div>
+            <div class="blog-card-meta">
+              <span>Category: Finance &amp; billing</span>
+              <span>Approx. 6 min read</span>
+            </div>
+          </article>
+
+          <!-- Post 3 -->
+          <article class="blog-card">
+            <div class="blog-card-main">
+              <div class="blog-card-tag-date">
+                <span class="blog-card-tag">Customer portals</span>
+                <span>12th December 2024</span>
+              </div>
+              <h3 class="blog-card-title">Introducing the <%= ENV['WEBSITE_NAME'] %> customer portal</h3>
+              <p class="blog-card-excerpt">
+                Give your customers a secure place to see appointments, invoices, quotes and payments – and
+                reduce the back-and-forth emails your team has to handle.
+              </p>
+              <a href="/blog/post/customer-portal" class="blog-card-link">Read article →</a>
+            </div>
+            <div class="blog-card-meta">
+              <span>Category: Customer experience</span>
+              <span>Approx. 7 min read</span>
+            </div>
+          </article>
+
+          <!-- Post 4 -->
+          <article class="blog-card">
+            <div class="blog-card-main">
+              <div class="blog-card-tag-date">
+                <span class="blog-card-tag">Customer story</span>
+                <span>16th January 2025</span>
+              </div>
+              <h3 class="blog-card-title">Customer story: growing a service business with <%= ENV['WEBSITE_NAME'] %></h3>
+              <p class="blog-card-excerpt">
+                See how a growing service company used <%= ENV['WEBSITE_NAME'] %> from day one to manage bookings, teams and
+                payments – and scaled to thousands of customers.
+              </p>
+              <a href="/blog/post/customer-story-service-business" class="blog-card-link">Read story →</a>
+            </div>
+            <div class="blog-card-meta">
+              <span>Category: Customer stories</span>
+              <span>Approx. 8 min read</span>
+            </div>
+          </article>
+
+          <!-- Post 5 -->
+          <article class="blog-card">
+            <div class="blog-card-main">
+              <div class="blog-card-tag-date">
+                <span class="blog-card-tag">How-to</span>
+                <span>11th December 2024</span>
+              </div>
+              <h3 class="blog-card-title">How to start a new cleaning company</h3>
+              <p class="blog-card-excerpt">
+                A practical guide to planning services, pricing, scheduling and payments – and how <%= ENV['WEBSITE_NAME'] %>
+                can help you build strong processes from day one.
+              </p>
+              <a href="/blog/post/how-to-start-cleaning-company" class="blog-card-link">Read guide →</a>
+            </div>
+            <div class="blog-card-meta">
+              <span>Category: Getting started</span>
+              <span>Approx. 9 min read</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Pagination (static) -->
+        <div class="blog-pagination" aria-label="Blog pagination">
+          <span>Page</span>
+          <button type="button" class="blog-page-pill active">1</button>
+          <button type="button" class="blog-page-pill">2</button>
+          <button type="button" class="blog-page-pill">3</button>
+          <span>…</span>
+        </div>
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="blog-sidebar">
+        <section class="blog-sidebar-card">
+          <p class="blog-sidebar-title">Popular topics</p>
+          <h3 class="blog-sidebar-heading">Browse by theme</h3>
+          <ul class="blog-sidebar-list">
+            <li>
+              <a href="/blog/category/scheduling-automation">Scheduling &amp; automation</a>
+              <span>Plan work, recurring jobs and routes.</span>
+            </li>
+            <li>
+              <a href="/blog/category/payments-invoicing">Payments &amp; invoicing</a>
+              <span>Get paid faster and improve cash flow.</span>
+            </li>
+            <li>
+              <a href="/blog/category/customer-experience">Customer experience</a>
+              <span>Customer portals, messaging and reminders.</span>
+            </li>
+            <li>
+              <a href="/blog/category/marketing">Marketing &amp; growth</a>
+              <span>Email, SMS and campaigns to fill your schedule.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="blog-sidebar-card">
+          <p class="blog-sidebar-title">Newsletter</p>
+          <h3 class="blog-sidebar-heading">Get <%= ENV['WEBSITE_NAME'] %> updates in your inbox</h3>
+          <p class="blog-newsletter-text">
+            Be the first to hear about new features, guides and resources to help you run a more efficient
+            service business.
+          </p>
+          <form class="blog-newsletter-form">
+            <input
+              type="email"
+              class="blog-input"
+              placeholder="you@example.com (demo only)"
+            />
+            <button type="button" class="blog-btn">Subscribe</button>
+            <p class="blog-newsletter-caption">
+              No spam – just practical updates now and then.
+            </p>
+          </form>
+        </section>
+      </aside>
+    </section>
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>

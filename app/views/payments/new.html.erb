@@ -9,6 +9,12 @@
           <td><%= link_to 'Connect New Account', create_express_account_path, method: :get %></td>
         <% else %>
           <p>You have already connected to stripe. Your account id is <span style="font-weight: 600;"><%= current_user.stripe_user_id %></span></p>
+          <br />
+            <%= link_to 'Update Require 3D', update_user_3d_path(id: current_user.try(:id)), method: :post %>
+          <br />
+          <br />
+            <%= link_to 'Set Minimum Balance', balance_path(id: current_user.try(:id)), method: :get %>
+          <br />
           <% if @individual_details.present? %>
             <h2>Individual Details</h2>
             <p><%= @individual_details["email"] %></p>

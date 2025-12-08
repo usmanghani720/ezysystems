@@ -92,5 +92,9 @@ class HomeController < ApplicationController
 		def mobile_cleaning_services
 
 		end
+
+		def blog
+
+		end
   end
   

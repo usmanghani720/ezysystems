@@ -138,6 +138,61 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def update_user_3d
+    @user = User.find_by(id: params[:id])
+    if @user.present?
+      if @user.require_3ds 
+        @user.update(require_3ds: false)
+      else  
+        @user.update(require_3ds: true)
+      end
+    end
+    if current_user.try(:role) != "admin"
+      redirect_to authenticated_root_path
+    end
+  end
+
+  def set_minimum_balance 
+    begin 
+      client = Stripe::StripeClient.new(ENV["STRIPE_SECRET_KEY"])
+
+      client.v1.balance_settings.update(
+        {
+          payments: {
+            payouts: {
+              minimum_balance_by_currency: {
+                "usd" => ((params[:amount].to_f * 100).to_i)
+              }
+            }
+          }
+        },
+        stripe_account: current_user.try(:stripe_user_id)
+      )
+
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::RateLimitError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::APIConnectionError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue => e
+      flash[:error] = "System Error"
+      redirect_to authenticated_root_path
+    end 
+  end
+
   def customers
     @customers = Customer.where(user_id: current_user.try(:id))
   end
@@ -161,6 +216,11 @@ class PaymentsController < ApplicationController
       connected_account_id = current_user.try(:stripe_user_id)
       session = Stripe::Checkout::Session.create({
         payment_method_types: ['card'],
+        payment_method_options: {
+          card: {
+            request_three_d_secure: current_user.try(:require_3ds) ? 'any' : 'automatic'
+          }
+        },
         line_items: [{
           price_data: {
             currency: ENV["CURRENCY"],
@@ -290,6 +350,10 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def balance  
+
+  end
+
   def make_payment
     @customer = Customer.find_by(id: params[:id])
     connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
@@ -370,6 +434,12 @@ class PaymentsController < ApplicationController
             payment_method: @customer.payment_method,           # their saved PM on connected
             confirm: true,
             off_session: true,
+            payment_method_types: ['card'],
+            payment_method_options: {
+              card: {
+                request_three_d_secure: current.try(:require_3ds) ? 'any' : 'automatic'
+              }
+            }
           },
           { stripe_account: connected_acct_id } # ← key line for direct charges
         )

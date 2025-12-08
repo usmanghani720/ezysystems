@@ -49,7 +49,9 @@
                   <th>Approved</th>
                   <th>Account Type</th>
                   <th>Stripe Account</th>
-                  <th></th>
+                  <th>Update Approval</th>
+                  <th>Update 3d</th>
+                  <th>Minimum Balance</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,6 +81,14 @@
                       <i class="fa fa-thumbs-down disapprove-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
                     <% end %>
                     </td>
+                    <td>
+                    <% if !user.try(:require_3ds) %>
+                      <i class="fa fa-arrow-up turn-on-3d-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
+                    <% else %>
+                      <i class="fa fa-arrow-down turn-off-3d-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
+                    <% end %>
+                    </td>
+                    <td><%= link_to 'Set Minimum Balance', balance_path(id: user.try(:id)), method: :get, :class=>"btn btn-block btn-info"%></td>
                   </tr>
                 <% end %>
               </tbody>
@@ -98,6 +108,13 @@
     "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
     "aaSorting": [[1, "asc"]],
   });
+
+  if (!sessionStorage.getItem('reloaded')) {
+    sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
+    location.reload(); // Reload the page
+  } else {
+    sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
+  }
 
     $(document).on('click', '.approve-icon', function (e) {
       e.preventDefault();
@@ -138,6 +155,46 @@
         }
       });
     });
+
+    $(document).on('click', '.turn-on-3d-icon', function (e) {
+      e.preventDefault();
+      const id = $(this)[0].id;
+      $.ajax({
+        url: "/payment/update_user_3d",
+        type: 'POST',
+        dataType: 'json',
+        data: { id: id },
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          window.location.reload()
+        },
+        error: function () {
+          window.location.reload()
+        }
+      });
+    });
+
+    $(document).on('click', '.turn-off-3d-icon', function (e) {
+      e.preventDefault();
+      const id = $(this)[0].id;
+      $.ajax({
+        url: "/payment/update_user_3d",
+        type: 'POST',
+        dataType: 'json',
+        data: { id: id },
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+          window.location.reload()
+        },
+        error: function () {
+          window.location.reload()
+        }
+      });
+    });
 </script>
 
 <style>
@@ -150,6 +207,22 @@
 }
 
 .disapprove-icon{
+  font-size: 2rem;
+  background: red;
+  color: #fff;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.turn-on-3d-icon{
+  font-size: 2rem;
+  background: green;
+  color: #fff;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.turn-off-3d-icon{
   font-size: 2rem;
   background: red;
   color: #fff;
