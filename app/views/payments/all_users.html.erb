@@ -44,7 +44,6 @@
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Stripe Email</th>
                   <th>Role</th>
                   <th>Approved</th>
                   <th>Account Type</th>
@@ -59,7 +58,6 @@
                   <tr>
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
-                    <td><%= user.stripe_email %></td>
                     <td><%= user.role %> </td>
                     <td><%= user.try(:approved) ? "Approved" : "Not Approved" %></td>
                     <td><%= user.account_type %> </td>
