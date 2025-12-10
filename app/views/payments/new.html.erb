@@ -45,7 +45,7 @@
               <% end %>
             <% end %>
 
-            <% if @account["business_profile"] && @account["business_profile"]["url"] %>
+            <% if @account.present? && @account["business_profile"] && @account["business_profile"]["url"] %>
               <p><%= @account["business_profile"]["url"] %></p>
             <% end %>
             
