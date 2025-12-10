@@ -77,9 +77,13 @@ class PaymentsController < ApplicationController
       end
     end
     if current_user.stripe_user_id.present?
-      @account = Stripe::Account.retrieve(current_user.stripe_user_id)
-      @individual_details = @account["individual"] || {}
-      @company_details = @account["company"] || {}
+      begin
+        @account = Stripe::Account.retrieve(current_user.stripe_user_id)
+        @individual_details = @account["individual"] || {}
+        @company_details = @account["company"] || {}
+      rescue Stripe::StripeError => e
+        flash[:alert] = "Error fetching account information: #{e.message}"
+      end
     end
   end
 
