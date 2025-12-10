@@ -63,7 +63,8 @@ module ApplicationHelper
   end
 
   def stripe_express_button_link(user)
-    user.update(account_type: 'express')
+    @code = rand(8 ** 8)
+    user.update(account_type: 'express', role: 'vendor', unique_code: @code)
     begin
       @data = {}
       @data[:individual] = {}

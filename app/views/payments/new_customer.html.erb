@@ -24,9 +24,9 @@
         <div class="box box-primary" data-aos="fade-up">
           <div class="box-header with-border">
             <%= form_with url: create_customer_path, method: :post, local: true do |form| %>
-                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email" required/>
+                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email" required value="<%= @user.try(:email) %>" />
 								<br />
-                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name" required/>
+                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name" required value="<%= @user.try(:name) %>"/>
 								<br />
                 <input id="phone" name="phone" class="form-control" style="width: 100%" placeholder="Phone"/>
 								<br />

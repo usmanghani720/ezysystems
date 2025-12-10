@@ -37,6 +37,9 @@
         <%= render "/layouts/alerts" %>
         <div class="box">
           <div class="box-body">
+            <p id="customer-link"><%= ENV['WEBSITE_URL'] + "/users/sign_up?id=" + current_user.try(:unique_code) %></p>
+            <button class="copy_btn btn btn-block btn-info">Copy Link</button>
+            <br />
             <table id="customers" class="table table-bordered table-striped" style="width: 100 !important;">
               <thead>
                 <tr>
@@ -116,6 +119,16 @@
       sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
     }
   })
+$(document).on('click', '.copy_btn', function (e) {
+    const copyTxtField = document.getElementById("customer-link");
+    navigator.clipboard.writeText(copyTxtField.textContent)
+    .then(() => {
+      console.log(copyTxtField.textContent);
+    })
+    .catch(err => {
+      console.error("Failed to copy: ", err);
+    });
+})
 </script>
 
 

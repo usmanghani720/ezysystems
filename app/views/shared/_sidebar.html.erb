@@ -12,6 +12,7 @@
         </li>
       </ul>
     <% end %>
+    <% if current_user.role == "vendor" || current_user.role == "admin" %>
       <ul class="sidebar-menu">
         <li class="treeview">
           <%= link_to authenticated_root_path do %>
@@ -49,7 +50,18 @@
           <i class="fa fa-angle-left pull-right"></i>
           <% end %>
         </li>
-      </ul>       
+      </ul>  
+    <% end %>
+    <% if current_user.role == "customer" %>
+      <ul class="sidebar-menu">
+        <li class="treeview">
+          <%= link_to new_customer_path do %>
+            ADD YOURSELF AS CUSTOMER
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>     
   </section>
   <!-- /.sidebar -->
 </aside>

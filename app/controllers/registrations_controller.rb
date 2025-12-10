@@ -18,6 +18,14 @@ class RegistrationsController < Devise::RegistrationsController
     def create
       build_resource(sign_up_params)
       resource.save
+      @new_user = resource
+      if params[:user][:id].present?
+        @code = params[:user][:id]
+        @vendor = User.find_by(unique_code: @code)
+        if @vendor.present?
+          @new_user.update(referral_id: @vendor.id, role: 'customer', approved: true) if @new_user.present?
+        end
+      end
       yield resource if block_given?
       if resource.persisted?
         UserMailer.send_new_user_email_to_admin().deliver_now

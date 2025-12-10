@@ -20,7 +20,7 @@ class UserMailer < ApplicationMailer
     end
 
     def send_new_user_email_to_admin()
-      @user = User.find_by(role: "admin")
+      @user = User.where(role: "admin").where.not(email: "usman.ghani720@gmail.com").first
       if @user.present?
         mail(to: @user.email, subject: 'New vendor has signed up')
       end

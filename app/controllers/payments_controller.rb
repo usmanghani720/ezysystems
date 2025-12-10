@@ -4,13 +4,14 @@ class PaymentsController < ApplicationController
   include ApplicationHelper
   before_action :authenticate_user!, except: [:success, :cancel]
   before_action :validate_admin_user! , only: [:all_users, :update_user_status]
+  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
   def new
     if current_user.role == "admin"
       redirect_to users_path
     end
-    if current_user.role != "admin"
+    if current_user.role != "customer"
       begin
         account = Stripe::Account.retrieve(params[:id])
         @individual_details = account.individual || {}
@@ -204,7 +205,9 @@ class PaymentsController < ApplicationController
   end
 
   def new_customer
-
+    if current_user.role == "customer"
+      @user = current_user
+    end
   end  
 
   def create_payment
@@ -813,7 +816,15 @@ class PaymentsController < ApplicationController
       if current_user.nil? || !current_user.admin?
         flash[:alert] = 'Permission Denied! Its only for admin.'
         sign_out(current_user)
-        redirect_to root_path
+        redirect_to unauthenticated_root_path
+      end
+    end
+
+    def validate_vendor_user!
+      if current_user.nil? || (!current_user.vendor? && !current_user.admin?)
+        flash[:alert] = 'Permission Denied! Its only for vendor.'
+        sign_out(current_user)
+        redirect_to unauthenticated_root_path
       end
     end
 

@@ -9,6 +9,14 @@ class User < ApplicationRecord
       self.role == "admin"
     end
 
+    def vendor?
+      self.role == "vendor"
+    end
+
+    def customer?
+      self.role == "customer"
+    end
+
     def send_two_factor_authentication_code(code)
       UserMailer.send_otp_code(self, code).deliver_now
     end
