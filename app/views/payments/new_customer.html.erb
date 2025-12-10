@@ -61,6 +61,71 @@
   }
 </script>
 
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY']%>&libraries=places&callback=initAddressAutocomplete"
+  defer>
+</script>
+
+
+<script>
+  function initAddressAutocomplete() {
+    const input = document.getElementById('line1');
+    if (!input) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      types: ['address'],
+    });
+
+    autocomplete.addListener('place_changed', function () {
+      const place = autocomplete.getPlace();
+      if (!place.address_components) return;
+
+      let street_number = "";
+      let route         = "";
+      let city          = "";
+      let state         = "";
+      let postal_code   = "";
+      let country       = "";
+
+      place.address_components.forEach(function (c) {
+        const types = c.types;
+        if (types.includes('street_number'))      street_number = c.long_name;
+        if (types.includes('route'))              route         = c.long_name;
+        if (types.includes('locality'))           city          = c.long_name;
+        if (types.includes('administrative_area_level_1')) state = c.short_name;
+        if (types.includes('postal_code'))        postal_code   = c.long_name;
+        if (types.includes('country'))            country       = c.long_name; countryCode = c.short_name;
+      });
+
+      const line1 = [street_number, route].filter(Boolean).join(' ');
+
+      document.getElementById('line1').value = line1;
+      document.getElementById('city').value          = city;
+      document.getElementById('state').value         = state;
+      document.getElementById('postal_code').value   = postal_code;
+      const countrySelect = document.getElementById('country');
+
+      if (countrySelect) {
+        // If your <option> values are ISO codes (US, CA, etc.)
+        if (countrySelect.querySelector(`option[value="${countryCode}"]`)) {
+          countrySelect.value = countryCode;
+        }
+        // Or, if your <option> values are the full country names
+        else if (countrySelect.querySelector(`option[value="${country}"]`)) {
+          countrySelect.value = country;
+        }
+
+        // Trigger change event in case anything listens to it
+        countrySelect.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+
+  // Turbo / normal navigation support
+  document.addEventListener('turbo:load', initAddressAutocomplete);
+  document.addEventListener('DOMContentLoaded', initAddressAutocomplete);
+</script>
+
 
 
 
