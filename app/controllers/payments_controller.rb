@@ -4,7 +4,7 @@ class PaymentsController < ApplicationController
   include ApplicationHelper
   before_action :authenticate_user!, except: [:success, :cancel]
   before_action :validate_admin_user! , only: [:all_users, :update_user_status]
-  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new ]
+  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
   def new
@@ -483,6 +483,7 @@ class PaymentsController < ApplicationController
   end
 
   def create_customer
+    @user_id = current_user.try(:referral_id).present? ? current_user.try(:referral_id) : current_user.try(:id)
     @customer = Customer.create(email: params[:email], 
       name: params[:name], 
       phone: params[:phone], 
@@ -492,7 +493,7 @@ class PaymentsController < ApplicationController
       state: params[:state], 
       postal_code: params[:postal_code], 
       country: params[:country], 
-      user_id: current_user.try(:id))
+      user_id: @user_id)
     begin  
       customer = Stripe::Customer.create(
         {
@@ -520,7 +521,7 @@ class PaymentsController < ApplicationController
           },
           }
         },
-        { stripe_account: current_user.try(:stripe_user_id) }
+        { stripe_account: User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id) }
       )
       @customer.update(customer_id: customer["id"])
     rescue Stripe::CardError => e
