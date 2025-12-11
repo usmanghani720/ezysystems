@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   get "/exterior_cleaning", to: "home#exterior_cleaning", as: :exterior_cleaning
   get "/cleaning_housekeeping_maid_service_software", to: "home#cleaning_housekeeping_maid_service_software", as: :cleaning_housekeeping_maid_service_software
   get "/mobile_cleaning_services", to: "home#mobile_cleaning_services", as: :mobile_cleaning_services
+  get "/other_services", to: "home#other_services", as: :other_services
   get "/blog", to: "home#blog", as: :blog
   # get 'create_payment/:id', to: 'payments#create_payment', as: 'create_payment'
   # post 'make_payment/:id', to: 'payments#make_payment', as: 'make_payment'
@@ -80,6 +81,10 @@ Rails.application.routes.draw do
   resources :charges, only: [:new, :create]
   resources :stripe, only: [:new]
   get "stripe/connect", to: "stripe#connect", as: :stripe_connect
+
+  # Maintenance fallback route for all unmatched paths
+  match "*unmatched", to: "home#maintenance", via: :all
+
 
   authenticated :user do
     root to: "payments#new", as: :authenticated_root

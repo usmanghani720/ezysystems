@@ -93,8 +93,16 @@ class HomeController < ApplicationController
 
 		end
 
+		def other_services
+
+		end
+
 		def blog
 
+		end
+
+		def maintenance
+			
 		end
   end
   

@@ -1,0 +1,878 @@
+<head>
+  <meta charset="UTF-8" />
+  <title><%= ENV['WEBSITE_NAME'] %> – Other Services & All Business Types</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    /* ===== <%= ENV['WEBSITE_NAME'] %> – Other Services Page ===== */
+
+    .os-page {
+      --bg: #f5f5fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --accent: #4f46e5;
+      --accent-dark: #312e81;
+      --accent-soft: #eef2ff;
+      --accent-secondary: #f97316;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.16);
+
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 40%, #f3f4f6 100%);
+      padding: 40px 16px 80px;
+    }
+
+    .os-page * {
+      box-sizing: border-box;
+    }
+
+    .os-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* ---------- HERO ---------- */
+
+    .os-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 56px;
+    }
+
+    @media (max-width: 900px) {
+      .os-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .os-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(to right, #ffffff, #eef2ff);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .os-kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #a5b4fc 0, #4f46e5 55%, #1e1b4b 100%);
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.9);
+    }
+
+    .os-title {
+      font-size: clamp(32px, 4.4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      margin-bottom: 10px;
+    }
+
+    .os-title span {
+      color: var(--accent-dark);
+    }
+
+    .os-sub {
+      font-size: 16px;
+      color: var(--text-sub);
+      max-width: 560px;
+      margin-bottom: 18px;
+    }
+
+    .os-hero-tagline {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--accent-dark);
+      margin-bottom: 24px;
+    }
+
+    .os-hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .os-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+    }
+
+    .os-btn-primary {
+      background: linear-gradient(to right, var(--accent), #6366f1);
+      color: #ffffff;
+      box-shadow: 0 14px 32px rgba(79, 70, 229, 0.45);
+      border-color: rgba(191, 219, 254, 0.9);
+    }
+
+    .os-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 20px 44px rgba(79, 70, 229, 0.65);
+    }
+
+    .os-btn-secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .os-btn-secondary:hover {
+      background: #f3f4ff;
+      transform: translateY(-1px);
+    }
+
+    .os-hero-trust {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .os-hero-trust strong {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .os-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(79, 70, 229, 0.06);
+      color: #4b5563;
+      border: 1px solid rgba(191, 219, 254, 0.9);
+      font-size: 11px;
+    }
+
+    /* Hero right: “all industries” card */
+
+    .os-hero-media {
+      position: relative;
+    }
+
+    .os-industries-card {
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      background: #0b1020;
+      color: #e5e7eb;
+      padding: 16px 16px 16px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .os-industries-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, 0.9), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(248, 250, 252, 0.06), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .os-industries-inner {
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    .os-industries-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .os-industries-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .os-industries-title span {
+      display: block;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .os-industries-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 10px;
+    }
+
+    .os-industry-grid {
+      margin-top: 6px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px 9px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .os-industry-chip {
+      font-size: 11px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.75);
+      color: #e5e7eb;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .os-industry-chip.alt {
+      background: rgba(79, 70, 229, 0.7);
+    }
+
+    .os-industries-footer {
+      margin-top: 9px;
+      font-size: 10px;
+      color: #cbd5f5;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .os-industries-footer strong {
+      color: #e5e7eb;
+    }
+
+    /* ---------- SECTION LAYOUT ---------- */
+
+    .os-section {
+      margin-bottom: 52px;
+    }
+
+    .os-section-header {
+      max-width: 780px;
+      margin-bottom: 18px;
+    }
+
+    .os-section-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .os-section-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .os-section-lead {
+      font-size: 15px;
+      color: var(--text-sub);
+    }
+
+    .os-section-lead strong {
+      color: var(--accent-dark);
+    }
+
+    .os-body-text {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .os-body-text p {
+      margin-bottom: 12px;
+    }
+
+    .os-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---------- INDUSTRY EXAMPLES GRID ---------- */
+
+    .os-industry-intro {
+      max-width: 720px;
+      margin-bottom: 20px;
+    }
+
+    .os-industry-grid-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .os-industry-grid-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .os-industry-grid-cards {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .os-industry-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 14px 16px 16px;
+      font-size: 14px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .os-industry-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .os-industry-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .os-industry-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .os-industry-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- FEATURE GRID (GENERIC FEATURES) ---------- */
+
+    .os-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .os-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .os-feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .os-feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .os-feature-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .os-feature-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .os-feature-text {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .os-feature-pill {
+      margin-top: 4px;
+      align-self: flex-start;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    /* ---------- TESTIMONIALS ---------- */
+
+    .os-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .os-testimonial-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .os-testimonial-card {
+      background: #0b1020;
+      border-radius: var(--radius-md);
+      padding: 18px 18px 16px;
+      color: #e5e7eb;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .os-testimonial-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.6), transparent 60%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    .os-testimonial-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .os-testimonial-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .os-testimonial-quote {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #e5e7eb;
+    }
+
+    .os-testimonial-quote em {
+      font-style: italic;
+    }
+
+    .os-testimonial-name {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .os-testimonial-name strong {
+      display: block;
+      color: #e5e7eb;
+    }
+
+    /* ---------- CTA BANNER ---------- */
+
+    .os-cta {
+      background: #111827;
+      border-radius: 22px;
+      padding: 18px 20px 18px;
+      color: #e5e7eb;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .os-cta-text {
+      max-width: 620px;
+      font-size: 14px;
+    }
+
+    .os-cta-text h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .os-cta-text p {
+      font-size: 13px;
+      color: #d1d5db;
+      margin: 0;
+    }
+
+    .os-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .os-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .os-cta-btn.primary {
+      background: #f97316;
+      color: #111827;
+      border-color: rgba(251, 191, 36, 0.9);
+    }
+
+    .os-cta-btn.secondary {
+      background: transparent;
+      color: #e5e7eb;
+      border-color: rgba(156, 163, 175, 0.9);
+    }
+  </style>
+</head>
+
+<%= render partial: "layouts/header" %>
+<div class="os-page" id="other-services">
+  <div class="os-shell">
+
+    <!-- HERO -->
+    <section class="os-hero">
+      <div>
+        <h1 class="os-title">
+          <%= ENV['WEBSITE_NAME'] %> works for <span>any service business.</span>
+        </h1>
+
+        <p class="os-sub">
+          Even if your business is not listed on our industry pages, <%= ENV['WEBSITE_NAME'] %> can still handle your
+          scheduling, jobs, customers and payments. If you book work, visit customers, send invoices or take
+          payments – <%= ENV['WEBSITE_NAME'] %> fits.
+        </p>
+
+        <p class="os-hero-tagline">
+          From solo operators to multi-location teams, <%= ENV['WEBSITE_NAME'] %> adapts to the way your business works.
+        </p>
+
+        <div class="os-hero-ctas">
+          <a href="/users/sign_up" class="os-btn os-btn-primary">Start a free trial</a>
+          <a href="/pricing" class="os-btn os-btn-secondary">Explore pricing</a>
+        </div>
+
+        <div class="os-hero-trust">
+          <strong>Built for all appointment-based and field service businesses.</strong>
+          <span class="os-pill">Flexible · Customisable · Scales as you grow</span>
+        </div>
+      </div>
+
+      <!-- Hero media: industries overview card -->
+      <div class="os-hero-media">
+        <div class="os-industries-card">
+          <div class="os-industries-inner">
+            <div class="os-industries-header">
+              <div class="os-industries-title">
+                “Other services” using <%= ENV['WEBSITE_NAME'] %>
+                <span>One platform · Many industries</span>
+              </div>
+              <div class="os-industries-badge">Any service business</div>
+            </div>
+
+            <div class="os-industry-grid">
+              <div class="os-industry-chip">Pest control</div>
+              <div class="os-industry-chip alt">Landscaping</div>
+              <div class="os-industry-chip alt">HVAC &amp; repairs</div>
+              <div class="os-industry-chip">Appliance service</div>
+              <div class="os-industry-chip">Pool care</div>
+              <div class="os-industry-chip alt">Property maintenance</div>
+              <div class="os-industry-chip">Security &amp; patrols</div>
+              <div class="os-industry-chip alt">Mobile detailing</div>
+            </div>
+
+            <div class="os-industries-footer">
+              <span>Use <%= ENV['WEBSITE_NAME'] %> for any workflow where you schedule work, send staff and bill customers.</span>
+              <span><strong>Need help?</strong> We can set up templates for your specific business.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO COPY -->
+    <section class="os-section">
+      <div class="os-section-header">
+        <p class="os-section-kicker">For every kind of service business</p>
+        <h2 class="os-section-title">Not just cleaning. Not just trades. All your services in one place.</h2>
+      </div>
+
+      <div class="os-body-text">
+        <p>
+          <%= ENV['WEBSITE_NAME'] %> is flexible enough to support almost any service-based business: if you schedule jobs,
+          assign work to people, track what was done and get paid for it, <%= ENV['WEBSITE_NAME'] %> gives you one place to
+          manage everything.
+        </p>
+        <p>
+          You can define your own services, prices, job types and workflows. Use custom fields for the
+          details that matter in your industry, add notes and photos, and keep a full history for every
+          customer and site.
+        </p>
+        <p>
+          Whether you’re maintaining equipment, visiting homes and offices, managing recurring contracts or
+          responding to urgent call-outs, <%= ENV['WEBSITE_NAME'] %> helps you stay organised, responsive and profitable.
+        </p>
+      </div>
+    </section>
+
+    <!-- INDUSTRY EXAMPLES -->
+    <section class="os-section">
+      <div class="os-section-header">
+        <p class="os-section-kicker">Examples</p>
+        <h2 class="os-section-title">A few of the many ways businesses use <%= ENV['WEBSITE_NAME'] %>.</h2>
+      </div>
+      <div class="os-industry-intro">
+        <p>
+          Here are just some of the “other services” that use the same core <%= ENV['WEBSITE_NAME'] %> features – scheduling,
+          job management, messaging, invoicing and reporting – with their own customised workflows.
+        </p>
+      </div>
+
+      <div class="os-industry-grid-cards">
+        <article class="os-industry-card">
+          <p class="os-industry-label">Field maintenance</p>
+          <h3 class="os-industry-title">Property &amp; facilities maintenance</h3>
+          <p class="os-industry-text">
+            Plan routine inspections, reactive repairs and preventative maintenance visits. Track assets,
+            log issues and keep landlords, tenants and facility managers informed.
+          </p>
+          <div class="os-industry-pill">Recurring &amp; one-off jobs</div>
+        </article>
+
+        <article class="os-industry-card">
+          <p class="os-industry-label">Outdoors &amp; grounds</p>
+          <h3 class="os-industry-title">Gardening &amp; landscaping</h3>
+          <p class="os-industry-text">
+            Build seasonal schedules, group nearby jobs into efficient routes and manage one-off projects
+            alongside regular maintenance visits.
+          </p>
+          <div class="os-industry-pill">Route-friendly planning</div>
+        </article>
+
+        <article class="os-industry-card">
+          <p class="os-industry-label">Specialist services</p>
+          <h3 class="os-industry-title">Pest control &amp; environmental services</h3>
+          <p class="os-industry-text">
+            Record treatment types, site notes and follow-up visits. Keep a clear record for compliance
+            while giving customers a professional digital experience.
+          </p>
+          <div class="os-industry-pill">Detailed job history</div>
+        </article>
+
+        <article class="os-industry-card">
+          <p class="os-industry-label">Technical &amp; repairs</p>
+          <h3 class="os-industry-title">Appliance, HVAC &amp; equipment repairs</h3>
+          <p class="os-industry-text">
+            Log faults, parts used and warranty information. Assign jobs to engineers based on skills and
+            location, and keep customers updated with arrival windows.
+          </p>
+          <div class="os-industry-pill">Skill-based assigning</div>
+        </article>
+
+        <article class="os-industry-card">
+          <p class="os-industry-label">Mobile services</p>
+          <h3 class="os-industry-title">Mobile detailing &amp; on-site services</h3>
+          <p class="os-industry-text">
+            Manage busy days on the road, optimise routes, and let customers confirm bookings and pay on
+            their phone – while you update job status in real time.
+          </p>
+          <div class="os-industry-pill">Perfect for mobile teams</div>
+        </article>
+
+        <article class="os-industry-card">
+          <p class="os-industry-label">Security &amp; patrols</p>
+          <h3 class="os-industry-title">Security checks &amp; patrol services</h3>
+          <p class="os-industry-text">
+            Schedule patrols, site checks and lock-ups. Track who attended, when, and log incident notes in
+            a central system visible to your management team.
+          </p>
+          <div class="os-industry-pill">Clear audit trail</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CORE FEATURES (APPLY TO ALL BUSINESSES) -->
+    <section class="os-section">
+      <div class="os-section-header">
+        <p class="os-section-kicker">Core platform</p>
+        <h2 class="os-section-title">One set of powerful tools, flexible enough for every business.</h2>
+      </div>
+
+      <div class="os-feature-grid">
+        <article class="os-feature-card">
+          <p class="os-feature-label">Scheduling</p>
+          <h3 class="os-feature-title">Visual scheduling &amp; calendars</h3>
+          <p class="os-feature-text">
+            See all jobs in a single planner. Drag to move, resize or reassign work between staff and
+            vehicles, and handle both one-off and recurring work with ease.
+          </p>
+          <div class="os-feature-pill">Drag, drop, done</div>
+        </article>
+
+        <article class="os-feature-card">
+          <p class="os-feature-label">Job management</p>
+          <h3 class="os-feature-title">Structured job details &amp; history</h3>
+          <p class="os-feature-text">
+            Capture everything important to your workflow – custom fields, checklists, photos, signatures –
+            so every visit is recorded and traceable.
+          </p>
+          <div class="os-feature-pill">Configured to your process</div>
+        </article>
+
+        <article class="os-feature-card">
+          <p class="os-feature-label">Customer records</p>
+          <h3 class="os-feature-title">Connected customer records</h3>
+          <p class="os-feature-text">
+            Keep all contact details, sites, contracts and communication in one place. Anyone on your team
+            can quickly see what was done, when and by whom.
+          </p>
+          <div class="os-feature-pill">Context at your fingertips</div>
+        </article>
+
+        <article class="os-feature-card">
+          <p class="os-feature-label">Messaging</p>
+          <h3 class="os-feature-title">Reminders &amp; updates</h3>
+          <p class="os-feature-text">
+            Send automatic appointment reminders, job updates and follow-ups by SMS and email to reduce
+            no-shows and keep customers in the loop.
+          </p>
+          <div class="os-feature-pill">Less chasing, fewer surprises</div>
+        </article>
+
+        <article class="os-feature-card">
+          <p class="os-feature-label">Invoicing &amp; payments</p>
+          <h3 class="os-feature-title">Get paid faster</h3>
+          <p class="os-feature-text">
+            Create invoices in a couple of clicks and accept card payments online. Track balances, chase
+            unpaid work and keep your cashflow healthy.
+          </p>
+          <div class="os-feature-pill">From job done to paid</div>
+        </article>
+
+        <article class="os-feature-card">
+          <p class="os-feature-label">Reporting</p>
+          <h3 class="os-feature-title">Business &amp; financial reporting</h3>
+          <p class="os-feature-text">
+            Understand revenue, job volume, repeat business and staff utilisation. Use real numbers to
+            decide where to invest and how to grow.
+          </p>
+          <div class="os-feature-pill">Know your numbers</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="os-section">
+      <div class="os-section-header">
+        <p class="os-section-kicker">What customers say</p>
+        <h2 class="os-section-title">Different industries. Same feedback.</h2>
+      </div>
+
+      <div class="os-testimonial-grid">
+        <article class="os-testimonial-card">
+          <div class="os-testimonial-inner">
+            <p class="os-testimonial-tag">Admin &amp; control</p>
+            <p class="os-testimonial-quote">
+              <em>“<%= ENV['WEBSITE_NAME'] %> has become the control centre of our business.”</em> We plan work, adjust
+              routes, send invoices and take payments all in one place. It works the same whether we’re
+              doing repairs, maintenance or specialist services.
+            </p>
+            <p class="os-testimonial-name">
+              <strong>Operations manager</strong>
+              Multi-service maintenance company
+            </p>
+          </div>
+        </article>
+
+        <article class="os-testimonial-card">
+          <div class="os-testimonial-inner">
+            <p class="os-testimonial-tag">Flexibility</p>
+            <p class="os-testimonial-quote">
+              “Our workflows are not standard – but <%= ENV['WEBSITE_NAME'] %> still fits. Custom fields, service templates
+              and reporting mean we can run everything our way without building our own software.”
+            </p>
+            <p class="os-testimonial-name">
+              <strong>Business owner</strong>
+              Specialist field service provider
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="os-section">
+      <div class="os-cta">
+        <div class="os-cta-text">
+          <h2>Not sure if <%= ENV['WEBSITE_NAME'] %> fits your business?</h2>
+          <p>
+            If you deliver services to customers, schedule jobs, send people out and take payments,
+            <%= ENV['WEBSITE_NAME'] %> is built for you. Start a free trial or talk to us about how we can set up your
+            workflows.
+          </p>
+        </div>
+        <div class="os-cta-actions">
+          <a href="/users/sign_up" class="os-cta-btn primary">Start free trial</a>
+          <a href="/contact" class="os-cta-btn secondary">Talk to our team</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+<%= render partial: "layouts/footer" %>
