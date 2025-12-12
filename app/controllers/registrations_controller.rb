@@ -25,6 +25,8 @@ class RegistrationsController < Devise::RegistrationsController
         if @vendor.present?
           @new_user.update(referral_id: @vendor.id, role: 'customer', approved: true) if @new_user.present?
         end
+      else  
+        @new_user.update(role: 'vendor')
       end
       yield resource if block_given?
       if resource.persisted?

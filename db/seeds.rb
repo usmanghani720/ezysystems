@@ -13,15 +13,15 @@
 # end
 
 
-# User.all.each do |user|
-#     @code = rand(8 ** 8)
-#     user.update(unique_code: @code)
-#     if user.role != "admin"
-#         user.update(role: 'vendor')
-#     end
-#     if user.role == "vendor" && user.unique_code.blank?
-#         user.update(unique_code: @code)
-#     end
-# end
+User.all.each do |user|
+    @code = rand(8 ** 8)
+    user.update(unique_code: @code)
+    if user.role != "admin"
+        user.update(role: 'vendor')
+    end
+    if user.role == "vendor" && user.unique_code.blank?
+        user.update(unique_code: @code)
+    end
+end
 
 
