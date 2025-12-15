@@ -218,44 +218,51 @@ class PaymentsController < ApplicationController
   end
 
   def new_payment_link
-
+    @customers = Customer.where(user_id: current_user.try(:id)).order(:name)
   end
 
   def create_custom_payment_link 
     begin
+      @customer = Customer.find_by(id: params[:customer_id])
       amount_cents = (params[:amount].to_f * 100 ).to_i
       percentage = params[:percentage].present? ? params[:percentage] : 10
       platform_fee_cents = (percentage.to_i * params[:amount].to_f).to_i     
       connected_account_id = current_user.try(:stripe_user_id)
-      session = Stripe::Checkout::Session.create({
-        payment_method_types: ['card'],
-        payment_method_options: {
-          card: {
-            request_three_d_secure: current_user.try(:require_3ds) ? 'any' : 'automatic'
+      session = Stripe::Checkout::Session.create(
+        {
+          mode: "payment",
+          payment_method_types: ["card"],
+          customer: @customer.try(:customer_id), # cus_... that exists on connected account
+      
+          payment_method_options: {
+            card: {
+              request_three_d_secure: current_user.require_3ds? ? "any" : "automatic"
+            }
+          },
+      
+          line_items: [{
+            price_data: {
+              currency: ENV["CURRENCY"],
+              unit_amount: amount_cents,
+              product_data: {
+                name: params[:name],
+                description: params[:description].presence || params[:name]
+              }
+            },
+            quantity: 1
+          }],
+      
+          success_url: ENV["SUCCESS_URL"] + "?session_id={CHECKOUT_SESSION_ID}",
+          cancel_url:  ENV["CANCEL_URL"]  + "?session_id={CHECKOUT_SESSION_ID}",
+      
+          payment_intent_data: {
+            application_fee_amount: platform_fee_cents,
+            setup_future_usage: "off_session" # saves new card for future; helps “saved cards show”
           }
         },
-        line_items: [{
-          price_data: {
-            currency: ENV["CURRENCY"],
-            unit_amount: amount_cents,
-            product_data: {
-              name: params[:name],
-              description: params[:description].present? ? params[:description] : params[:name]
-            },
-          },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: ENV['SUCCESS_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
-        payment_intent_data: {
-          on_behalf_of: connected_account_id, # Ensures the connected account is the merchant of record
-          application_fee_amount: platform_fee_cents, # 10% fee to the platform
-          transfer_data: {
-            destination: connected_account_id, # Connected account receives the remaining balance
-          },
-        },
-      })
+        { stripe_account: connected_account_id }  # ✅ connected account context
+      )
+      
 
       cookies[:session_url] = session.url
       redirect_to success_path
@@ -586,9 +593,11 @@ class PaymentsController < ApplicationController
   end
 
   def invoice
+    @customers = Customer.where(user_id: current_user.try(:id)).order(:name)
   end
 
   def create_payment_link
+    @customer = Customer.find_by(id: params[:customer_id])
     amount = (params[:amount].to_i * 100)
     email = params[:email]
     @unique_id = SecureRandom.hex(6).upcase
@@ -600,6 +609,7 @@ class PaymentsController < ApplicationController
           price_data: {
             currency: "usd",
             unit_amount: amount,
+            customer: @customer.try(:customer_id),
             product_data: {
               name: params[:name],
               description: params[:description]
@@ -621,6 +631,8 @@ class PaymentsController < ApplicationController
 
       @invoice.update(invoice_url: session.url)
       flash[:success] = "Invoice sent to customer"
+      UserMailer.send_payment_link(@invoice).deliver_now
+      redirect_to authenticated_root_path
 
     rescue Stripe::CardError => e
       if @invoice.present?
@@ -665,8 +677,6 @@ class PaymentsController < ApplicationController
       flash[:error] = "System Error"
       redirect_to authenticated_root_path
     end
-    UserMailer.send_payment_link(@invoice).deliver_now
-    redirect_to authenticated_root_path
   end
 
   def success

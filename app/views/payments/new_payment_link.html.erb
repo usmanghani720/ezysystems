@@ -32,6 +32,10 @@
 								<br/>
 								<input id="percentage" name="percentage" class="form-control" style="width: 100%" placeholder="Percentage for master account"/>
 								<br/>
+                <%= select_tag :customer_id,
+                      options_from_collection_for_select(@customers, :id, :name),
+                      class: "form-control" %>
+                <br />
                 <%= submit_tag 'Create Link',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
           </div>
