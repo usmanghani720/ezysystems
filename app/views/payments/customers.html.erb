@@ -37,7 +37,9 @@
         <%= render "/layouts/alerts" %>
         <div class="box">
           <div class="box-body">
-            <p id="customer-link"><%= ENV['WEBSITE_URL'] + "/users/sign_up?id=" + current_user.try(:unique_code) %></p>
+            <% if current_user.try(:unique_code).present? %>
+              <p id="customer-link"><%= ENV['WEBSITE_URL'] + "/users/sign_up?id=" + current_user.try(:unique_code) %></p>
+            <% end %>
             <button class="copy_btn btn btn-block btn-info">Copy Link</button>
             <br />
             <table id="customers" class="table table-bordered table-striped" style="width: 100 !important;">
