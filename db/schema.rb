@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_10_091150) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_17_103951) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -95,6 +95,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_10_091150) do
     t.string "tax_value"
     t.float "percentage"
     t.string "payment_intent_id"
+    t.string "customer_id"
   end
 
   create_table "payouts", force: :cascade do |t|

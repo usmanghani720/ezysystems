@@ -42,8 +42,7 @@
             <table id="example1" class="table table-bordered table-striped" style="width: 100 !important;">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
+                  <th>Customer</th>
                   <th>Amount</th>
                   <th>Link</th>
                 </tr>
@@ -51,14 +50,17 @@
               <tbody>
                 <% @invoices.each do |invoice| %>
                   <tr>
-                    <td><%= invoice.name %></td>
-                    <td><%= invoice.email %></td>
+                    <td><%= Customer.find_by(id: invoice.try(:customer_id)).try(:name) %></td>
                     <td>
                       <% if invoice.amount.present? %>
                         <%= money_symbols[invoice.currency] %><%= number_with_precision((invoice.amount/100), precision: 2) %>
                       <% end %>
                     </td>
-                    <td style="word-break: break-all;white-space: normal;"><%= invoice.invoice_url %></td>
+                    <td style="word-break: break-all;white-space: normal;">
+                      <% if invoice.invoice_url.present? && invoice.try(:unique_id).present? %>
+                        <%= "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + invoice.try(:unique_id) %>
+                      <% end %>
+                    </td>
                   </tr>
                 <% end %>
               </tbody>

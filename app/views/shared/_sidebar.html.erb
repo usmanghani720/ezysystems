@@ -27,6 +27,18 @@
           <% end %>
         </li>
         <li class="treeview">
+          <%= link_to invoice_path do %>
+            INVOICE
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
+          <%= link_to invoices_path do %>
+            INVOICES
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
           <%= link_to new_payment_link_path do %>
             PAYMENT LINK
           <i class="fa fa-angle-left pull-right"></i>

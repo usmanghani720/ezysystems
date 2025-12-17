@@ -6,7 +6,12 @@
       <p id="payment-link" style="word-break: break-all;white-space: normal;"><%= @session_url %></p>
       <button class="copy_btn btn btn-block btn-info">Copy Link</button>
       <br/>
-      <%= link_to "Back", customers_path %>
+      <%= link_to "Back", authenticated_root_path %>
+    <% elsif @invoice_url.present? %>
+      <p id="payment-link" style="word-break: break-all;white-space: normal;"><%= @invoice_url %></p>
+      <button class="copy_btn btn btn-block btn-info">Copy Link</button>
+      <br/>
+      <%= link_to "Back", authenticated_root_path %>
     <% else %>
       <%= link_to "Back", authenticated_root_path %>
     <% end %>

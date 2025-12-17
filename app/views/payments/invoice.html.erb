@@ -24,17 +24,15 @@
         <div class="box box-primary" data-aos="fade-up">
           <div class="box-header with-border">
             <%= form_with url: create_payment_link_path, method: :post, local: true do |form| %>
-                <input id="email" name="email" class="form-control" style="width: 100%" placeholder="Email" required/>
-								<br/>
-                <input id="name" name="name" class="form-control" style="width: 100%" placeholder="Name" required/>
-								<br/>
 								<input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Amount (USD)" required/>
 								<br/>
                 <%= select_tag :customer_id,
                       options_from_collection_for_select(@customers, :id, :name),
                       class: "form-control" %>
                 <br />
-								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Service Description" rows="5" required></textarea>
+								<input id="percentage" name="percentage" class="form-control" style="width: 100%" placeholder="Percentage for master account"/>
+								<br/>
+								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5" required></textarea>
                 <br/>
                 <%= submit_tag 'Send Invoice',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>

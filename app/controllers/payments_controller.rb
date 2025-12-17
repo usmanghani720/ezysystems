@@ -2,9 +2,9 @@ class PaymentsController < ApplicationController
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
   require "stripe"
   include ApplicationHelper
-  before_action :authenticate_user!, except: [:success, :checkout_url, :customer_creation_success]
+  before_action :authenticate_user!, except: [:success, :checkout_url, :customer_creation_success, :checkout_url, :stripe_invoice_url]
   before_action :validate_admin_user! , only: [:all_users, :update_user_status]
-  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url ]
+  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url, :stripe_invoice_url ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
   def new
@@ -593,6 +593,11 @@ class PaymentsController < ApplicationController
     redirect_to @customer.customer_card_url if @customer.present? && @customer.customer_card_url.present?
   end
 
+  def stripe_invoice_url
+    @invoice = Invoice.find_by(unique_id: params[:id])
+    redirect_to @invoice.invoice_url if @invoice.present? && @invoice.invoice_url.present?
+  end
+
   def all_users
     @users = User.all
   end
@@ -602,85 +607,101 @@ class PaymentsController < ApplicationController
   end
 
   def create_payment_link
-    @customer = Customer.find_by(id: params[:customer_id])
-    amount = (params[:amount].to_i * 100)
-    email = params[:email]
-    @unique_id = SecureRandom.hex(6).upcase
-    @invoice = Invoice.create(unique_id: @unique_id, email: email, name: params[:name], description: params[:description], amount: amount, currency: "usd", user_id: current_user.try(:id))
     begin
-      session = Stripe::Checkout::Session.create({
-        payment_method_types: ['card'],
-        line_items: [{
-          price_data: {
-            currency: "usd",
-            unit_amount: amount,
-            customer: @customer.try(:customer_id),
-            product_data: {
-              name: params[:name],
-              description: params[:description]
-            },
-          },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: ENV['SUCCESS_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}",
-        payment_intent_data: {
-          on_behalf_of: current_user.try(:stripe_user_id), # Ensures the connected account is the merchant of record
-          application_fee_amount: 0,
-          transfer_data: {
-            destination: current_user.try(:stripe_user_id), # Connected account receives the remaining balance
-          },
+      @unique_id = SecureRandom.hex(6).upcase
+
+        # 1) Vendor context
+      connected_acct_id = current_user.stripe_user_id
+
+      # 2) Customer selected from your DB (must belong to this vendor)
+      customer = Customer.find_by(id: params[:customer_id])
+      stripe_customer_id = customer.customer_id # cus_...
+
+      # 3) Invoice line item (simple single-item example)
+      description  = params[:description].presence || "Invoice"
+
+      amount_cents = (params[:amount].to_f * 100).round
+
+      percentage = (params[:percentage].presence || 10).to_f
+      application_fee_cents = (amount_cents * (percentage / 100.0)).round
+
+      # 5) Create the Invoice (draft) 
+      invoice = Stripe::Invoice.create(
+        {
+          customer: stripe_customer_id,
+          collection_method: "send_invoice",
+          days_until_due: 7,
+          application_fee_amount: application_fee_cents, # optional
+          auto_advance: false # we will finalize + send explicitly
         },
-      })
+        { stripe_account: connected_acct_id }
+      )
 
-      @invoice.update(invoice_url: session.url)
-      flash[:success] = "Invoice sent to customer"
-      UserMailer.send_payment_link(@invoice).deliver_now
-      redirect_to authenticated_root_path
+      # 4) Create an Invoice Item on the connected account 
+      invoice_item = Stripe::InvoiceItem.create(
+        {
+          customer: stripe_customer_id,
+          invoice: invoice.id, 
+          amount: amount_cents,
+          currency: ENV["CURRENCY"] || "usd",
+          description: description
+        },
+        { stripe_account: connected_acct_id }
+      )
 
+      # 6) Finalize the invoice (moves draft -> open) 
+      finalized = Stripe::Invoice.finalize_invoice(
+        invoice.id,
+        {},
+        { stripe_account: connected_acct_id }
+      )
+
+      @invoice = Invoice.create(customer_id: params[:customer_id], unique_id: @unique_id, description: params[:description], amount: amount_cents, currency: ENV['CURRENCY'], user_id: current_user.try(:id), invoice_url: finalized.hosted_invoice_url)
+
+      cookies[:invoice_url] = @invoice.unique_id
+      redirect_to success_path, notice: "Invoice created successfully."
     rescue Stripe::CardError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue Stripe::InvalidRequestError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue Stripe::RateLimitError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue Stripe::AuthenticationError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue Stripe::APIConnectionError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue Stripe::StripeError => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = e.message
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     rescue => e
       if @invoice.present?
         @invoice.delete
       end
       flash[:error] = "System Error"
-      redirect_to authenticated_root_path
+      redirect_to invoices_path
     end
   end
 
@@ -689,6 +710,11 @@ class PaymentsController < ApplicationController
       @customer = Customer.find_by(customer_id: cookies[:session_url])
       @session_url = "#{ENV['WEBSITE_URL']}" + "/checkout/" + @customer.try(:customer_id) if @customer.present?
       cookies.delete :session_url
+    end
+    if cookies[:invoice_url].present? 
+      @invoice = Invoice.find_by(unique_id: cookies[:invoice_url])
+      @invoice_url = "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + @invoice.try(:unique_id) if @invoice.present?
+      cookies.delete :invoice_url
     end
   end
 

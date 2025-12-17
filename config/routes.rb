@@ -82,6 +82,7 @@ Rails.application.routes.draw do
   resources :stripe, only: [:new]
   get "stripe/connect", to: "stripe#connect", as: :stripe_connect
   get "/checkout/:id", to: "payments#checkout_url"
+  get "/stripe_invoice/:id", to: "payments#stripe_invoice_url"
 
   # Maintenance fallback route for all unmatched paths
   match "*unmatched", to: "home#maintenance", via: :all
