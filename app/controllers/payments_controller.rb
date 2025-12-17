@@ -583,7 +583,7 @@ class PaymentsController < ApplicationController
       },
       { stripe_account: connected_acct_id }
     )
-    cookies[:session_url] = customer_id
+    cookies[:customer_url] = customer_id
     @customer.update(customer_card_url: session.url)
     redirect_to success_path
   end
@@ -706,15 +706,19 @@ class PaymentsController < ApplicationController
   end
 
   def success
-    if cookies[:session_url].present? 
-      @customer = Customer.find_by(customer_id: cookies[:session_url])
+    if cookies[:customer_url].present? 
+      @customer = Customer.find_by(customer_id: cookies[:customer_url])
       @session_url = "#{ENV['WEBSITE_URL']}" + "/checkout/" + @customer.try(:customer_id) if @customer.present?
-      cookies.delete :session_url
+      cookies.delete :customer_url
     end
     if cookies[:invoice_url].present? 
       @invoice = Invoice.find_by(unique_id: cookies[:invoice_url])
       @invoice_url = "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + @invoice.try(:unique_id) if @invoice.present?
       cookies.delete :invoice_url
+    end
+    if cookies[:session_url].present? 
+      @session_url = cookies[:session_url]
+      cookies.delete :session_url
     end
   end
 
