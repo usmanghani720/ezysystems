@@ -2,9 +2,9 @@ class PaymentsController < ApplicationController
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
   require "stripe"
   include ApplicationHelper
-  before_action :authenticate_user!, except: [:success, :cancel]
+  before_action :authenticate_user!, except: [:success, :checkout_url, :customer_creation_success]
   before_action :validate_admin_user! , only: [:all_users, :update_user_status]
-  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success ]
+  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
   def new
