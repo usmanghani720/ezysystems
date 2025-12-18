@@ -12,6 +12,11 @@
       <button class="copy_btn btn btn-block btn-info">Copy Link</button>
       <br/>
       <%= link_to "Back", authenticated_root_path %>
+    <% elsif @checkout_session_url.present? %>
+      <p id="payment-link" style="word-break: break-all;white-space: normal;"><%= @checkout_session_url %></p>
+      <button class="copy_btn btn btn-block btn-info">Copy Link</button>
+      <br/>
+      <%= link_to "Back", authenticated_root_path %>
     <% else %>
       <%= link_to "Back", authenticated_root_path %>
     <% end %>

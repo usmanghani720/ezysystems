@@ -221,6 +221,24 @@ class PaymentsController < ApplicationController
     @customers = Customer.where(user_id: current_user.try(:id)).order(:name)
   end
 
+  def redirect_checkout
+    session_id = params[:id]
+    raise "no session found" unless session_id
+  
+    connected_account_id = current_user.stripe_user_id
+    begin
+      checkout_session = Stripe::Checkout::Session.retrieve(
+        session_id,
+        { stripe_account: connected_account_id }
+      )
+    rescue Stripe::StripeError => e
+      flash[:alert] = "#{e.message}"
+      redirect_to authenticated_root_path
+    end
+  
+    redirect_to checkout_session.url, allow_other_host: true
+  end
+
   def create_custom_payment_link 
     begin
       @customer = Customer.find_by(id: params[:customer_id])
@@ -263,8 +281,9 @@ class PaymentsController < ApplicationController
         { stripe_account: connected_account_id }  # ✅ connected account context
       )
       
+      session_id = session.id # ex: cs_test_123
 
-      cookies[:session_url] = session.url
+      cookies[:checkout_session_id] = session_id
       redirect_to success_path
       
     rescue Stripe::CardError => e
@@ -715,6 +734,10 @@ class PaymentsController < ApplicationController
       @invoice = Invoice.find_by(unique_id: cookies[:invoice_url])
       @invoice_url = "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + @invoice.try(:unique_id) if @invoice.present?
       cookies.delete :invoice_url
+    end
+    if cookies[:checkout_session_id].present? 
+      @checkout_session_url = "#{ENV['WEBSITE_URL']}" + "/redirect_checkout/" + cookies[:checkout_session_id]
+      cookies.delete :checkout_session_id
     end
     if cookies[:session_url].present? 
       @session_url = cookies[:session_url]
