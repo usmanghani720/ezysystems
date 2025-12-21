@@ -239,6 +239,48 @@ class PaymentsController < ApplicationController
     redirect_to checkout_session.url, allow_other_host: true
   end
 
+  def create_saved_card_intent
+    customer = Customer.find_by(id: params[:customer_id])
+    connected_acct_id = current_user.stripe_user_id
+    raise "Connected Stripe account missing" unless connected_acct_id.present?
+
+    stripe_customer_id = customer.customer_id       # cus_...
+    pm_id             = customer.payment_method     # pm_... (saved earlier)
+
+    amount_cents = (params[:amount].to_f * 100).round
+    percentage   = (params[:percentage].presence || 0).to_f
+    fee_cents    = (amount_cents * (percentage / 100.0)).round
+
+    intent = Stripe::PaymentIntent.create(
+      {
+        amount:   amount_cents,
+        currency: ENV["CURRENCY"] || "usd",
+
+        customer:       stripe_customer_id,
+        payment_method: pm_id,
+
+        confirmation_method: "automatic",
+        confirm:             false,   # will confirm from JS after CVC
+
+        application_fee_amount: fee_cents,
+
+        # Strong hint to Stripe we want CVC when using this saved card
+        payment_method_options: {
+          card: {
+            require_cvc_recollection: true
+          }
+        }
+      },
+      { stripe_account: connected_acct_id }
+    )
+
+    render json: { client_secret: intent.client_secret }
+  rescue Stripe::StripeError => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  rescue => e
+    render json: { error: "System Error" }, status: :unprocessable_entity
+  end
+
   def create_custom_payment_link 
     begin
       @customer = Customer.find_by(id: params[:customer_id])

@@ -48,9 +48,8 @@
                   <th>Name</th>
                   <th>Created</th>
                   <th>Email</th>
-                  <th>Phone</th>
-                  <th>ID</th>
                   <th>Payment Method</th>
+                  <th></th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -63,8 +62,6 @@
                     <td><%= customer.name %></td>
                     <td><%= customer.created_at.strftime("%a, %d %b %Y") %></td>
                     <td><%= customer.email %></td>
-                    <td><%= customer.phone %></td>
-                    <td><%= customer.customer_id %> </td>
                     <td>
                       <% if !customer.payment_method.blank? %> 
                         <p><%= customer.brand %></p>
@@ -76,6 +73,11 @@
                     <td>
                       <% if !customer.payment_method.blank? %> 
                         <%= link_to 'Create Payment', create_payment_path(id: customer.id),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if !customer.payment_method.blank? %> 
+                        <%= link_to 'Verify CVC', create_payment_path(id: customer.id, cvc: true),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
                       <% end %>
                     </td>
                     <td>

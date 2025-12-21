@@ -102,7 +102,11 @@ class HomeController < ApplicationController
 		end
 
 		def maintenance
-			
+			respond_to do |format|
+			  format.html { render :maintenance, status: :not_found }
+			  # For JSON/other formats, just return 404 without trying to render a template
+			  format.any  { head :not_found }
+			end
 		end
   end
   

@@ -5,7 +5,7 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
 
 
-
+<% if params[:cvc].blank? %>
 <div class="content-wrapper tables-data-page">
   <!-- Content Header (Page header) -->
   <section class="content-header">
@@ -17,28 +17,87 @@
     </ol>
   </section>
 
+    <section>
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+          <div class="box box-primary" data-aos="fade-up">
+            <div class="box-header with-border">
+              <%= form_with url: create_payment_path(@customer), method: :post do %>
+                  <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
+                  <br/>
+                  <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                  <br/>
+                  <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<% else %>
+<div class="content-wrapper tables-data-page">
+  <section class="content-header">
+    <h1>Create Payment for <%= @customer.name %></h1>
+    <ol class="breadcrumb">
+      <li><%= link_to authenticated_root_path do %>
+        <i class="fa fa-dashboard"></i> Home
+      <% end %></li>
+    </ol>
+  </section>
+
   <section>
     <div class="row">
-      <!-- left column -->
       <div class="col-md-12">
         <div class="box box-primary" data-aos="fade-up">
           <div class="box-header with-border">
-            <%= form_with url: create_payment_path(@customer), method: :post do %>
-                <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
-								<br/>
-								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
-                <br/>
-                <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
-            <% end %>
+            <p>
+              Saved card:
+              <strong><%= @customer.brand %></strong>
+              ending in <strong><%= @customer.last4 %></strong>
+            </p>
+
+            <div id="messages" style="color:red;"></div>
+
+            <div class="form-group">
+              <input id="amount"
+                     class="form-control"
+                     style="width: 100%"
+                     placeholder="Enter amount in USD"
+                     required />
+            </div>
+
+            <div class="form-group">
+              <div id="card-cvc-element"
+                   class="form-control"
+                   style="width:100%; padding:8px;"></div>
+            </div>
+
+            <div class="form-group">
+              <textarea id="description"
+                        class="form-control"
+                        style="width: 100%"
+                        placeholder="Description"
+                        rows="5"></textarea>
+            </div>
+
+            <button id="charge-button"
+                    class="btn btn-block btn-info"
+                    type="button">
+              Make Payment
+            </button>
           </div>
         </div>
       </div>
     </div>
   </section>
+</div>
+<% end %>
 
 
 
-  <script>
+<script>
   // Check if the page has already been reloaded
   if (!sessionStorage.getItem('reloaded')) {
     sessionStorage.setItem('reloaded', 'true'); // Mark as reloaded
@@ -47,4 +106,114 @@
     sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
   }
 </script>
+
+<script>
+  // 1) Stripe setup in CONNECTED ACCOUNT context
+  const stripe = Stripe(
+    "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>",
+    { stripeAccount: "<%= current_user.stripe_user_id %>" }
+  );
+  const elements = stripe.elements();
+
+  // Mount CVC-only element into the div
+  const cardCvcElement = elements.create("cardCvc");
+  cardCvcElement.mount("#card-cvc-element");
+
+  const chargeButton = document.getElementById("charge-button");
+  const messages     = document.getElementById("messages");
+
+  function showMessage(msg) {
+    messages.textContent = msg || "";
+  }
+
+  // CSRF token for Rails
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+  chargeButton.addEventListener("click", async function (e) {
+    e.preventDefault();
+    showMessage("");
+
+    const amount       = document.getElementById("amount").value;
+    const description  = document.getElementById("description").value || "";
+
+    if (!amount || parseFloat(amount) <= 0) {
+      showMessage("Please enter a valid amount.");
+      return;
+    }
+
+    chargeButton.disabled  = true;
+    chargeButton.textContent = "Processing...";
+
+    try {
+      //
+      // 2) Ask backend to create a PaymentIntent for this saved card
+      //
+      const piResp = await fetch("<%= saved_card_intents_path %>", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken
+        },
+        body: JSON.stringify({
+          customer_id: "<%= @customer.id %>",
+          amount:      amount
+        })
+      });
+
+      const piData = await piResp.json();
+      if (!piResp.ok) {
+        showMessage(piData.error || "Error creating payment.");
+        chargeButton.disabled  = false;
+        chargeButton.textContent = "Make Payment";
+        return;
+      }
+
+      const clientSecret    = piData.client_secret;
+      const paymentMethodId = "<%= @customer.payment_method %>"; // pm_xxx stored on customer
+
+      //
+      // 3) Confirm the PaymentIntent with the SAVED CARD + recollected CVC
+      //
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethodId,
+        payment_method_options: {
+          card: {
+            cvc: cardCvcElement
+          }
+        }
+      });
+
+      if (result.error) {
+        // Stripe rejected payment (CVC failure, auth failure, etc.)
+        showMessage(result.error.message);
+        chargeButton.disabled  = false;
+        chargeButton.textContent = "Make Payment";
+        return;
+      }
+
+      if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
+        showMessage(
+          "Payment did not succeed. Status: " +
+          (result.paymentIntent && result.paymentIntent.status)
+        );
+        chargeButton.disabled  = false;
+        chargeButton.textContent = "Make Payment";
+        return;
+      }
+      else{
+        window.location = "<%= success_path %>"
+      }
+
+    } catch (err) {
+      console.error(err);
+      showMessage("Unexpected error. Please try again.");
+      chargeButton.disabled  = false;
+      chargeButton.textContent = "Make Payment";
+    }
+  });
+</script>
+
+
+
+
 

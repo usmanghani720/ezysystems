@@ -85,9 +85,10 @@ Rails.application.routes.draw do
   get "/stripe_invoice/:id", to: "payments#stripe_invoice_url"
   get "/redirect_checkout/:id", to: "payments#redirect_checkout"
 
+  post "/saved_card_intents", to: "payments#create_saved_card_intent"
+
   # Maintenance fallback route for all unmatched paths
   match "*unmatched", to: "home#maintenance", via: :all
-
 
   authenticated :user do
     root to: "payments#new", as: :authenticated_root
