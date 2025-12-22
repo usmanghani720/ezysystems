@@ -26,8 +26,19 @@
               <%= form_with url: create_payment_path(@customer), method: :post do %>
                   <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
                   <br/>
-                  <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                  <input id="shipping"
+                    class="form-control"
+                    style="width: 100%"
+                    placeholder="Shipping Address"
+                  />
                   <br/>
+                  <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                  <input type="hidden" id="shipping_line1" name="shipping_line1">
+                  <input type="hidden" id="shipping_city" name="shipping_city">
+                  <input type="hidden" id="shipping_state" name="shipping_state">
+                  <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                  <input type="hidden" id="shipping_country" name="shipping_country">
+                  <input type="hidden" id="shipping_name" name="shipping_name">
                   <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
               <% end %>
             </div>
@@ -75,12 +86,26 @@
             </div>
 
             <div class="form-group">
+              <input id="shipping"
+                     class="form-control"
+                     style="width: 100%"
+                     placeholder="Shipping Address"
+              />
+            </div>
+
+            <div class="form-group">
               <textarea id="description"
                         class="form-control"
                         style="width: 100%"
                         placeholder="Description"
                         rows="5"></textarea>
             </div>
+            <input type="hidden" id="shipping" name="shipping">
+            <input type="hidden" id="shipping_line1" name="shipping_line1">
+            <input type="hidden" id="shipping_city" name="shipping_city">
+            <input type="hidden" id="shipping_state" name="shipping_state">
+            <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+            <input type="hidden" id="shipping_country" name="shipping_country">
 
             <button id="charge-button"
                     class="btn btn-block btn-info"
@@ -135,6 +160,7 @@
 
     const amount       = document.getElementById("amount").value;
     const description  = document.getElementById("description").value || "";
+    const shipping  = document.getElementById("shipping").value || "";
 
     if (!amount || parseFloat(amount) <= 0) {
       showMessage("Please enter a valid amount.");
@@ -145,9 +171,6 @@
     chargeButton.textContent = "Processing...";
 
     try {
-      //
-      // 2) Ask backend to create a PaymentIntent for this saved card
-      //
       const piResp = await fetch("<%= saved_card_intents_path %>", {
         method: "POST",
         headers: {
@@ -156,7 +179,13 @@
         },
         body: JSON.stringify({
           customer_id: "<%= @customer.id %>",
-          amount:      amount
+          amount:      amount,
+          shipping_name: document.getElementById('shipping').value,
+          shipping_line1: document.getElementById("shipping_line1").value,
+          shipping_city: document.getElementById("shipping_city").value,
+          shipping_state: document.getElementById("shipping_state").value,
+          shipping_postal_code: document.getElementById("shipping_postal_code").value,
+          shipping_country: document.getElementById("shipping_country").value
         })
       });
 
@@ -211,6 +240,59 @@
       chargeButton.textContent = "Make Payment";
     }
   });
+</script>
+
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY']%>&libraries=places&callback=initAddressAutocomplete"
+  defer>
+</script>
+
+
+<script>
+  function initAddressAutocomplete() {
+    const input = document.getElementById('shipping');
+    if (!input) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      types: ['address'],
+    });
+
+    autocomplete.addListener('place_changed', function () {
+      const place = autocomplete.getPlace();
+      if (!place.address_components) return;
+
+      let street_number = "";
+      let route         = "";
+      let city          = "";
+      let state         = "";
+      let postal_code   = "";
+      let country       = "";
+
+      place.address_components.forEach(function (c) {
+        const types = c.types;
+        if (types.includes('street_number'))      street_number = c.long_name;
+        if (types.includes('route'))              route         = c.long_name;
+        if (types.includes('locality'))           city          = c.long_name;
+        if (types.includes('administrative_area_level_1')) state = c.short_name;
+        if (types.includes('postal_code'))        postal_code   = c.long_name;
+        if (types.includes('country'))            country       = c.long_name; countryCode = c.short_name;
+      });
+
+      const line1 = [street_number, route].filter(Boolean).join(' ');
+
+      document.getElementById("shipping_line1").value        = line1;
+      document.getElementById("shipping_city").value         = city;
+      document.getElementById("shipping_state").value        = state;
+      document.getElementById("shipping_postal_code").value  = postal_code;
+      document.getElementById("shipping_country").value      = countryCode; // use two-letter ISO for Stripe
+      document.getElementById("shipping_name").value         = document.getElementById("shipping").value;
+    });
+  }
+
+  // Turbo / normal navigation support
+  document.addEventListener('turbo:load', initAddressAutocomplete);
+  document.addEventListener('DOMContentLoaded', initAddressAutocomplete);
 </script>
 
 

@@ -7,7 +7,7 @@ module Payments
 
     # Creates an off-session authorization (no funds captured yet).
     # Returns status "requires_capture" if auth holds were placed successfully.
-    def self.call(customer_id:, payment_method_id:, amount_cents:, currency:, idempotency_key:, stripe_account:, description: nil, metadata: {}, force_3ds: false)
+    def self.call(customer_id:, payment_method_id:, amount_cents:, currency:, idempotency_key:, stripe_account:, description: nil, metadata: {}, force_3ds: false, shipping_name:, shipping_line1:, shipping_city:, shipping_state:, shipping_postal_code:, shipping_country:)
       create_args = {
         amount: amount_cents,
         currency: currency,
@@ -17,7 +17,17 @@ module Payments
         confirm: true,              # perform the authorization now
         capture_method: "manual",   # <-- key difference: manual capture
         description: description,
-        metadata: metadata
+        metadata: metadata,
+        shipping: {
+          name: shipping_name,
+          address: {
+            line1:       shipping_line1,
+            city:        shipping_city,
+            state:       shipping_state,
+            postal_code: shipping_postal_code,
+            country:     shipping_country
+          }
+        },
       }
       create_args[:payment_method_options] = { card: { request_three_d_secure: "any" } } if force_3ds
 

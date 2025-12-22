@@ -24,7 +24,13 @@ class CustomersController < ApplicationController
         idempotency_key:   "auth-#{@customer.id}-#{SecureRandom.uuid}",
         stripe_account:    connected_acct_id,
         description:       @description.blank? ? "Authorization for Customer ##{@customer.id}" : @description,
-        force_3ds:         params[:force_3ds].present? # dev/test
+        force_3ds:         params[:force_3ds].present? ? params[:force_3ds] : nil,
+        shipping_name:     params[:shipping_name],
+        shipping_line1:    params[:shipping_line1],
+        shipping_city:     params[:shipping_city],
+        shipping_state:    params[:shipping_state],
+        shipping_postal_code: params[:shipping_postal_code],
+        shipping_country:  params[:shipping_country]
       )
 
       case res.status
@@ -48,6 +54,12 @@ class CustomersController < ApplicationController
         idempotency_key:   "charge-#{@customer.id}-#{SecureRandom.uuid}",
         stripe_account:    connected_acct_id,
         description:       @description.blank? ? "Manual charge for Customer ##{@customer.id}" : @description,
+        shipping_name:     params[:shipping_name],
+        shipping_line1:    params[:shipping_line1],
+        shipping_city:     params[:shipping_city],
+        shipping_state:    params[:shipping_state],
+        shipping_postal_code: params[:shipping_postal_code],
+        shipping_country:  params[:shipping_country]
       )
 
       case res.status
