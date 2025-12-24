@@ -323,7 +323,7 @@ class PaymentsController < ApplicationController
           }],
 
           shipping_address_collection: {
-            allowed_countries: ["US", "CA"]
+            allowed_countries: ["US", "ID", "AU", "SG"]
           },
       
           success_url: ENV["SUCCESS_URL"] + "?session_id={CHECKOUT_SESSION_ID}",
@@ -651,7 +651,7 @@ class PaymentsController < ApplicationController
         customer: customer_id,
         payment_method_types: ["card"],
         shipping_address_collection: {
-          allowed_countries: ["US", "CA"]
+          allowed_countries: ["US", "ID", "AU", "SG"]
         },
         success_url: ENV['CUSTOMER_CREATION_SUCCESS'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
         cancel_url: ENV['CANCEL_URL'] + "?session_id={CHECKOUT_SESSION_ID}&id=#{@customer.try(:id)}",
@@ -703,6 +703,7 @@ class PaymentsController < ApplicationController
       # 5) Create the Invoice (draft) 
       invoice = Stripe::Invoice.create(
         {
+          description: description,
           customer: stripe_customer_id,
           collection_method: "send_invoice",
           days_until_due: 7,

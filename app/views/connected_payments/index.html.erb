@@ -1,0 +1,100 @@
+<!-- app/views/connected_payments/index.html.erb -->
+
+<h1>Payments</h1>
+
+<% if flash[:error].present? %>
+  <div style="color:red;"><%= flash[:error] %></div>
+<% end %>
+
+<div style="display:flex; gap:10px; margin-bottom:12px; align-items:center;">
+  <strong>View:</strong>
+  <%= link_to "PaymentIntents",
+      connected_payments_path(view: "payment_intents", status: params[:status], limit: params[:limit]),
+      class: (@view_type == "payment_intents" ? "btn btn-primary" : "btn btn-default") %>
+
+  <%= link_to "Charges",
+      connected_payments_path(view: "charges", status: params[:status], limit: params[:limit]),
+      class: (@view_type == "charges" ? "btn btn-primary" : "btn btn-default") %>
+</div>
+
+<% # Status tabs differ slightly between PI and Charges %>
+<div style="display:flex; gap:10px; margin-bottom:12px;">
+  <% current = @status %>
+
+  <% if @view_type == "charges" %>
+    <%= link_to "All",
+        connected_payments_path(view: @view_type, status: "all", limit: @limit),
+        class: (current=="all" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Succeeded",
+        connected_payments_path(view: @view_type, status: "succeeded", limit: @limit),
+        class: (current=="succeeded" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Failed",
+        connected_payments_path(view: @view_type, status: "failed", limit: @limit),
+        class: (current=="failed" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Refunded",
+        connected_payments_path(view: @view_type, status: "refunded", limit: @limit),
+        class: (current=="refunded" ? "btn btn-primary" : "btn btn-default") %>
+  <% else %>
+    <%= link_to "All",
+        connected_payments_path(view: @view_type, status: "all", limit: @limit),
+        class: (current=="all" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Succeeded",
+        connected_payments_path(view: @view_type, status: "succeeded", limit: @limit),
+        class: (current=="succeeded" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Failed",
+        connected_payments_path(view: @view_type, status: "failed", limit: @limit),
+        class: (current=="failed" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Processing",
+        connected_payments_path(view: @view_type, status: "processing", limit: @limit),
+        class: (current=="processing" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Requires action",
+        connected_payments_path(view: @view_type, status: "requires_action", limit: @limit),
+        class: (current=="requires_action" ? "btn btn-primary" : "btn btn-default") %>
+    <%= link_to "Canceled",
+        connected_payments_path(view: @view_type, status: "canceled", limit: @limit),
+        class: (current=="canceled" ? "btn btn-primary" : "btn btn-default") %>
+  <% end %>
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Status</th>
+      <th>Payment method</th>
+      <th>Description</th>
+      <th>Customer</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rows.each do |r| %>
+      <tr>
+        <td><%= r[:id] %></td>
+        <td><%= sprintf("$%.2f", (r[:amount].to_i / 100.0)) %></td>
+        <td><%= r[:currency].to_s.upcase %></td>
+        <td><%= r[:status] %></td>
+        <td><%= r[:payment_method] %></td>
+        <td><%= r[:description] %></td>
+        <td><%= r[:customer] %></td>
+        <td><%= Time.at(r[:created].to_i).strftime("%b %d, %Y %I:%M %p") rescue "-" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div style="margin-top:12px;">
+  <% if @has_more && @next_starting_after.present? %>
+    <%= link_to "Next",
+      connected_payments_path(
+        view: @view_type,
+        status: @status,
+        starting_after: @next_starting_after,
+        limit: @limit
+      ),
+      class: "btn btn-default"
+    %>
+  <% end %>
+</div>

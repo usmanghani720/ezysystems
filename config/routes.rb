@@ -87,6 +87,8 @@ Rails.application.routes.draw do
 
   post "/saved_card_intents", to: "payments#create_saved_card_intent"
 
+  get "/connected/payments", to: "connected_payments#index", as: :connected_payments
+
   # Maintenance fallback route for all unmatched paths
   match "*unmatched", to: "home#maintenance", via: :all
 
