@@ -1,192 +1,161 @@
 # app/controllers/connected_payments_controller.rb
 class ConnectedPaymentsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_stripe
-    before_action :set_connected_account!
   
-    # GET /connected_payments
-    #
-    # Shows both:
-    # - PaymentIntents (pi_*)
-    # - Charges (ch_*)
-    #
-    # Notes:
-    # - Uses CONNECTED ACCOUNT context via { stripe_account: acct_id }
-    # - Avoids `dig` entirely (Stripe::StripeObject doesn't support it in many versions)
-    # - Supports pagination via params[:pi_cursor], params[:ch_cursor]
-    #
     def index
-      # Optional filters
-      limit = (params[:limit].presence || 20).to_i
-      limit = 100 if limit > 100
-      limit = 1   if limit < 1
+      connected_acct_id = current_user.stripe_user_id
+      raise "Connected Stripe account missing" unless connected_acct_id.present?
   
-      query = params[:q].to_s.strip.downcase
+      @view_type = params[:view].presence_in(%w[payment_intents charges]) || "payment_intents"
+      @status    = params[:status].presence || "all"
+      @limit     = [[params[:limit].to_i, 10].max, 100].min
+      @limit     = 25 if @limit.zero?
+      @after     = params[:starting_after].presence
   
-      # -------------------------
-      # PaymentIntents
-      # -------------------------
-      pi_list = Stripe::PaymentIntent.list(
-        {
-          limit: limit,
-          starting_after: params[:pi_cursor].presence
-        },
-        { stripe_account: @connected_acct_id }
-      )
-  
-      @payment_intents = pi_list.data.map do |pi|
-        build_payment_intent_row(pi)
+      case @view_type
+      when "charges"
+        load_charges!(connected_acct_id)
+      else
+        load_payment_intents!(connected_acct_id)
       end
-  
-      @pi_next_cursor = pi_list.data.last&.id
-      @pi_has_more    = !!pi_list.has_more
-  
-      # -------------------------
-      # Charges
-      # -------------------------
-      ch_list = Stripe::Charge.list(
-        {
-          limit: limit,
-          starting_after: params[:ch_cursor].presence
-        },
-        { stripe_account: @connected_acct_id }
-      )
-  
-      @charges = ch_list.data.map do |ch|
-        build_charge_row(ch)
-      end
-  
-      @ch_next_cursor = ch_list.data.last&.id
-      @ch_has_more    = !!ch_list.has_more
-  
-      # -------------------------
-      # Simple local filter (optional)
-      # -------------------------
-      if query.present?
-        @payment_intents.select! { |r| row_matches_query?(r, query) }
-        @charges.select!         { |r| row_matches_query?(r, query) }
-      end
-  
-      # Render your view: app/views/connected_payments/index.html.erb
     rescue Stripe::StripeError => e
-      flash[:error] = e.message
-      @payment_intents = []
-      @charges = []
-      @pi_has_more = @ch_has_more = false
+      flash.now[:error] = e.message
+      @rows = []
+      @has_more = false
+    rescue => e
+      flash.now[:error] = e.message
+      @rows = []
+      @has_more = false
     end
   
     private
   
-    def set_stripe
-      require "stripe"
-      Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
-    end
+    def load_payment_intents!(connected_acct_id)
+      list_params = { limit: @limit, starting_after: @after }.compact
   
-    def set_connected_account!
-      # You can change this logic if you pick connected account by params[:acct_id]
-      @connected_acct_id = current_user.try(:stripe_user_id)
+      # Stripe supports these statuses in list filtering:
+      # succeeded, processing, requires_action, canceled (others exist, but these match your UI best)
+      list_params[:status] = @status if %w[succeeded processing requires_action canceled].include?(@status)
   
-      unless @connected_acct_id.present?
-        redirect_to authenticated_root_path, alert: "Connected Stripe account missing."
-      end
-    end
+      intents = Stripe::PaymentIntent.list(
+        list_params.merge(
+          expand: [
+            "data.customer",
+            "data.payment_method",
+            "data.latest_charge",
+            "data.latest_charge.billing_details"
+          ]
+        ),
+        { stripe_account: connected_acct_id }
+      )
   
-    # -------------------------
-    # Row builders (NO `dig`)
-    # -------------------------
+      raw = intents.data
   
-    def build_payment_intent_row(pi)
-      # Try to show customer email if possible. PaymentIntent.customer is usually "cus_..."
-      customer_label = "-"
-      begin
-        if pi.respond_to?(:customer) && pi.customer.present?
-          cus = Stripe::Customer.retrieve(pi.customer, { stripe_account: @connected_acct_id })
-          customer_label = cus.email.presence || cus.name.presence || cus.id
-        end
-      rescue Stripe::StripeError
-        customer_label = pi.customer.to_s.presence || "-"
-      end
-  
-      description =
-        pi.description.presence ||
-        (pi.respond_to?(:metadata) && pi.metadata && pi.metadata["description"].presence) ||
-        "-"
-  
-      {
-        type: "payment_intent",
-        id: pi.id,
-        amount: pi.amount,                 # integer cents
-        currency: pi.currency,
-        status: pi.status,
-        created: Time.at(pi.created.to_i),
-        customer: customer_label,
-        payment_method: pi.payment_method.to_s.presence || "-",
-        description: description,
-        latest_charge: pi.latest_charge.to_s.presence || "-",
-        livemode: !!pi.livemode
-      }
-    end
-  
-    def build_charge_row(ch)
-      customer_label = "-"
-      begin
-        if ch.respond_to?(:customer) && ch.customer.present?
-          cus = Stripe::Customer.retrieve(ch.customer, { stripe_account: @connected_acct_id })
-          customer_label = cus.email.presence || cus.name.presence || cus.id
-        end
-      rescue Stripe::StripeError
-        customer_label = ch.customer.to_s.presence || "-"
-      end
-  
-      description =
-        ch.description.presence ||
-        (ch.respond_to?(:metadata) && ch.metadata && ch.metadata["description"].presence) ||
-        "-"
-  
-      pm_label = "-"
-      if ch.respond_to?(:payment_method_details) && ch.payment_method_details
-        # e.g. { "card" => { "last4" => "4242", "brand" => "visa" }, "type" => "card" }
-        type = ch.payment_method_details.type.to_s.presence
-        if type == "card" && ch.payment_method_details.card
-          brand = ch.payment_method_details.card.brand.to_s
-          last4 = ch.payment_method_details.card.last4.to_s
-          pm_label = [brand, ("•••• " + last4)].reject(&:blank?).join(" ")
+      # Custom "failed" bucket (Stripe doesn't provide `status=failed` for PIs)
+      filtered =
+        if @status == "failed"
+          raw.select { |pi| pi.status == "requires_payment_method" || pi.status == "canceled" }
         else
-          pm_label = type.presence || "-"
+          raw
         end
+  
+      @rows = filtered.map do |pi|
+        pm = pi.payment_method
+        card = pm&.card
+        pm_label = card ? "#{card.brand.to_s.upcase} •••• #{card.last4}" : (pm&.type || "-")
+  
+        cust = pi.customer
+        cust_label =
+          if cust.respond_to?(:email) && cust.email.present?
+            cust.email
+          else
+            pi.metadata&.dig("customer_email") || "-"
+          end
+  
+        desc = pi.description.presence || pi.metadata&.dig("description") || "-"
+  
+        {
+          id: pi.id,
+          amount: (pi.amount || 0),
+          currency: (pi.currency || "usd"),
+          status: pi.status,
+          payment_method: pm_label,
+          description: desc,
+          customer: cust_label,
+          created: pi.created
+        }
       end
   
-      {
-        type: "charge",
-        id: ch.id,
-        amount: ch.amount,                 # integer cents
-        currency: ch.currency,
-        status: ch.status,                 # "succeeded", "failed", etc.
-        paid: !!ch.paid,
-        refunded: !!ch.refunded,
-        captured: !!ch.captured,
-        created: Time.at(ch.created.to_i),
-        customer: customer_label,
-        payment_intent: ch.payment_intent.to_s.presence || "-",
-        receipt_email: ch.receipt_email.to_s.presence || "-",
-        payment_method: pm_label,
-        description: description,
-        livemode: !!ch.livemode
-      }
+      @has_more = intents.has_more
+      @next_starting_after = raw.last&.id
     end
   
-    def row_matches_query?(row, query)
-      haystack = [
-        row[:id],
-        row[:status],
-        row[:currency],
-        row[:customer],
-        row[:payment_method],
-        row[:payment_intent],
-        row[:description]
-      ].compact.join(" ").downcase
+    def load_charges!(connected_acct_id)
+      list_params = { limit: @limit, starting_after: @after }.compact
   
-      haystack.include?(query)
+      # Charges list supports status filtering via `paid` and `refunded` better than "status"
+      # We'll filter in Ruby for a Stripe-dashboard-like experience.
+      charges = Stripe::Charge.list(
+        list_params.merge(
+          expand: [
+            "data.customer",
+            "data.payment_method_details",
+            "data.billing_details"
+          ]
+        ),
+        { stripe_account: connected_acct_id }
+      )
+  
+      raw = charges.data
+  
+      filtered =
+        case @status
+        when "succeeded"
+          raw.select { |ch| ch.paid == true && ch.status == "succeeded" }
+        when "failed"
+          raw.select { |ch| ch.status == "failed" }
+        when "refunded"
+          raw.select { |ch| ch.refunded == true }
+        when "all", nil
+          raw
+        else
+          raw
+        end
+  
+      @rows = filtered.map do |ch|
+        pmd = ch.payment_method_details
+        card = pmd&.card
+        pm_label =
+          if card
+            "#{card.brand.to_s.upcase} •••• #{card.last4}"
+          else
+            pmd&.type || "-"
+          end
+  
+        cust = ch.customer
+        cust_label =
+          if cust.respond_to?(:email) && cust.email.present?
+            cust.email
+          else
+            ch.billing_details&.email || "-"
+          end
+  
+        desc = ch.description.presence || "-"
+  
+        {
+          id: ch.id,
+          amount: (ch.amount || 0),
+          currency: (ch.currency || "usd"),
+          status: ch.status,              # succeeded/failed/pending
+          payment_method: pm_label,
+          description: desc,
+          customer: cust_label,
+          created: ch.created
+        }
+      end
+  
+      @has_more = charges.has_more
+      @next_starting_after = raw.last&.id
     end
   end
   
