@@ -7,137 +7,78 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
-<div class="content-wrapper tables-data-page">
+<div class="content-wrapper">
   <section class="content-header">
     <h1>Payments</h1>
-    <ol class="breadcrumb">
-      <li><%= link_to authenticated_root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
-    </ol>
   </section>
 
   <section class="content">
-    <div class="row">
-      <div class="col-xs-12">
-        <%= render "/layouts/alerts" %>
+    <%= render "/layouts/alerts" %>
 
-        <div class="box">
-          <div class="box-body">
+    <!-- STATUS TABS -->
+    <div class="btn-group mb-3">
+      <% %w[all succeeded failed processing requires_action canceled].each do |s| %>
+        <%= link_to s.titleize,
+          connected_payments_path(status: s),
+          class: "btn btn-default #{'btn-primary' if @status == s}" %>
+      <% end %>
+    </div>
 
-            <!-- Status tabs -->
-            <div style="margin-bottom: 12px;">
-              <% tabs = [
-                ["All", "all"],
-                ["Succeeded", "succeeded"],
-                ["Failed", "failed"],
-                ["Processing", "processing"],
-                ["Requires action", "requires_action"],
-                ["Canceled", "canceled"]
-              ] %>
+    <table id="payments" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Status</th>
+          <th>Payment Method</th>
+          <th>Description</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Payment ID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @rows.each do |r| %>
+          <tr>
+            <td><strong>$<%= r[:amount] / 100.0 %></strong></td>
+            <td><%= r[:currency] %></td>
+            <td><%= r[:status] %></td>
+            <td><%= r[:payment_method] %></td>
+            <td><%= r[:description] %></td>
+            <td><%= r[:customer] %></td>
+            <td><%= r[:created_at] %></td>
+            <td><%= r[:id] %></td>
+          </tr>
+        <% end %>
 
-              <% tabs.each do |label, value| %>
-                <% active = (@status == value) %>
-                <%= link_to label,
-                  connected_payments_path(status: value, limit: @limit),
-                  class: "btn #{active ? "btn-primary" : "btn-default"}",
-                  style: "margin-right:6px;" %>
-              <% end %>
-            </div>
+        <% if @rows.empty? %>
+          <tr>
+            <td colspan="8" class="text-center">No payments found.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-            <table id="payments" class="table table-bordered table-striped" style="width:100%;">
-              <thead>
-                <tr>
-                  <th>Amount</th>
-                  <th>Currency</th>
-                  <th>Status</th>
-                  <th>Payment method</th>
-                  <th>Description</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>IDs</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% if @rows.blank? %>
-                  <tr>
-                    <td colspan="8" style="text-align:center;">No payments found.</td>
-                  </tr>
-                <% else %>
-                  <% @rows.each do |row| %>
-                    <tr>
-                      <td><%= number_to_currency(row[:amount].to_i / 100.0) %></td>
-                      <td><%= row[:currency].to_s.upcase %></td>
-                      <td><%= row[:status] %></td>
-                      <td><%= row[:payment_method] %></td>
-                      <td><%= row[:description] %></td>
-                      <td><%= row[:customer] %></td>
-
-                      <!-- IMPORTANT: make DataTables sort by timestamp -->
-                      <td data-order="<%= row[:created].to_i %>">
-                        <%= Time.at(row[:created].to_i).strftime("%b %d, %Y %I:%M %p") %>
-                      </td>
-
-                      <td>
-                        PI: <%= row[:id] %><br/>
-                        <% if row[:charge_id].present? %>
-                          CH: <%= row[:charge_id] %>
-                        <% end %>
-                        <% if current_user.role == "admin" %>
-                          <br/>ACCT: <%= row[:connected_account] %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                <% end %>
-              </tbody>
-            </table>
-
-            <!-- Server-side paging (Stripe cursor paging) -->
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
-              <div>
-                <% prev_disabled = @ending_before.blank? && @starting_after.blank? %>
-                <% next_disabled = !@has_more || @last_id.blank? %>
-
-                <!-- Prev: use ending_before = first id from current raw page -->
-                <%= link_to "Prev",
-                  connected_payments_path(
-                    status: @status,
-                    limit: @limit,
-                    ending_before: @first_id
-                  ),
-                  class: "btn btn-default #{prev_disabled ? "disabled" : ""}",
-                  disabled: prev_disabled %>
-
-                <!-- Next: use starting_after = last id from current raw page -->
-                <%= link_to "Next",
-                  connected_payments_path(
-                    status: @status,
-                    limit: @limit,
-                    starting_after: @last_id
-                  ),
-                  class: "btn btn-default #{next_disabled ? "disabled" : ""}",
-                  disabled: next_disabled %>
-              </div>
-
-              <div>
-                <label style="margin-right:8px;">Per page</label>
-                <%= form_with url: connected_payments_path, method: :get, local: true, style: "display:inline-block;" do %>
-                  <%= hidden_field_tag :status, @status %>
-                  <%= select_tag :limit,
-                    options_for_select([10, 25, 50, 100], @limit),
-                    onchange: "this.form.submit();",
-                    class: "form-control",
-                    style: "display:inline-block;width:120px;" %>
-                <% end %>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
+    <!-- PAGINATION -->
+    <div class="text-center">
+      <% if @total_pages > 1 %>
+        <ul class="pagination">
+          <% 1.upto(@total_pages) do |p| %>
+            <li class="<%= 'active' if p == @page %>">
+              <%= link_to p,
+                connected_payments_path(
+                  page: p,
+                  limit: @limit,
+                  status: @status
+                ) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     </div>
   </section>
 </div>
+
 
 <script>
   $("#payments").DataTable({
