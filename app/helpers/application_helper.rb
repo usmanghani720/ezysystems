@@ -24,9 +24,11 @@ module ApplicationHelper
   def stripe_supported_countries
     [
       ['United States', 'US'],
+      ['Australia', 'AU'],
+      ['Singapore', 'SG'],
+      ['Indonesia', 'ID'],
       ['Canada', 'CA'],
       ['United Kingdom', 'GB'],
-      ['Australia', 'AU'],
       ['Austria', 'AT'],
       ['Belgium', 'BE'],
       ['Brazil', 'BR'],
@@ -44,7 +46,6 @@ module ApplicationHelper
       ['New Zealand', 'NZ'],
       ['Norway', 'NO'],
       ['Portugal', 'PT'],
-      ['Singapore', 'SG'],
       ['Spain', 'ES'],
       ['Sweden', 'SE'],
       ['Switzerland', 'CH'],

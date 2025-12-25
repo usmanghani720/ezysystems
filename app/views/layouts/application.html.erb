@@ -19,7 +19,7 @@
     <div id="shadow"></div>
     <div id="shadow2"></div>
     <% if user_signed_in? && params[:action] != "success" && params[:action] != "cancel" && params[:action] != "authenticate" %>
-        <% if params[:controller] == "payments" ||  params[:controller] == "customers" %>
+        <% if params[:controller] == "payments" ||  params[:controller] == "customers" || params[:controller] == "connected_payments"  %>
           <%= render "shared/header" %>
           <%= render "shared/sidebar" %>
           <div class="page-loader">

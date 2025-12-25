@@ -1,100 +1,150 @@
 <!-- app/views/connected_payments/index.html.erb -->
 
-<h1>Payments</h1>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
 
-<% if flash[:error].present? %>
-  <div style="color:red;"><%= flash[:error] %></div>
-<% end %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
-<div style="display:flex; gap:10px; margin-bottom:12px; align-items:center;">
-  <strong>View:</strong>
-  <%= link_to "PaymentIntents",
-      connected_payments_path(view: "payment_intents", status: params[:status], limit: params[:limit]),
-      class: (@view_type == "payment_intents" ? "btn btn-primary" : "btn btn-default") %>
+<div class="content-wrapper tables-data-page">
+  <section class="content-header">
+    <h1>Payments</h1>
+    <ol class="breadcrumb">
+      <li><%= link_to authenticated_root_path do %><i class="fa fa-dashboard"></i> Home<% end %></li>
+    </ol>
+  </section>
 
-  <%= link_to "Charges",
-      connected_payments_path(view: "charges", status: params[:status], limit: params[:limit]),
-      class: (@view_type == "charges" ? "btn btn-primary" : "btn btn-default") %>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <%= render "/layouts/alerts" %>
+
+        <div class="box">
+          <div class="box-body">
+
+            <!-- Status tabs -->
+            <div style="margin-bottom: 12px;">
+              <% tabs = [
+                ["All", "all"],
+                ["Succeeded", "succeeded"],
+                ["Failed", "failed"],
+                ["Processing", "processing"],
+                ["Requires action", "requires_action"],
+                ["Canceled", "canceled"]
+              ] %>
+
+              <% tabs.each do |label, value| %>
+                <% active = (@status == value) %>
+                <%= link_to label,
+                  connected_payments_path(status: value, limit: @limit),
+                  class: "btn #{active ? "btn-primary" : "btn-default"}",
+                  style: "margin-right:6px;" %>
+              <% end %>
+            </div>
+
+            <table id="payments" class="table table-bordered table-striped" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Amount</th>
+                  <th>Currency</th>
+                  <th>Status</th>
+                  <th>Payment method</th>
+                  <th>Description</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>IDs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @rows.blank? %>
+                  <tr>
+                    <td colspan="8" style="text-align:center;">No payments found.</td>
+                  </tr>
+                <% else %>
+                  <% @rows.each do |row| %>
+                    <tr>
+                      <td><%= number_to_currency(row[:amount].to_i / 100.0) %></td>
+                      <td><%= row[:currency].to_s.upcase %></td>
+                      <td><%= row[:status] %></td>
+                      <td><%= row[:payment_method] %></td>
+                      <td><%= row[:description] %></td>
+                      <td><%= row[:customer] %></td>
+
+                      <!-- IMPORTANT: make DataTables sort by timestamp -->
+                      <td data-order="<%= row[:created].to_i %>">
+                        <%= Time.at(row[:created].to_i).strftime("%b %d, %Y %I:%M %p") %>
+                      </td>
+
+                      <td>
+                        PI: <%= row[:id] %><br/>
+                        <% if row[:charge_id].present? %>
+                          CH: <%= row[:charge_id] %>
+                        <% end %>
+                        <% if current_user.role == "admin" %>
+                          <br/>ACCT: <%= row[:connected_account] %>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+
+            <!-- Server-side paging (Stripe cursor paging) -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+              <div>
+                <% prev_disabled = @ending_before.blank? && @starting_after.blank? %>
+                <% next_disabled = !@has_more || @last_id.blank? %>
+
+                <!-- Prev: use ending_before = first id from current raw page -->
+                <%= link_to "Prev",
+                  connected_payments_path(
+                    status: @status,
+                    limit: @limit,
+                    ending_before: @first_id
+                  ),
+                  class: "btn btn-default #{prev_disabled ? "disabled" : ""}",
+                  disabled: prev_disabled %>
+
+                <!-- Next: use starting_after = last id from current raw page -->
+                <%= link_to "Next",
+                  connected_payments_path(
+                    status: @status,
+                    limit: @limit,
+                    starting_after: @last_id
+                  ),
+                  class: "btn btn-default #{next_disabled ? "disabled" : ""}",
+                  disabled: next_disabled %>
+              </div>
+
+              <div>
+                <label style="margin-right:8px;">Per page</label>
+                <%= form_with url: connected_payments_path, method: :get, local: true, style: "display:inline-block;" do %>
+                  <%= hidden_field_tag :status, @status %>
+                  <%= select_tag :limit,
+                    options_for_select([10, 25, 50, 100], @limit),
+                    onchange: "this.form.submit();",
+                    class: "form-control",
+                    style: "display:inline-block;width:120px;" %>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 </div>
 
-<% # Status tabs differ slightly between PI and Charges %>
-<div style="display:flex; gap:10px; margin-bottom:12px;">
-  <% current = @status %>
-
-  <% if @view_type == "charges" %>
-    <%= link_to "All",
-        connected_payments_path(view: @view_type, status: "all", limit: @limit),
-        class: (current=="all" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Succeeded",
-        connected_payments_path(view: @view_type, status: "succeeded", limit: @limit),
-        class: (current=="succeeded" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Failed",
-        connected_payments_path(view: @view_type, status: "failed", limit: @limit),
-        class: (current=="failed" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Refunded",
-        connected_payments_path(view: @view_type, status: "refunded", limit: @limit),
-        class: (current=="refunded" ? "btn btn-primary" : "btn btn-default") %>
-  <% else %>
-    <%= link_to "All",
-        connected_payments_path(view: @view_type, status: "all", limit: @limit),
-        class: (current=="all" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Succeeded",
-        connected_payments_path(view: @view_type, status: "succeeded", limit: @limit),
-        class: (current=="succeeded" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Failed",
-        connected_payments_path(view: @view_type, status: "failed", limit: @limit),
-        class: (current=="failed" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Processing",
-        connected_payments_path(view: @view_type, status: "processing", limit: @limit),
-        class: (current=="processing" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Requires action",
-        connected_payments_path(view: @view_type, status: "requires_action", limit: @limit),
-        class: (current=="requires_action" ? "btn btn-primary" : "btn btn-default") %>
-    <%= link_to "Canceled",
-        connected_payments_path(view: @view_type, status: "canceled", limit: @limit),
-        class: (current=="canceled" ? "btn btn-primary" : "btn btn-default") %>
-  <% end %>
-</div>
-
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Amount</th>
-      <th>Currency</th>
-      <th>Status</th>
-      <th>Payment method</th>
-      <th>Description</th>
-      <th>Customer</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @rows.each do |r| %>
-      <tr>
-        <td><%= r[:id] %></td>
-        <td><%= sprintf("$%.2f", (r[:amount].to_i / 100.0)) %></td>
-        <td><%= r[:currency].to_s.upcase %></td>
-        <td><%= r[:status] %></td>
-        <td><%= r[:payment_method] %></td>
-        <td><%= r[:description] %></td>
-        <td><%= r[:customer] %></td>
-        <td><%= Time.at(r[:created].to_i).strftime("%b %d, %Y %I:%M %p") rescue "-" %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<div style="margin-top:12px;">
-  <% if @has_more && @next_starting_after.present? %>
-    <%= link_to "Next",
-      connected_payments_path(
-        view: @view_type,
-        status: @status,
-        starting_after: @next_starting_after,
-        limit: @limit
-      ),
-      class: "btn btn-default"
-    %>
-  <% end %>
-</div>
+<script>
+  $("#payments").DataTable({
+    responsive: true,
+    paging: false,     // IMPORTANT: Stripe does paging
+    searching: false,  // optional
+    info: false,       // optional
+    order: [[6, "desc"]] // Date column newest first
+  });
+</script>
