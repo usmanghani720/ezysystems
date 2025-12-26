@@ -309,7 +309,9 @@ class PaymentsController < ApplicationController
               request_three_d_secure: current_user.require_3ds? ? "any" : "automatic"
             }
           },
-      
+          consent_collection: {
+            terms_of_service: "required"
+          },
           line_items: [{
             price_data: {
               currency: ENV["CURRENCY"],
