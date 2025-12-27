@@ -36,28 +36,28 @@ $(document).on("click", ".sidebar li a", function (e) {
 });
 
 (function() {
-  $.turbo.execute(".main-sidebar", function() {
-    var animationSpeed = 300
+  // $.turbo.execute(".main-sidebar", function() {
+  //   var animationSpeed = 300
 
-    // Activate current link
-    // In production version, you might want to
-    // use a backend (server-side) implementation
-    // to add 'active' class to the current link.
-    var currentPath = window.location.pathname
+  //   // Activate current link
+  //   // In production version, you might want to
+  //   // use a backend (server-side) implementation
+  //   // to add 'active' class to the current link.
+  //   var currentPath = window.location.pathname
 
-    $(".main-sidebar .active").removeClass("active")
+  //   $(".main-sidebar .active").removeClass("active")
 
-    if(currentPath == "/") {
-      var $currentLink = $(".sidebar a[href='/index.html']")
-    } else {
-      var $currentLink = $(".sidebar a[href='" + currentPath + "']")
-    }
+  //   if(currentPath == "/") {
+  //     var $currentLink = $(".sidebar a[href='/index.html']")
+  //   } else {
+  //     var $currentLink = $(".sidebar a[href='" + currentPath + "']")
+  //   }
 
-    if($currentLink && $currentLink.length) {
-      $currentLink.parent().addClass("active")
-      $currentLink.parents("li.treeview").addClass("menu-open active")
-      $currentLink.parents("ul").first().slideDown(animationSpeed)
-    }
-  })
+  //   if($currentLink && $currentLink.length) {
+  //     $currentLink.parent().addClass("active")
+  //     $currentLink.parents("li.treeview").addClass("menu-open active")
+  //     $currentLink.parents("ul").first().slideDown(animationSpeed)
+  //   }
+  // })
 
 })()

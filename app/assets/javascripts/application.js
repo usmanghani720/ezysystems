@@ -13,11 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./vendor
-//= require turbolinks
-//= require cocoon
-//= require custom/box
 //= require custom/offcanvas
 //= require custom/tree-menu
+//= require custom/box
+//= require custom/pjax-setup
+//= require turbolinks
+//= require cocoon
 
 function getCookie(name) {
 	const value = `; ${document.cookie}`;
