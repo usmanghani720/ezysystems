@@ -309,6 +309,10 @@ class PaymentsController < ApplicationController
               request_three_d_secure: current_user.require_3ds? ? "any" : "automatic"
             }
           },
+          # consent_collection: {
+          #   terms_of_service: "required"
+          # },
+
           line_items: [{
             price_data: {
               currency: ENV["CURRENCY"],
@@ -681,7 +685,7 @@ class PaymentsController < ApplicationController
   end
 
   def create_payment_link
-    begin
+    #begin
       @unique_id = SecureRandom.hex(6).upcase
 
         # 1) Vendor context
@@ -691,6 +695,8 @@ class PaymentsController < ApplicationController
       customer = Customer.find_by(id: params[:customer_id])
       stripe_customer_id = customer.customer_id # cus_...
 
+      pm_id = customer.payment_method 
+
       # 3) Invoice line item (simple single-item example)
       description  = params[:description].presence || "Invoice"
 
@@ -699,85 +705,138 @@ class PaymentsController < ApplicationController
       percentage = (params[:percentage].presence || 10).to_f
       application_fee_cents = (amount_cents * (percentage / 100.0)).round
 
-      # 5) Create the Invoice (draft) 
-      invoice = Stripe::Invoice.create(
-        {
-          description: description,
-          customer: stripe_customer_id,
-          collection_method: "send_invoice",
-          days_until_due: 7,
-          application_fee_amount: application_fee_cents, # optional
-          auto_advance: false # we will finalize + send explicitly
-        },
-        { stripe_account: connected_acct_id }
-      )
+      if params[:type] == "automatic"
+        # 2) Create invoice set to auto-charge
+        invoice = Stripe::Invoice.create(
+          {
+            customer: stripe_customer_id,
 
-      # 4) Create an Invoice Item on the connected account 
-      invoice_item = Stripe::InvoiceItem.create(
-        {
-          customer: stripe_customer_id,
-          invoice: invoice.id, 
-          amount: amount_cents,
-          currency: ENV["CURRENCY"] || "usd",
-          description: description
-        },
-        { stripe_account: connected_acct_id }
-      )
+            # IMPORTANT: auto-charge, not send_invoice
+            collection_method: "charge_automatically",
 
-      # 6) Finalize the invoice (moves draft -> open) 
-      finalized = Stripe::Invoice.finalize_invoice(
-        invoice.id,
-        {},
-        { stripe_account: connected_acct_id }
-      )
+            # Use the saved card you already have
+            default_payment_method: pm_id,
+
+            # Your custom description (shows on invoice; payment objects still often show "Payment for Invoice")
+            description: description,
+
+            # If you need Connect fee
+            application_fee_amount: application_fee_cents,
+
+            # Let Stripe finalize & attempt payment automatically, OR you can finalize+pay yourself below
+            auto_advance: false
+          },
+          { stripe_account: connected_acct_id }
+        )
+
+        invoice_item = Stripe::InvoiceItem.create(
+          {
+            customer: stripe_customer_id,
+            invoice: invoice.id, 
+            amount: amount_cents,
+            currency: ENV["CURRENCY"] || "usd",
+            description: description
+          },
+          { stripe_account: connected_acct_id }
+        )
+
+        # 3) Finalize invoice (draft -> open)
+        finalized = Stripe::Invoice.finalize_invoice(
+          invoice.id,
+          {},
+          { stripe_account: connected_acct_id }
+        )
+
+        # 4) Pay now (forces attempt immediately)
+        paid = Stripe::Invoice.pay(
+          finalized.id,
+          {
+            off_session: true,
+            payment_method: pm_id
+          },
+          { stripe_account: connected_acct_id }
+        )
+      else  
+        # 5) Create the Invoice (draft) 
+        invoice = Stripe::Invoice.create(
+          {
+            description: description,
+            customer: stripe_customer_id,
+            collection_method: "send_invoice",
+            days_until_due: 7,
+            application_fee_amount: application_fee_cents, # optional
+            auto_advance: false # we will finalize + send explicitly
+          },
+          { stripe_account: connected_acct_id }
+        )
+
+        # 4) Create an Invoice Item on the connected account 
+        invoice_item = Stripe::InvoiceItem.create(
+          {
+            customer: stripe_customer_id,
+            invoice: invoice.id, 
+            amount: amount_cents,
+            currency: ENV["CURRENCY"] || "usd",
+            description: description
+          },
+          { stripe_account: connected_acct_id }
+        )
+
+        # 6) Finalize the invoice (moves draft -> open) 
+        finalized = Stripe::Invoice.finalize_invoice(
+          invoice.id,
+          {},
+          { stripe_account: connected_acct_id }
+        )
+      end
 
       @invoice = Invoice.create(customer_id: params[:customer_id], unique_id: @unique_id, description: params[:description], amount: amount_cents, currency: ENV['CURRENCY'], user_id: current_user.try(:id), invoice_url: finalized.hosted_invoice_url)
 
       cookies[:invoice_url] = @invoice.unique_id
       redirect_to success_path, notice: "Invoice created successfully."
-    rescue Stripe::CardError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue Stripe::InvalidRequestError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue Stripe::RateLimitError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue Stripe::AuthenticationError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue Stripe::APIConnectionError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue Stripe::StripeError => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = e.message
-      redirect_to invoices_path
-    rescue => e
-      if @invoice.present?
-        @invoice.delete
-      end
-      flash[:error] = "System Error"
-      redirect_to invoices_path
-    end
+    # rescue Stripe::CardError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue Stripe::InvalidRequestError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue Stripe::RateLimitError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue Stripe::AuthenticationError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue Stripe::APIConnectionError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue Stripe::StripeError => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = e.message
+    #   redirect_to invoices_path
+    # rescue => e
+    #   if @invoice.present?
+    #     @invoice.delete
+    #   end
+    #   flash[:error] = "System Error"
+    #   redirect_to invoices_path
+    # end
   end
 
   def success

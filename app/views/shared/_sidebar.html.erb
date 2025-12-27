@@ -34,7 +34,13 @@
         </li>
         <li class="treeview">
           <%= link_to invoice_path do %>
-            INVOICE
+            SEND INVOICE
+          <i class="fa fa-angle-left pull-right"></i>
+          <% end %>
+        </li>
+        <li class="treeview">
+          <%= link_to invoice_path(type: "automatic") do %>
+            AUTOMATIC INVOICE
           <i class="fa fa-angle-left pull-right"></i>
           <% end %>
         </li>

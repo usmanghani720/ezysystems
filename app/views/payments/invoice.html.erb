@@ -34,6 +34,7 @@
 								<br/>
 								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5" required></textarea>
                 <br/>
+                <%= form.hidden_field :type, value: params[:type] %>
                 <%= submit_tag 'Send Invoice',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
           </div>
