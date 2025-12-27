@@ -372,34 +372,36 @@ class PaymentsController < ApplicationController
   def remove_customer
     @customer = Customer.find_by(id: params[:format])
     if @customer.present? 
-      connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
-      customer_id = @customer.try(:customer_id)
-      begin
-        Stripe::Customer.delete(customer_id, {}, { stripe_account: connected_acct_id})
-        @customer.delete
-        redirect_to customers_path
-      rescue Stripe::CardError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue Stripe::InvalidRequestError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue Stripe::RateLimitError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue Stripe::AuthenticationError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue Stripe::APIConnectionError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue Stripe::StripeError => e
-        flash[:error] = e.message
-        redirect_to customers_path
-      rescue => e
-        flash[:error] = "System Error"
-        redirect_to customers_path
-      end
+      # connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+      # customer_id = @customer.try(:customer_id)
+      @customer.delete
+      redirect_to customers_path
+      # begin
+      #   Stripe::Customer.delete(customer_id, {}, { stripe_account: connected_acct_id})
+      #   @customer.delete
+      #   redirect_to customers_path
+      # rescue Stripe::CardError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue Stripe::InvalidRequestError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue Stripe::RateLimitError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue Stripe::AuthenticationError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue Stripe::APIConnectionError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue Stripe::StripeError => e
+      #   flash[:error] = e.message
+      #   redirect_to customers_path
+      # rescue => e
+      #   flash[:error] = "System Error"
+      #   redirect_to customers_path
+      # end
     end
   end
 
@@ -685,7 +687,7 @@ class PaymentsController < ApplicationController
   end
 
   def create_payment_link
-    #begin
+    begin
       @unique_id = SecureRandom.hex(6).upcase
 
         # 1) Vendor context
@@ -722,6 +724,8 @@ class PaymentsController < ApplicationController
 
             # If you need Connect fee
             application_fee_amount: application_fee_cents,
+
+            delivery_method: "none",     # 🔒 HARD STOP email delivery
 
             # Let Stripe finalize & attempt payment automatically, OR you can finalize+pay yourself below
             auto_advance: false
@@ -794,49 +798,49 @@ class PaymentsController < ApplicationController
 
       cookies[:invoice_url] = @invoice.unique_id
       redirect_to success_path, notice: "Invoice created successfully."
-    # rescue Stripe::CardError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue Stripe::InvalidRequestError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue Stripe::RateLimitError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue Stripe::AuthenticationError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue Stripe::APIConnectionError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue Stripe::StripeError => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = e.message
-    #   redirect_to invoices_path
-    # rescue => e
-    #   if @invoice.present?
-    #     @invoice.delete
-    #   end
-    #   flash[:error] = "System Error"
-    #   redirect_to invoices_path
-    # end
+    rescue Stripe::CardError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue Stripe::InvalidRequestError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue Stripe::RateLimitError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue Stripe::AuthenticationError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue Stripe::APIConnectionError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue Stripe::StripeError => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = e.message
+      redirect_to invoices_path
+    rescue => e
+      if @invoice.present?
+        @invoice.delete
+      end
+      flash[:error] = "System Error"
+      redirect_to invoices_path
+    end
   end
 
   def success

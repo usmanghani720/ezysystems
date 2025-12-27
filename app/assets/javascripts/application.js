@@ -12,10 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
-//= require cocoon
 //= require_tree ./vendor
 //= require custom/pjax-setup
+//= require turbolinks
+//= require cocoon
 //= require custom/box
 //= require custom/offcanvas
 //= require custom/tree-menu

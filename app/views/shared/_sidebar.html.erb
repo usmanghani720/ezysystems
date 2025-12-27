@@ -10,12 +10,6 @@
           <i class="fa fa-angle-left pull-right"></i>
           <% end %>
         </li>
-        <li class="treeview">
-          <%= link_to connected_payments_path do %>
-            PAYMENTS
-          <i class="fa fa-angle-left pull-right"></i>
-          <% end %>
-        </li>
       </ul>
     <% end %>
     <% if current_user.role == "vendor" || current_user.role == "admin" %>

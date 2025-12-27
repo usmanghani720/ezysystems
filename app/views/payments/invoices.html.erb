@@ -56,9 +56,9 @@
                         <%= money_symbols[invoice.currency] %><%= number_with_precision((invoice.amount/100), precision: 2) %>
                       <% end %>
                     </td>
-                    <td style="word-break: break-all;white-space: normal;">
+                    <td>
                       <% if invoice.invoice_url.present? && invoice.try(:unique_id).present? %>
-                        <%= "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + invoice.try(:unique_id) %>
+                        <span style="word-break: break-all;white-space: normal;"><%= "#{ENV['WEBSITE_URL']}" + "/stripe_invoice/" + invoice.try(:unique_id) %></span>
                       <% end %>
                     </td>
                   </tr>

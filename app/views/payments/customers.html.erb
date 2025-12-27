@@ -1,6 +1,11 @@
 
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
 
 
@@ -42,7 +47,7 @@
             <% end %>
             <button class="copy_btn btn btn-block btn-info">Copy Link</button>
             <br />
-            <table id="customers" class="table table-bordered table-striped" style="width: 100 !important;">
+            <table id="customers" class="table table-bordered table-striped" style="width: 100% !important;">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -61,7 +66,7 @@
                   <tr>
                     <td><%= customer.name %></td>
                     <td><%= customer.created_at.strftime("%a, %d %b %Y") %></td>
-                    <td><%= customer.email %></td>
+                    <td><span style="word-break: break-all;white-space: normal;"><%= customer.email %></span></td>
                     <td>
                       <% if !customer.payment_method.blank? %> 
                         <p><%= customer.brand %></p>
@@ -92,7 +97,7 @@
                     </td>
                     <td style="word-break: break-all;white-space: normal;">
                       <% if customer.customer_card_url.present? %>
-                        <%= "#{ENV['WEBSITE_URL']}" + "/checkout/" + customer.try(:customer_id) %>
+                        <span style="word-break: break-all;white-space: normal;"><%= "#{ENV['WEBSITE_URL']}" + "/checkout/" + customer.try(:customer_id) %></span>
                       <% end %>
                     </td>
                   </tr>

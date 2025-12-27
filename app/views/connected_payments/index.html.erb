@@ -40,12 +40,11 @@
             <table id="payments" class="table table-bordered table-striped responsive nowrap" style="width:100%;">
               <thead>
                 <tr>
-                  <th>Amount</th>
-                  <th>Currency</th>
+                  <th>Amount/Currency</th>
+                  <th>Customer</th>
                   <th>Status</th>
                   <th>Payment Method</th>
                   <th>Description</th>
-                  <th>Customer</th>
                   <th>Date</th>
                   <th>Payment ID</th>
                 </tr>
@@ -58,8 +57,9 @@
                       <strong>
                         $<%= sprintf("%.2f", row[:amount].to_f / 100) %>
                       </strong>
+                      <%= row[:currency] %>
                     </td>
-                    <td><%= row[:currency] %></td>
+                    <td><%= row[:customer] %></td>
                     <td>
                       <span class="label label-<%= row[:status] == 'succeeded' ? 'success' : 'default' %>">
                         <%= row[:status].humanize %>
@@ -67,7 +67,6 @@
                     </td>
                     <td><%= row[:payment_method] %></td>
                     <td><%= row[:description] %></td>
-                    <td><%= row[:customer] %></td>
                     <td><%= row[:created_at] %></td>
                     <td><%= row[:id] %></td>
                   </tr>
