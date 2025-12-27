@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree ./vendor
-//= require custom/pjax-setup
 //= require turbolinks
 //= require cocoon
 //= require custom/box
