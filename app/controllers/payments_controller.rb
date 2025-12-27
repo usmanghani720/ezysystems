@@ -686,6 +686,16 @@ class PaymentsController < ApplicationController
     @customers = Customer.where(user_id: current_user.try(:id)).order(:name)
   end
 
+  def add_note
+    @customer = Customer.find_by(id: params[:customer_id])
+    if @customer.present?
+      @customer.update(note: params[:note])
+    end
+
+    redirect_to customers_path
+
+  end
+
   def create_payment_link
     begin
       @unique_id = SecureRandom.hex(6).upcase

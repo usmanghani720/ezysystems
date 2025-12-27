@@ -54,6 +54,7 @@
                   <th>Created</th>
                   <th>Email</th>
                   <th>Payment Method</th>
+                  <th>Note</th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -73,6 +74,15 @@
                         <p><%= customer.last4 %></p>
                       <% else %>
                         <p>Not Available</p>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= form_with url: add_note_path, method: :post, local: true do |form| %>
+
+                        <%= text_field_tag "note", customer.try(:note), class: "form-control" %>
+                        <%= form.hidden_field :customer_id, value: customer.id %>
+                        <br/>
+                        <%= submit_tag 'Add Note',:class=>"btn btn-block btn-info",:style=>"display:inline;", :id => "submit-button" %>
                       <% end %>
                     </td>
                     <td>

@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   post "/capture_payment_intent", to: "payments#capture",  as: :capture_payment_intent
 
   post "/stripe/webhooks", to: "stripe_webhooks#receive"
+  post "/add_note", to: "payments#add_note"
 
   resources :charges, only: [:create]
 

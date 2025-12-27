@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_17_103951) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_27_163313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -62,6 +62,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_17_103951) do
     t.float "last_payment_amount"
     t.string "last_payment_currency"
     t.string "last_payment_date"
+    t.string "note"
   end
 
   create_table "intents", force: :cascade do |t|
