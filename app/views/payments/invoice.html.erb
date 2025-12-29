@@ -32,8 +32,17 @@
                 <br />
 								<input id="percentage" name="percentage" class="form-control" style="width: 100%" placeholder="Percentage for master account"/>
 								<br/>
+                <input id="shipping" class="form-control" style="width: 100%" placeholder="Shipping Address"/>
+                <br/>
 								<textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5" required></textarea>
                 <br/>
+                <input type="hidden" id="shipping" name="shipping">
+                <input type="hidden" id="shipping_line1" name="shipping_line1">
+                <input type="hidden" id="shipping_city" name="shipping_city">
+                <input type="hidden" id="shipping_state" name="shipping_state">
+                <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                <input type="hidden" id="shipping_country" name="shipping_country">
+                <input type="hidden" id="shipping_name" name="shipping_name">
                 <%= form.hidden_field :type, value: params[:type] %>
                 <%= submit_tag 'Send Invoice',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
             <% end %>
@@ -53,5 +62,56 @@
   } else {
     sessionStorage.removeItem('reloaded'); // Remove the flag after reloading once
   }
+</script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAPS_API_KEY']%>&libraries=places&callback=initAddressAutocomplete"
+  defer>
+</script>
+
+<script>
+  function initAddressAutocomplete() {
+    const input = document.getElementById('shipping');
+    if (!input) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      types: ['address'],
+    });
+
+    autocomplete.addListener('place_changed', function () {
+      const place = autocomplete.getPlace();
+      if (!place.address_components) return;
+
+      let street_number = "";
+      let route         = "";
+      let city          = "";
+      let state         = "";
+      let postal_code   = "";
+      let country       = "";
+
+      place.address_components.forEach(function (c) {
+        const types = c.types;
+        if (types.includes('street_number'))      street_number = c.long_name;
+        if (types.includes('route'))              route         = c.long_name;
+        if (types.includes('locality'))           city          = c.long_name;
+        if (types.includes('administrative_area_level_1')) state = c.short_name;
+        if (types.includes('postal_code'))        postal_code   = c.long_name;
+        if (types.includes('country'))            country       = c.long_name; countryCode = c.short_name;
+      });
+
+      const line1 = [street_number, route].filter(Boolean).join(' ');
+
+      document.getElementById("shipping_line1").value        = line1;
+      document.getElementById("shipping_city").value         = city;
+      document.getElementById("shipping_state").value        = state;
+      document.getElementById("shipping_postal_code").value  = postal_code;
+      document.getElementById("shipping_country").value      = countryCode; // use two-letter ISO for Stripe
+      document.getElementById("shipping_name").value         = document.getElementById("shipping").value;
+    });
+  }
+
+  // Turbo / normal navigation support
+  document.addEventListener('turbo:load', initAddressAutocomplete);
+  document.addEventListener('DOMContentLoaded', initAddressAutocomplete);
 </script>
 

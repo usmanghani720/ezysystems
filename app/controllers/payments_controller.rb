@@ -735,10 +735,19 @@ class PaymentsController < ApplicationController
             # If you need Connect fee
             application_fee_amount: application_fee_cents,
 
-            delivery_method: "none",     # 🔒 HARD STOP email delivery
-
             # Let Stripe finalize & attempt payment automatically, OR you can finalize+pay yourself below
-            auto_advance: false
+            auto_advance: false,
+
+            shipping_details: {
+              name: params[:shipping_name],
+              address: {
+                line1:    params[:shipping_line1],
+                city:     params[:shipping_city],
+                state:    params[:shipping_state],
+                postal_code: params[:shipping_postal_code],
+                country:  params[:shipping_country]
+              }
+            },
           },
           { stripe_account: connected_acct_id }
         )
@@ -779,7 +788,17 @@ class PaymentsController < ApplicationController
             collection_method: "send_invoice",
             days_until_due: 7,
             application_fee_amount: application_fee_cents, # optional
-            auto_advance: false # we will finalize + send explicitly
+            auto_advance: false,
+            shipping_details: {
+              name: params[:shipping_name],
+              address: {
+                line1:    params[:shipping_line1],
+                city:     params[:shipping_city],
+                state:    params[:shipping_state],
+                postal_code: params[:shipping_postal_code],
+                country:  params[:shipping_country]
+              }
+            },
           },
           { stripe_account: connected_acct_id }
         )
