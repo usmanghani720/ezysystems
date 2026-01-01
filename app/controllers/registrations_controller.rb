@@ -3,6 +3,7 @@ class RegistrationsController < Devise::RegistrationsController
     prepend_before_action :require_no_authentication, only: [:new, :create, :cancel]
     prepend_before_action :authenticate_scope!, only: [:edit, :update, :destroy]
     prepend_before_action :set_minimum_password_length, only: [:new, :edit]
+    before_action :store_signup_source, only: [:new, :create]
     require "stripe"
     Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
     # GET /resource/sign_up
@@ -35,15 +36,24 @@ class RegistrationsController < Devise::RegistrationsController
           set_flash_message! :notice, :signed_up
           sign_up(resource_name, resource)
           respond_with resource, location: after_sign_up_path_for(resource)
+          cookies.delete(:vendor_id)
         else
           set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
           expire_data_after_sign_in!
-          respond_with resource, location: after_inactive_sign_up_path_for(resource)
+          if cookies[:vendor_id].blank?
+            respond_with resource, location: after_inactive_sign_up_path_for(resource)
+          else  
+            redirect_to new_user_registration_path(id: cookies[:vendor_id])
+          end
         end
       else
         clean_up_passwords resource
         set_minimum_password_length
-        respond_with resource
+        if cookies[:vendor_id].blank?
+          respond_with resource
+        else  
+          redirect_to new_user_registration_path(id: cookies[:vendor_id])
+        end
       end
     end
   
@@ -155,6 +165,10 @@ class RegistrationsController < Devise::RegistrationsController
   
     def translation_scope
       'devise.registrations'
+    end
+
+    def store_signup_source
+      cookies[:vendor_id] ||= params[:user][:id] if params[:user].present?
     end
   
     private
