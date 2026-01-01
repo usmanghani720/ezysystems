@@ -3,7 +3,7 @@ class PaymentsController < ApplicationController
   require "stripe"
   include ApplicationHelper
   before_action :authenticate_user!, except: [:success, :checkout_url, :customer_creation_success, :checkout_url, :stripe_invoice_url]
-  before_action :validate_admin_user! , only: [:all_users, :update_user_status]
+  before_action :validate_admin_user! , only: [:all_users, :update_user_status, :remove_user]
   before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url, :stripe_invoice_url ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
@@ -367,6 +367,19 @@ class PaymentsController < ApplicationController
       flash[:error] = "System Error"
       redirect_to authenticated_root_path
     end 
+  end
+
+  def remove_user
+    begin
+      @user = User.find_by(id: params[:format])
+      if @user.present?
+        @stripe_user_id = @user.stripe_user_id if @user.stripe_user_id.present?
+        @user.delete
+        Stripe::Account.delete(@stripe_user_id)
+      end
+    rescue => e 
+    end
+    redirect_to users_path
   end
 
   def remove_customer

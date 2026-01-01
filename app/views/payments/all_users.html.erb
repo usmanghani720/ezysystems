@@ -46,10 +46,10 @@
                   <th>Email</th>
                   <th>Role</th>
                   <th>Approved</th>
-                  <th>Account Type</th>
                   <th>Stripe Account</th>
                   <th>Update Approval</th>
                   <th>Update 3d</th>
+                  <th></th>
                   <th>Minimum Balance</th>
                 </tr>
               </thead>
@@ -60,7 +60,6 @@
                     <td><%= user.email %></td>
                     <td><%= user.role %> </td>
                     <td><%= user.try(:approved) ? "Approved" : "Not Approved" %></td>
-                    <td><%= user.account_type %> </td>
                     <td>
                       <% if user.try(:stripe_user_id).present? %>
                           <%= user.try(:stripe_user_id) %>
@@ -85,6 +84,9 @@
                     <% else %>
                       <i class="fa fa-arrow-down turn-off-3d-icon" id="<%= user.try(:id) %>" aria-hidden="true"></i>
                     <% end %>
+                    <td>
+                      <%= link_to(ActionController::Base.helpers.image_tag("destroy.png",:class=>"index_img",:title=>"Destroy"), remove_user_path(user), method: :post, data: { confirm: 'Are you sure?' }, :class=>"btn bg-maroon m-r-5") %>
+                    </td>
                     </td>
                     <td><%= link_to 'Set Minimum Balance', balance_path(id: user.try(:id)), method: :get, :class=>"btn btn-block btn-info"%></td>
                   </tr>

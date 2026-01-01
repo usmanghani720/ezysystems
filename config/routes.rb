@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   post 'payment/update_user_status', to: 'payments#update_user_status', as: 'update_user_status' 
   post 'payment/update_user_3d', to: 'payments#update_user_3d', as: 'update_user_3d' 
   post 'payment/remove_customer', to: 'payments#remove_customer', as: 'remove_customer' 
+  post 'payment/remove_user', to: 'payments#remove_user', as: 'remove_user' 
 
   get 'balance/:id', to: 'payments#balance', as: 'balance'
   post 'set_minimum_balance', to: 'payments#set_minimum_balance', as: 'set_minimum_balance' 
