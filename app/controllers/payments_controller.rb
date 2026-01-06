@@ -343,7 +343,7 @@ class PaymentsController < ApplicationController
       session_id = session.id # ex: cs_test_123
 
       cookies[:checkout_session_id] = session_id
-      redirect_to success_path
+      redirect_to success_path(id: params[:customer_id])
       
     rescue Stripe::CardError => e
       flash[:error] = e.message
@@ -424,7 +424,6 @@ class PaymentsController < ApplicationController
 
     @stripe_customer = Stripe::Customer.retrieve(@customer.customer_id,{stripe_account: connected_acct_id})
 
-  
     begin
       # 1) Get the Checkout Session that just finished
       checkout_session = Stripe::Checkout::Session.retrieve(
@@ -456,7 +455,7 @@ class PaymentsController < ApplicationController
         end
       end
       @customer.update(customer_card_url: nil)
-      redirect_to success_path
+      redirect_to success_path(id: params[:id])
     rescue => e
       flash[:error] = e.message.presence || "System Error"
       redirect_to cancel_path
@@ -678,7 +677,7 @@ class PaymentsController < ApplicationController
     )
     cookies[:customer_url] = customer_id
     @customer.update(customer_card_url: session.url)
-    redirect_to success_path
+    redirect_to success_path(id: customer_id)
   end
 
   def checkout_url
@@ -839,7 +838,7 @@ class PaymentsController < ApplicationController
       @invoice = Invoice.create(customer_id: params[:customer_id], unique_id: @unique_id, description: params[:description], amount: amount_cents, currency: ENV['CURRENCY'], user_id: current_user.try(:id), invoice_url: finalized.hosted_invoice_url)
 
       cookies[:invoice_url] = @invoice.unique_id
-      redirect_to success_path, notice: "Invoice created successfully."
+      redirect_to success_path(id: params[:customer_id]), notice: "Invoice created successfully."
     rescue Stripe::CardError => e
       if @invoice.present?
         @invoice.delete

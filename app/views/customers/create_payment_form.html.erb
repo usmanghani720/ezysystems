@@ -230,7 +230,7 @@
         return;
       }
       else{
-        window.location = "<%= success_path %>"
+        window.location = "<%= success_path(id: @customer.try(:id)) %>"
       }
 
     } catch (err) {

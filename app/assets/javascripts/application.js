@@ -41,23 +41,23 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
-	const form = document.getElementById('make-transfer');
-	const submitButton = document.getElementById('submit-button');
-		submitButton && submitButton.addEventListener('click', function (event) {
-			let inputs = document.querySelectorAll('input[type="text"]');  // Adjust this selector if necessary
-			let count = 0;  // To count inputs with values
-			let sum = 0;    // To sum the values
+	// const form = document.getElementById('make-transfer');
+	// const submitButton = document.getElementById('submit-button');
+	// 	submitButton && submitButton.addEventListener('click', function (event) {
+	// 		let inputs = document.querySelectorAll('input[type="text"]');  // Adjust this selector if necessary
+	// 		let count = 0;  // To count inputs with values
+	// 		let sum = 0;    // To sum the values
 
-			inputs.forEach(function (input) {
-				if (input.value) {  // Check if the input field has a value
-					count++;  // Increment count if there is a value
-					sum += parseFloat(input.value) || 0;  // Add the value to sum, ensure it's a number
-				}
-			});
-			const confirmed = confirm(`Are you sure you want to sent ${sum} usd to ${count} users?`);
+	// 		inputs.forEach(function (input) {
+	// 			if (input.value) {  // Check if the input field has a value
+	// 				count++;  // Increment count if there is a value
+	// 				sum += parseFloat(input.value) || 0;  // Add the value to sum, ensure it's a number
+	// 			}
+	// 		});
+	// 		const confirmed = confirm(`Are you sure you want to sent ${sum} usd to ${count} users?`);
 
-			if (!confirmed) {
-				event.preventDefault(); // Prevent form submission if user cancels
-			}
-		});
+	// 		if (!confirmed) {
+	// 			event.preventDefault(); // Prevent form submission if user cancels
+	// 		}
+	// 	});
 });

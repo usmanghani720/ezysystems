@@ -2,6 +2,21 @@
   <div class="form-signin">
     <h2>Success</h2>
     <br />
+      <% if current_user.try(:role) == "vendor" || current_user.try(:role) == "admin"  %>
+      <% if params[:id].present? %>
+        <% @customer = Customer.find_by(customer_id: params[:id]) %>
+      <% end %>
+      <% if params[:id].present? && @customer.blank? %>
+        <% @customer = Customer.find_by(id: params[:id]) %>
+      <% end %>
+      <%= form_with url: add_note_path, method: :post, local: true do |form| %>
+        <%= text_field_tag :note, @customer.try(:note), class: "form-control" %>
+        <%= form.hidden_field :customer_id, value: @customer.try(:id) %>
+        <br/>
+        <%= submit_tag 'Add Note',:class=>"btn btn-block btn-info",:style=>"display:inline;", :id => "submit-button" %>
+      <% end %>
+    <% end %>
+    <br />
     <% if @session_url.present? %>
       <p id="payment-link" style="word-break: break-all;white-space: normal;"><%= @session_url %></p>
       <button class="copy_btn btn btn-block btn-info">Copy Link</button>
