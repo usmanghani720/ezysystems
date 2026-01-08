@@ -4,7 +4,7 @@ class PaymentsController < ApplicationController
   include ApplicationHelper
   before_action :authenticate_user!, except: [:success, :checkout_url, :customer_creation_success, :checkout_url, :stripe_invoice_url]
   before_action :validate_admin_user! , only: [:all_users, :update_user_status, :remove_user]
-  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url, :stripe_invoice_url ]
+  before_action :validate_vendor_user!, except: [:new_customer, :success, :cancel, :create_customer, :new, :customer_creation_success, :checkout_url, :stripe_invoice_url, :add_note ]
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
   def new
@@ -898,8 +898,6 @@ class PaymentsController < ApplicationController
           si = Stripe::SetupIntent.retrieve(
             checkout_session.setup_intent
           )
-
-          debugger
     
           # 3) Pull the exact payment method saved during Checkout
           pm_id = si.payment_method
