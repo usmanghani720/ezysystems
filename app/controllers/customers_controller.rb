@@ -5,6 +5,32 @@ class CustomersController < ApplicationController
 
   def create_payment_form
     @customer = Customer.find(params[:id])
+    connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+    begin
+      @stripe_customer = Stripe::Customer.retrieve(@customer.customer_id,{stripe_account: connected_acct_id})
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::RateLimitError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::APIConnectionError => e
+
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue Stripe::StripeError => e
+      flash[:error] = e.message
+      redirect_to authenticated_root_path
+    rescue => e
+      flash[:error] = "System Error"
+      redirect_to authenticated_root_path
+    end
     redirect_to customers_path, alert: "No saved card." and return unless @customer.payment_method.present?
   end
 

@@ -26,6 +26,7 @@
               <%= form_with url: create_payment_path(@customer), method: :post do %>
                   <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
                   <br/>
+                  <p><%= format_stripe_address(@stripe_customer["address"]) %></p>
                   <input id="shipping"
                     class="form-control"
                     style="width: 100%"

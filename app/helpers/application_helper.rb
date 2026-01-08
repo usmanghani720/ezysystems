@@ -3,6 +3,35 @@ module ApplicationHelper
   Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
   require "stripe"
 
+  def format_stripe_address(addr)
+    return "" if addr.blank?
+
+    parts = [
+      addr["line1"] || addr.line1,
+      addr["line2"] || addr.line2,
+      addr["city"] || addr.city,
+      addr["state"] || addr.state,
+      addr["postal_code"] || addr.postal_code,
+      addr["country"] || addr.country
+    ]
+
+    parts.compact_blank.join(", ")
+  end
+
+  # Optional: map ISO country code to a nicer label without extra gems
+  def country_name(code)
+    return code if code.blank?
+    mapping = {
+      "US" => "United States",
+      "AU" => "Australia",
+      "SG" => "Singapore",
+      "ID" => "Indonesia",
+      "CA" => "Canada",
+      # add more if you want; otherwise just return the code
+    }
+    mapping[code.upcase] || code.upcase
+  end
+
   def last_successful_payment_intent(customer_id, connected_account_id)
     intents = Stripe::PaymentIntent.list(
       {
