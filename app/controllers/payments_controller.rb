@@ -885,6 +885,43 @@ class PaymentsController < ApplicationController
   end
 
   def success
+    if params[:vendor].present?
+      @user = User.find_by(id: params[:vendor_id])
+      begin
+        # 1) Get the Checkout Session that just finished
+        checkout_session = Stripe::Checkout::Session.retrieve(
+          params[:session_id],
+        )
+    
+        # 2) It will have a setup_intent; fetch it
+        if checkout_session.setup_intent.present?
+          si = Stripe::SetupIntent.retrieve(
+            checkout_session.setup_intent
+          )
+
+          debugger
+    
+          # 3) Pull the exact payment method saved during Checkout
+          pm_id = si.payment_method
+          if pm_id.present?
+            # 4) Save it locally and make it default for the customer
+            @user.update!(payment_method: pm_id)
+            pm = Stripe::PaymentMethod.retrieve(pm_id)
+            if pm.present? && pm["card"].present?
+              @user.update(last4: pm["card"]["last4"], brand: pm["card"]["brand"])
+            end
+            Stripe::Customer.update(
+              @user.vendor_id,
+              { invoice_settings: { default_payment_method: pm_id } },
+            )
+          end
+        end
+        redirect_to success_path(id: params[:id])
+      rescue => e
+        flash[:error] = e.message.presence || "System Error"
+        redirect_to cancel_path
+      end
+    end
     if cookies[:customer_url].present? 
       @customer = Customer.find_by(customer_id: cookies[:customer_url])
       @session_url = "#{ENV['WEBSITE_URL']}" + "/checkout/" + @customer.try(:customer_id) if @customer.present?

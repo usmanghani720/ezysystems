@@ -2,7 +2,7 @@
   <div class="form-signin">
     <h2>Success</h2>
     <br />
-      <% if current_user.try(:role) == "vendor" || current_user.try(:role) == "admin"  %>
+      <% if current_user.try(:role) == "vendor" || current_user.try(:role) == "admin" || current_user.try(:role) == "customer" %>
       <% if params[:id].present? %>
         <% @customer = Customer.find_by(customer_id: params[:id]) %>
       <% end %>

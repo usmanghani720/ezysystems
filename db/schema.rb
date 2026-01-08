@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_27_163313) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_07_113944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -106,6 +106,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_27_163313) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "plans", force: :cascade do |t|
+    t.string "name", null: false
+    t.float "amount_cents", null: false
+    t.string "currency", default: "usd", null: false
+    t.string "stripe_product_id", null: false
+    t.string "stripe_price_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["amount_cents", "currency"], name: "index_plans_on_amount_cents_and_currency", unique: true
+    t.index ["stripe_price_id"], name: "index_plans_on_stripe_price_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -134,6 +146,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_27_163313) do
     t.boolean "require_3ds", default: false, null: false
     t.string "unique_code"
     t.integer "referral_id"
+    t.string "payment_method"
+    t.string "last4"
+    t.string "brand"
+    t.string "vendor_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
