@@ -703,8 +703,8 @@ class PaymentsController < ApplicationController
     if @customer.present?
       @customer.update(note: params[:note])
     end
-
-    redirect_to customers_path
+    
+    redirect_to authenticated_root_path
 
   end
 
