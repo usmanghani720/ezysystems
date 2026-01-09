@@ -551,7 +551,10 @@
 					</div>
 
 					<div class="plan-cta">
-            <a href="/users/sign_up?plan=12" class="plan-button">
+            <a href="/users/sign_up?plan=12" 
+            data-monthly-plan="15"
+            data-yearly-plan="12" 
+            class="plan-button js-plan-link">
 							<span>Start free trial</span>
 						</a>
 						<p class="plan-extra">No credit card required. Upgrade only when you’re ready.</p>
@@ -607,9 +610,13 @@
 					</div>
 
 					<div class="plan-cta">
-						<a href="/users/sign_up?plan=24" class="plan-button primary">
-							<span>Start free 14-day trial</span>
-						</a>
+            <a
+              href="/users/sign_up?plan=29"
+              class="plan-button primary js-plan-link"
+              data-monthly-plan="29"
+              data-yearly-plan="24">
+              <span>Start free 14-day trial</span>
+            </a>
 						<p class="plan-extra">Switch plans or cancel in a couple of clicks.</p>
 					</div>
 
@@ -662,10 +669,13 @@
 					</div>
 
 					<div class="plan-cta">
-						<a href="#signup-ultimate" class="plan-button">
-            <a href="/users/sign_up?plan=42" class="plan-button">
-							<span>Talk to sales</span>
-						</a>
+            <a
+              href="/users/sign_up?plan=49"
+              class="plan-button js-plan-link"
+              data-monthly-plan="49"
+              data-yearly-plan="42">
+              <span>Talk to sales</span>
+            </a>
 						<p class="plan-extra">We’ll help you import data and configure your account.</p>
 					</div>
 
@@ -717,7 +727,7 @@
 					</div>
 
 					<div class="plan-cta">
-						<a href="#contact-sales" class="plan-button">
+						<a class="plan-button">
 							<span>Book a call</span>
 						</a>
 						<p class="plan-extra">Tell us about your setup — we’ll handle the rest.</p>
@@ -853,20 +863,42 @@
     const monthlyPrices = document.querySelectorAll(".plan-price-monthly");
     const yearlyPrices = document.querySelectorAll(".plan-price-yearly");
 
+    // All CTAs that should change plan param
+    const planLinks = document.querySelectorAll(".js-plan-link");
+
+    function updatePlanLinks(mode) {
+      planLinks.forEach(link => {
+        const planValue =
+          mode === "yearly"
+            ? link.dataset.yearlyPlan
+            : link.dataset.monthlyPlan;
+
+        if (!planValue) return;
+
+        // Safely update the plan= query param
+        const url = new URL(link.getAttribute("href"), window.location.origin);
+        url.searchParams.set("plan", planValue);
+        link.setAttribute("href", url.pathname + url.search);
+      });
+    }
+
     function setBilling(mode) {
       page.dataset.billing = mode;
+
       options.forEach(btn => {
         btn.classList.toggle("active", btn.dataset.billingChoice === mode);
       });
+
       const showYearly = mode === "yearly";
-      monthlyPrices.forEach(el => el.style.display = showYearly ? "none" : "inline-block");
-      yearlyPrices.forEach(el => el.style.display = showYearly ? "inline-block" : "none");
+      monthlyPrices.forEach(el => (el.style.display = showYearly ? "none" : "inline-block"));
+      yearlyPrices.forEach(el => (el.style.display = showYearly ? "inline-block" : "none"));
+
+      // NEW: update the sign up URLs
+      updatePlanLinks(mode);
     }
 
     options.forEach(btn => {
-      btn.addEventListener("click", () => {
-        setBilling(btn.dataset.billingChoice);
-      });
+      btn.addEventListener("click", () => setBilling(btn.dataset.billingChoice));
     });
 
     setBilling("monthly");

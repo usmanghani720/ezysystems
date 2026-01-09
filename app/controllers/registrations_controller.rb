@@ -31,7 +31,13 @@ class RegistrationsController < Devise::RegistrationsController
       end
       yield resource if block_given?
       if resource.persisted?
-        UserMailer.send_new_user_email_to_admin().deliver_now
+        UserMailer.send_new_user_email_to_admin().deliver_now if @new_user.try(:role) == "vendor" && Rails.env.production?
+        if cookies[:plan].present? && @new_user.try(:role) == "vendor"
+          plan = (cookies[:plan].to_i * 100)
+          cookies.delete(:plan)
+          redirect_to stripe_checkout_path(id: @new_user.try(:id), amount_cents: plan)
+          return
+        end
         if resource.active_for_authentication?
           set_flash_message! :notice, :signed_up
           sign_up(resource_name, resource)
@@ -40,19 +46,27 @@ class RegistrationsController < Devise::RegistrationsController
         else
           set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
           expire_data_after_sign_in!
-          if cookies[:vendor_id].blank?
+          if cookies[:vendor_id].blank? && cookies[:plan].blank?
             respond_with resource, location: after_inactive_sign_up_path_for(resource)
-          else  
-            redirect_to new_user_registration_path(id: cookies[:vendor_id])
+          else 
+            if !cookies[:vendor_id].blank?
+              redirect_to new_user_registration_path(id: cookies[:vendor_id])
+            elsif !cookies[:plan].blank?
+              redirect_to new_user_registration_path(plan: cookies[:plan])
+            end
           end
         end
       else
         clean_up_passwords resource
         set_minimum_password_length
-        if cookies[:vendor_id].blank?
+        if cookies[:vendor_id].blank? && cookies[:plan].blank?
           respond_with resource
         else  
-          redirect_to new_user_registration_path(id: cookies[:vendor_id])
+          if !cookies[:vendor_id].blank?
+            redirect_to new_user_registration_path(id: cookies[:vendor_id])
+          elsif !cookies[:plan].blank?
+            redirect_to new_user_registration_path(plan: cookies[:plan])
+          end
         end
       end
     end
@@ -169,6 +183,7 @@ class RegistrationsController < Devise::RegistrationsController
 
     def store_signup_source
       cookies[:vendor_id] ||= params[:user][:id] if params[:user].present?
+      cookies[:plan] ||= params[:user][:plan] if params[:user].present?
     end
   
     private

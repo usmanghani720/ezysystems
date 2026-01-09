@@ -885,40 +885,59 @@ class PaymentsController < ApplicationController
   end
 
   def success
-    if params[:vendor].present?
+    if params[:vendor_id].present?
       @user = User.find_by(id: params[:vendor_id])
-      begin
+      #begin
         # 1) Get the Checkout Session that just finished
         checkout_session = Stripe::Checkout::Session.retrieve(
           params[:session_id],
         )
+
+        subscription_id = checkout_session.subscription
+        customer_id     = checkout_session.customer
     
-        # 2) It will have a setup_intent; fetch it
-        if checkout_session.setup_intent.present?
-          si = Stripe::SetupIntent.retrieve(
-            checkout_session.setup_intent
-          )
+        subscription = Stripe::Subscription.retrieve(subscription_id)
     
-          # 3) Pull the exact payment method saved during Checkout
-          pm_id = si.payment_method
-          if pm_id.present?
-            # 4) Save it locally and make it default for the customer
-            @user.update!(payment_method: pm_id)
-            pm = Stripe::PaymentMethod.retrieve(pm_id)
-            if pm.present? && pm["card"].present?
-              @user.update(last4: pm["card"]["last4"], brand: pm["card"]["brand"])
-            end
-            Stripe::Customer.update(
-              @user.vendor_id,
-              { invoice_settings: { default_payment_method: pm_id } },
-            )
+        # Stripe usually sets this automatically after Checkout:
+        payment_method_id =
+          subscription.default_payment_method ||
+          subscription.dig(:payment_settings, :payment_method_options, :card) # usually nil
+        # If default_payment_method is nil for some reason, fallback to latest invoice:
+        if payment_method_id.blank? && subscription.latest_invoice.present?
+          invoice = Stripe::Invoice.retrieve(subscription.latest_invoice)
+          payment_intent_id = invoice.payment_intent
+          if payment_intent_id.present?
+            pi = Stripe::PaymentIntent.retrieve(payment_intent_id)
+            payment_method_id = pi.payment_method
           end
         end
+    
+        raise "Payment method not found" if payment_method_id.blank?
+  
+        # 3) Pull the exact payment method saved during Checkout
+        if payment_method_id.present?
+          # 4) Save it locally and make it default for the customer
+          @user.update!(payment_method: payment_method_id)
+          pm = Stripe::PaymentMethod.retrieve(payment_method_id)
+          if pm.present? && pm["card"].present?
+            @user.update(last4: pm["card"]["last4"], brand: pm["card"]["brand"])
+          end
+          Stripe::Customer.update(
+            customer_id,
+            { invoice_settings: { default_payment_method: payment_method_id } }
+          )
+      
+          # 2) (Optional but recommended) Also set Subscription default explicitly
+          Stripe::Subscription.update(
+            subscription_id,
+            { default_payment_method: payment_method_id }
+          )
+        end
         redirect_to success_path(id: params[:id])
-      rescue => e
-        flash[:error] = e.message.presence || "System Error"
-        redirect_to cancel_path
-      end
+      # rescue => e
+      #   flash[:error] = e.message.presence || "System Error"
+      #   redirect_to cancel_path
+      # end
     end
     if cookies[:customer_url].present? 
       @customer = Customer.find_by(customer_id: cookies[:customer_url])

@@ -47,6 +47,7 @@
                   <th>Role</th>
                   <th>Approved</th>
                   <th>Stripe Account</th>
+                  <th>Payment Method</th>
                   <th>Update Approval</th>
                   <th>Update 3d</th>
                   <th>Remove</th>
@@ -69,6 +70,14 @@
                         Payout: <%= user.try(:payout) ? "Enabled" : "Not Enabled" %>
                         <br />
                         Charges: <%= user.try(:charges) ? "Enabled" : "Not Enabled" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if !user.payment_method.blank? %> 
+                        <p><%= user.brand %></p>
+                        <p><%= user.last4 %></p>
+                      <% else %>
+                        <p>Not Available</p>
                       <% end %>
                     </td>
                     <td>

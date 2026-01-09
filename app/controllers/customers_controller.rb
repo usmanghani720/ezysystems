@@ -4,10 +4,10 @@ class CustomersController < ApplicationController
   require "stripe"
 
   def create_payment_form
-    @customer = Customer.find(params[:id])
-    connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+    @customer = Customer.find_by(id: params[:id])
+    connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
     begin
-      @stripe_customer = Stripe::Customer.retrieve(@customer.customer_id,{stripe_account: connected_acct_id})
+      @stripe_customer = Stripe::Customer.retrieve(@customer.try(:customer_id),{stripe_account: connected_acct_id})
     rescue Stripe::CardError => e
       flash[:error] = e.message
       redirect_to authenticated_root_path
@@ -31,7 +31,7 @@ class CustomersController < ApplicationController
       flash[:error] = "System Error"
       redirect_to authenticated_root_path
     end
-    redirect_to customers_path, alert: "No saved card." and return unless @customer.payment_method.present?
+    redirect_to customers_path, alert: "No saved card." and return unless @customer.try(:payment_method).present?
   end
 
   def create_payment

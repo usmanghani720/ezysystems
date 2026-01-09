@@ -14,14 +14,13 @@ class CheckoutController < ApplicationController
         mode: "subscription",
         payment_method_types: ["card"],
         line_items: [{ price: plan.stripe_price_id, quantity: 1 }],
-        customer_creation: "always",
         subscription_data: {
           # 3-month free trial (90 days) or use trial_end below for exact 3 calendar months
           trial_period_days: 90
           # trial_end: 3.months.from_now.to_i
         },
-        success_url: "#{root_url}/success?session_id={CHECKOUT_SESSION_ID}&vendor_id=#{user.try(:id)}",
-        cancel_url:  "#{root_url}/cancel",
+        success_url: "#{authenticated_root_url}/success?session_id={CHECKOUT_SESSION_ID}&vendor_id=#{user.try(:id)}",
+        cancel_url:  "#{authenticated_root_url}/cancel",
         metadata: {
           plan_id: plan.id.to_s,
           amount_cents: plan.amount_cents.to_s,
