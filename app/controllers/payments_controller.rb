@@ -89,29 +89,53 @@ class PaymentsController < ApplicationController
 
   def capture_ui
     @pi_id      = params[:pi_id]
-    @customer   = Customer.find(params[:customer_id])
-    @acct_id    = User.find(@customer.user_id).try(:stripe_user_id)
-    # Fetch latest PI to show amount_capturable
-    @pi = Stripe::PaymentIntent.retrieve(@pi_id, { stripe_account: @acct_id })
+    @customer   = Customer.find_by(id: params[:customer_id])
+    if @customer.present?
+      @acct_id    = User.find(@customer.user_id).try(:stripe_user_id)
+      # Fetch latest PI to show amount_capturable
+      @pi = Stripe::PaymentIntent.retrieve(@pi_id, { stripe_account: @acct_id })
+    else  
+      @customer   = User.find_by(id: params[:customer_id])
+      @pi = Stripe::PaymentIntent.retrieve(@pi_id)
+    end
   end
 
   def capture
-    customer   = Customer.find(params[:customer_id])
-    acct_id    = User.find(customer.user_id).try(:stripe_user_id)
-    pi_id      = params[:pi_id]
-    amount_cents = params[:amount].present? ? (BigDecimal(params[:amount]) * 100).to_i : nil
+    customer   = Customer.find_by(id: params[:customer_id])
+    if customer.present?
+      acct_id    = User.find(customer.user_id).try(:stripe_user_id)
+      pi_id      = params[:pi_id]
+      amount_cents = params[:amount].present? ? (BigDecimal(params[:amount]) * 100).to_i : nil
 
-    res = Payments::CapturePaymentIntent.call(
-      payment_intent_id: pi_id,
-      stripe_account:    acct_id,
-      idempotency_key:   "capture-#{pi_id}-#{SecureRandom.uuid}",
-      amount_to_capture_cents: amount_cents # nil => full amount
-    )
+      res = Payments::CapturePaymentIntent.call(
+        payment_intent_id: pi_id,
+        stripe_account:    acct_id,
+        idempotency_key:   "capture-#{pi_id}-#{SecureRandom.uuid}",
+        amount_to_capture_cents: amount_cents # nil => full amount
+      )
 
-    if res.ok
-      redirect_to customers_path, notice: "Capture submitted. Status: #{res.status}."
-    else
-      redirect_to capture_ui_path(pi_id: pi_id, customer_id: customer.id), alert: res.message || "Capture failed."
+      if res.ok
+        redirect_to customers_path, notice: "Capture submitted. Status: #{res.status}."
+      else
+        redirect_to capture_ui_path(pi_id: pi_id, customer_id: customer.id), alert: res.message || "Capture failed."
+      end
+    else   
+      user = User.find_by(id: params[:customer_id])
+      pi_id      = params[:pi_id]
+      amount_cents = params[:amount].present? ? (BigDecimal(params[:amount]) * 100).to_i : nil
+
+      res = Payments::CapturePaymentIntent.call(
+        payment_intent_id: pi_id,
+        stripe_account:    nil,
+        idempotency_key:   "capture-#{pi_id}-#{SecureRandom.uuid}",
+        amount_to_capture_cents: amount_cents # nil => full amount
+      )
+
+      if res.ok
+        redirect_to users_path, notice: "Capture submitted. Status: #{res.status}."
+      else
+        redirect_to capture_ui_path(pi_id: pi_id, customer_id: user.id), alert: res.message || "Capture failed."
+      end
     end
   end
 
@@ -206,6 +230,7 @@ class PaymentsController < ApplicationController
 
   def customers
     @customers = Customer.where(user_id: current_user.try(:id))
+    cookies[:transaction_type] = "customer"
   end
 
   def new_customer
@@ -241,54 +266,105 @@ class PaymentsController < ApplicationController
 
   def create_saved_card_intent
     customer = Customer.find_by(id: params[:customer_id])
-    connected_acct_id = current_user.stripe_user_id
-    raise "Connected Stripe account missing" unless connected_acct_id.present?
+    if customer.present? && cookies[:transaction_type] == "customer"
+      connected_acct_id = current_user.stripe_user_id
+      raise "Connected Stripe account missing" unless connected_acct_id.present?
 
-    stripe_customer_id = customer.customer_id       # cus_...
-    pm_id             = customer.payment_method     # pm_... (saved earlier)
+      stripe_customer_id = customer.customer_id       # cus_...
+      pm_id             = customer.payment_method     # pm_... (saved earlier)
 
-    amount_cents = (params[:amount].to_f * 100).round
-    percentage   = (params[:percentage].presence || 0).to_f
-    fee_cents    = (amount_cents * (percentage / 100.0)).round
+      amount_cents = (params[:amount].to_f * 100).round
+      percentage   = (params[:percentage].presence || 0).to_f
+      fee_cents    = (amount_cents * (percentage / 100.0)).round
 
-    intent = Stripe::PaymentIntent.create(
-      {
-        amount:   amount_cents,
-        currency: ENV["CURRENCY"] || "usd",
+      begin
+        intent = Stripe::PaymentIntent.create(
+          {
+            amount:   amount_cents,
+            currency: ENV["CURRENCY"] || "usd",
 
-        customer:       stripe_customer_id,
-        payment_method: pm_id,
+            customer:       stripe_customer_id,
+            payment_method: pm_id,
 
-        confirmation_method: "automatic",
-        confirm:             false,   # will confirm from JS after CVC
+            confirmation_method: "automatic",
+            confirm:             false,   # will confirm from JS after CVC
 
-        application_fee_amount: fee_cents,
+            application_fee_amount: fee_cents,
 
-        shipping: {
-          name: params[:shipping_name],
-          address: {
-            line1:       params[:shipping_line1],
-            city:        params[:shipping_city],
-            state:       params[:shipping_state],
-            postal_code: params[:shipping_postal_code],
-            country:     params[:shipping_country]
-          }
-        },
-        # Strong hint to Stripe we want CVC when using this saved card
-        payment_method_options: {
-          card: {
-            require_cvc_recollection: true
-          }
-        }
-      },
-      { stripe_account: connected_acct_id }
-    )
+            shipping: {
+              name: params[:shipping_name],
+              address: {
+                line1:       params[:shipping_line1],
+                city:        params[:shipping_city],
+                state:       params[:shipping_state],
+                postal_code: params[:shipping_postal_code],
+                country:     params[:shipping_country]
+              }
+            },
+            # Strong hint to Stripe we want CVC when using this saved card
+            payment_method_options: {
+              card: {
+                require_cvc_recollection: true
+              }
+            }
+          },
+          { stripe_account: connected_acct_id }
+        )
 
-    render json: { client_secret: intent.client_secret }
-  rescue Stripe::StripeError => e
-    render json: { error: e.message }, status: :unprocessable_entity
-  rescue => e
-    render json: { error: "System Error" }, status: :unprocessable_entity
+        render json: { client_secret: intent.client_secret }
+      rescue Stripe::StripeError => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue => e
+        render json: { error: "System Error" }, status: :unprocessable_entity
+      end
+    else   
+      user = User.find_by(id: params[:customer_id])
+
+      stripe_customer_id = user.vendor_id       # cus_...
+      pm_id             = user.payment_method     # pm_... (saved earlier)
+
+      amount_cents = (params[:amount].to_f * 100).round
+      percentage   = (params[:percentage].presence || 0).to_f
+      fee_cents    = (amount_cents * (percentage / 100.0)).round
+
+      begin
+        intent = Stripe::PaymentIntent.create(
+          {
+            amount:   amount_cents,
+            currency: ENV["CURRENCY"] || "usd",
+
+            customer:       stripe_customer_id,
+            payment_method: pm_id,
+
+            confirmation_method: "automatic",
+            confirm:             false,   # will confirm from JS after CVC
+
+            shipping: {
+              name: params[:shipping_name],
+              address: {
+                line1:       params[:shipping_line1],
+                city:        params[:shipping_city],
+                state:       params[:shipping_state],
+                postal_code: params[:shipping_postal_code],
+                country:     params[:shipping_country]
+              }
+            },
+            # Strong hint to Stripe we want CVC when using this saved card
+            payment_method_options: {
+              card: {
+                require_cvc_recollection: true
+              }
+            }
+          },
+        )
+
+        render json: { client_secret: intent.client_secret }
+      rescue Stripe::StripeError => e
+        render json: { error: e.message }, status: :unprocessable_entity
+      rescue => e
+        render json: { error: "System Error" }, status: :unprocessable_entity
+      end
+    end
   end
 
   def create_custom_payment_link 
@@ -692,6 +768,7 @@ class PaymentsController < ApplicationController
 
   def all_users
     @users = User.all
+    cookies[:transaction_type] = "vendor"
   end
 
   def invoice
@@ -917,7 +994,7 @@ class PaymentsController < ApplicationController
         # 3) Pull the exact payment method saved during Checkout
         if payment_method_id.present?
           # 4) Save it locally and make it default for the customer
-          @user.update!(payment_method: payment_method_id)
+          @user.update!(payment_method: payment_method_id, vendor_id: customer_id)
           pm = Stripe::PaymentMethod.retrieve(payment_method_id)
           if pm.present? && pm["card"].present?
             @user.update(last4: pm["card"]["last4"], brand: pm["card"]["brand"])

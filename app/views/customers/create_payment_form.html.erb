@@ -23,24 +23,46 @@
         <div class="col-md-12">
           <div class="box box-primary">
             <div class="box-header with-border">
-              <%= form_with url: create_payment_path(@customer), method: :post do %>
-                  <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
-                  <br/>
-                  <p><%= format_stripe_address(@stripe_customer["address"]) %></p>
-                  <input id="shipping"
-                    class="form-control"
-                    style="width: 100%"
-                    placeholder="Shipping Address"
-                  />
-                  <br/>
-                  <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
-                  <input type="hidden" id="shipping_line1" name="shipping_line1">
-                  <input type="hidden" id="shipping_city" name="shipping_city">
-                  <input type="hidden" id="shipping_state" name="shipping_state">
-                  <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
-                  <input type="hidden" id="shipping_country" name="shipping_country">
-                  <input type="hidden" id="shipping_name" name="shipping_name">
-                  <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+              <% if @customer.present? && cookies[:transaction_type] == "customer" %>
+                <%= form_with url: create_payment_path(@customer), method: :post do %>
+                    <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
+                    <br/>
+                    <p><%= format_stripe_address(@stripe_customer["address"]) %></p>
+                    <input id="shipping"
+                      class="form-control"
+                      style="width: 100%"
+                      placeholder="Shipping Address"
+                    />
+                    <br/>
+                    <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                    <input type="hidden" id="shipping_line1" name="shipping_line1">
+                    <input type="hidden" id="shipping_city" name="shipping_city">
+                    <input type="hidden" id="shipping_state" name="shipping_state">
+                    <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                    <input type="hidden" id="shipping_country" name="shipping_country">
+                    <input type="hidden" id="shipping_name" name="shipping_name">
+                    <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+                <% end %>
+              <% else %>
+                <%= form_with url: create_payment_path(@user), method: :post do %>
+                    <input id="amount" name="amount" class="form-control" style="width: 100%" placeholder="Enter amount in usd" required/>
+                    <br/>
+                    <p><%= format_stripe_address(@stripe_customer["address"]) %></p>
+                    <input id="shipping"
+                      class="form-control"
+                      style="width: 100%"
+                      placeholder="Shipping Address"
+                    />
+                    <br/>
+                    <textarea id="description" name="description" class="form-control" style="width: 100%" placeholder="Description" rows="5"></textarea>
+                    <input type="hidden" id="shipping_line1" name="shipping_line1">
+                    <input type="hidden" id="shipping_city" name="shipping_city">
+                    <input type="hidden" id="shipping_state" name="shipping_state">
+                    <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                    <input type="hidden" id="shipping_country" name="shipping_country">
+                    <input type="hidden" id="shipping_name" name="shipping_name">
+                    <%= submit_tag 'Make Payment',:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+                <% end %>
               <% end %>
             </div>
           </div>
@@ -49,76 +71,149 @@
     </section>
   </div>
 <% else %>
-<div class="content-wrapper tables-data-page">
-  <section class="content-header">
-    <h1>Create Payment for <%= @customer.name %></h1>
-    <ol class="breadcrumb">
-      <li><%= link_to authenticated_root_path do %>
-        <i class="fa fa-dashboard"></i> Home
-      <% end %></li>
-    </ol>
-  </section>
+  <% if @customer.present? && cookies[:transaction_type] == "customer" %>
+    <div class="content-wrapper tables-data-page">
+      <section class="content-header">
+        <h1>Create Payment for <%= @customer.name %></h1>
+        <ol class="breadcrumb">
+          <li><%= link_to authenticated_root_path do %>
+            <i class="fa fa-dashboard"></i> Home
+          <% end %></li>
+        </ol>
+      </section>
 
-  <section>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <p>
-              Saved card:
-              <strong><%= @customer.brand %></strong>
-              ending in <strong><%= @customer.last4 %></strong>
-            </p>
+      <section>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <p>
+                  Saved card:
+                  <strong><%= @customer.brand %></strong>
+                  ending in <strong><%= @customer.last4 %></strong>
+                </p>
 
-            <div id="messages" style="color:red;"></div>
+                <div id="messages" style="color:red;"></div>
 
-            <div class="form-group">
-              <input id="amount"
-                     class="form-control"
-                     style="width: 100%"
-                     placeholder="Enter amount in USD"
-                     required />
-            </div>
-
-            <div class="form-group">
-              <div id="card-cvc-element"
-                   class="form-control"
-                   style="width:100%; padding:8px;"></div>
-            </div>
-
-            <div class="form-group">
-              <input id="shipping"
-                     class="form-control"
-                     style="width: 100%"
-                     placeholder="Shipping Address"
-              />
-            </div>
-
-            <div class="form-group">
-              <textarea id="description"
+                <div class="form-group">
+                  <input id="amount"
                         class="form-control"
                         style="width: 100%"
-                        placeholder="Description"
-                        rows="5"></textarea>
-            </div>
-            <input type="hidden" id="shipping" name="shipping">
-            <input type="hidden" id="shipping_line1" name="shipping_line1">
-            <input type="hidden" id="shipping_city" name="shipping_city">
-            <input type="hidden" id="shipping_state" name="shipping_state">
-            <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
-            <input type="hidden" id="shipping_country" name="shipping_country">
+                        placeholder="Enter amount in USD"
+                        required />
+                </div>
 
-            <button id="charge-button"
-                    class="btn btn-block btn-info"
-                    type="button">
-              Make Payment
-            </button>
+                <div class="form-group">
+                  <div id="card-cvc-element"
+                      class="form-control"
+                      style="width:100%; padding:8px;"></div>
+                </div>
+
+                <div class="form-group">
+                  <input id="shipping"
+                        class="form-control"
+                        style="width: 100%"
+                        placeholder="Shipping Address"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <textarea id="description"
+                            class="form-control"
+                            style="width: 100%"
+                            placeholder="Description"
+                            rows="5"></textarea>
+                </div>
+                <input type="hidden" id="shipping" name="shipping">
+                <input type="hidden" id="shipping_line1" name="shipping_line1">
+                <input type="hidden" id="shipping_city" name="shipping_city">
+                <input type="hidden" id="shipping_state" name="shipping_state">
+                <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                <input type="hidden" id="shipping_country" name="shipping_country">
+
+                <button id="charge-button"
+                        class="btn btn-block btn-info"
+                        type="button">
+                  Make Payment
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
-  </section>
-</div>
+  <% else %>
+    <div class="content-wrapper tables-data-page">
+      <section class="content-header">
+        <h1>Create Payment for <%= @user.name %></h1>
+        <ol class="breadcrumb">
+          <li><%= link_to authenticated_root_path do %>
+            <i class="fa fa-dashboard"></i> Home
+          <% end %></li>
+        </ol>
+      </section>
+
+      <section>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-primary">
+              <div class="box-header with-border">
+                <p>
+                  Saved card:
+                  <strong><%= @user.brand %></strong>
+                  ending in <strong><%= @user.last4 %></strong>
+                </p>
+
+                <div id="messages" style="color:red;"></div>
+
+                <div class="form-group">
+                  <input id="amount"
+                        class="form-control"
+                        style="width: 100%"
+                        placeholder="Enter amount in USD"
+                        required />
+                </div>
+
+                <div class="form-group">
+                  <div id="card-cvc-element"
+                      class="form-control"
+                      style="width:100%; padding:8px;"></div>
+                </div>
+
+                <div class="form-group">
+                  <input id="shipping"
+                        class="form-control"
+                        style="width: 100%"
+                        placeholder="Shipping Address"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <textarea id="description"
+                            class="form-control"
+                            style="width: 100%"
+                            placeholder="Description"
+                            rows="5"></textarea>
+                </div>
+                <input type="hidden" id="shipping" name="shipping">
+                <input type="hidden" id="shipping_line1" name="shipping_line1">
+                <input type="hidden" id="shipping_city" name="shipping_city">
+                <input type="hidden" id="shipping_state" name="shipping_state">
+                <input type="hidden" id="shipping_postal_code" name="shipping_postal_code">
+                <input type="hidden" id="shipping_country" name="shipping_country">
+
+                <button id="charge-button"
+                        class="btn btn-block btn-info"
+                        type="button">
+                  Make Payment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  <% end %>
 <% end %>
 
 
@@ -133,115 +228,228 @@
   }
 </script>
 
-<script>
-  // 1) Stripe setup in CONNECTED ACCOUNT context
-  const stripe = Stripe(
-    "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>",
-    { stripeAccount: "<%= current_user.stripe_user_id %>" }
-  );
-  const elements = stripe.elements();
+<% if @customer.present? && cookies[:transaction_type] == "customer" %>
+  <script>
+      // 1) Stripe setup in CONNECTED ACCOUNT context
+      const stripe = Stripe(
+        "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>",
+        { stripeAccount: "<%= current_user.stripe_user_id %>" }
+      );
+      const elements = stripe.elements();
 
-  // Mount CVC-only element into the div
-  const cardCvcElement = elements.create("cardCvc");
-  cardCvcElement.mount("#card-cvc-element");
+      // Mount CVC-only element into the div
+      const cardCvcElement = elements.create("cardCvc");
+      cardCvcElement.mount("#card-cvc-element");
 
-  const chargeButton = document.getElementById("charge-button");
-  const messages     = document.getElementById("messages");
+      const chargeButton = document.getElementById("charge-button");
+      const messages     = document.getElementById("messages");
 
-  function showMessage(msg) {
-    messages.textContent = msg || "";
-  }
-
-  // CSRF token for Rails
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-
-  chargeButton.addEventListener("click", async function (e) {
-    e.preventDefault();
-    showMessage("");
-
-    const amount       = document.getElementById("amount").value;
-    const description  = document.getElementById("description").value || "";
-    const shipping  = document.getElementById("shipping").value || "";
-
-    if (!amount || parseFloat(amount) <= 0) {
-      showMessage("Please enter a valid amount.");
-      return;
-    }
-
-    chargeButton.disabled  = true;
-    chargeButton.textContent = "Processing...";
-
-    try {
-      const piResp = await fetch("<%= saved_card_intents_path %>", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken
-        },
-        body: JSON.stringify({
-          customer_id: "<%= @customer.id %>",
-          amount:      amount,
-          shipping_name: document.getElementById('shipping').value,
-          shipping_line1: document.getElementById("shipping_line1").value,
-          shipping_city: document.getElementById("shipping_city").value,
-          shipping_state: document.getElementById("shipping_state").value,
-          shipping_postal_code: document.getElementById("shipping_postal_code").value,
-          shipping_country: document.getElementById("shipping_country").value
-        })
-      });
-
-      const piData = await piResp.json();
-      if (!piResp.ok) {
-        showMessage(piData.error || "Error creating payment.");
-        chargeButton.disabled  = false;
-        chargeButton.textContent = "Make Payment";
-        return;
+      function showMessage(msg) {
+        messages.textContent = msg || "";
       }
 
-      const clientSecret    = piData.client_secret;
-      const paymentMethodId = "<%= @customer.payment_method %>"; // pm_xxx stored on customer
+      // CSRF token for Rails
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-      //
-      // 3) Confirm the PaymentIntent with the SAVED CARD + recollected CVC
-      //
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: paymentMethodId,
-        payment_method_options: {
-          card: {
-            cvc: cardCvcElement
+      chargeButton.addEventListener("click", async function (e) {
+        e.preventDefault();
+        showMessage("");
+
+        const amount       = document.getElementById("amount").value;
+        const description  = document.getElementById("description").value || "";
+        const shipping  = document.getElementById("shipping").value || "";
+
+        if (!amount || parseFloat(amount) <= 0) {
+          showMessage("Please enter a valid amount.");
+          return;
+        }
+
+        chargeButton.disabled  = true;
+        chargeButton.textContent = "Processing...";
+
+        try {
+          const piResp = await fetch("<%= saved_card_intents_path %>", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken
+            },
+            body: JSON.stringify({
+              customer_id: "<%= @customer.id %>",
+              amount:      amount,
+              shipping_name: document.getElementById('shipping').value,
+              shipping_line1: document.getElementById("shipping_line1").value,
+              shipping_city: document.getElementById("shipping_city").value,
+              shipping_state: document.getElementById("shipping_state").value,
+              shipping_postal_code: document.getElementById("shipping_postal_code").value,
+              shipping_country: document.getElementById("shipping_country").value
+            })
+          });
+
+          const piData = await piResp.json();
+          if (!piResp.ok) {
+            showMessage(piData.error || "Error creating payment.");
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
           }
+
+          const clientSecret    = piData.client_secret;
+          const paymentMethodId = "<%= @customer.payment_method %>"; // pm_xxx stored on customer
+
+          //
+          // 3) Confirm the PaymentIntent with the SAVED CARD + recollected CVC
+          //
+          const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: paymentMethodId,
+            payment_method_options: {
+              card: {
+                cvc: cardCvcElement
+              }
+            }
+          });
+
+          if (result.error) {
+            // Stripe rejected payment (CVC failure, auth failure, etc.)
+            showMessage(result.error.message);
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
+          }
+
+          if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
+            showMessage(
+              "Payment did not succeed. Status: " +
+              (result.paymentIntent && result.paymentIntent.status)
+            );
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
+          }
+          else{
+            window.location = "<%= success_path(id: @customer.try(:id)) %>"
+          }
+
+        } catch (err) {
+          console.error(err);
+          showMessage("Unexpected error. Please try again.");
+          chargeButton.disabled  = false;
+          chargeButton.textContent = "Make Payment";
         }
       });
+  </script>
+<% end %>
 
-      if (result.error) {
-        // Stripe rejected payment (CVC failure, auth failure, etc.)
-        showMessage(result.error.message);
-        chargeButton.disabled  = false;
-        chargeButton.textContent = "Make Payment";
-        return;
+<% if @user.present? %>
+  <script>
+      // 1) Stripe setup in CONNECTED ACCOUNT context
+      const stripe = Stripe(
+        "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>"
+      );
+      const elements = stripe.elements();
+
+      // Mount CVC-only element into the div
+      const cardCvcElement = elements.create("cardCvc");
+      cardCvcElement.mount("#card-cvc-element");
+
+      const chargeButton = document.getElementById("charge-button");
+      const messages     = document.getElementById("messages");
+
+      function showMessage(msg) {
+        messages.textContent = msg || "";
       }
 
-      if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
-        showMessage(
-          "Payment did not succeed. Status: " +
-          (result.paymentIntent && result.paymentIntent.status)
-        );
-        chargeButton.disabled  = false;
-        chargeButton.textContent = "Make Payment";
-        return;
-      }
-      else{
-        window.location = "<%= success_path(id: @customer.try(:id)) %>"
-      }
+      // CSRF token for Rails
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-    } catch (err) {
-      console.error(err);
-      showMessage("Unexpected error. Please try again.");
-      chargeButton.disabled  = false;
-      chargeButton.textContent = "Make Payment";
-    }
-  });
-</script>
+      chargeButton.addEventListener("click", async function (e) {
+        e.preventDefault();
+        showMessage("");
+
+        const amount       = document.getElementById("amount").value;
+        const description  = document.getElementById("description").value || "";
+        const shipping  = document.getElementById("shipping").value || "";
+
+        if (!amount || parseFloat(amount) <= 0) {
+          showMessage("Please enter a valid amount.");
+          return;
+        }
+
+        chargeButton.disabled  = true;
+        chargeButton.textContent = "Processing...";
+
+        try {
+          const piResp = await fetch("<%= saved_card_intents_path %>", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken
+            },
+            body: JSON.stringify({
+              customer_id: "<%= @user.id %>",
+              amount:      amount,
+              shipping_name: document.getElementById('shipping').value,
+              shipping_line1: document.getElementById("shipping_line1").value,
+              shipping_city: document.getElementById("shipping_city").value,
+              shipping_state: document.getElementById("shipping_state").value,
+              shipping_postal_code: document.getElementById("shipping_postal_code").value,
+              shipping_country: document.getElementById("shipping_country").value
+            })
+          });
+
+          const piData = await piResp.json();
+          if (!piResp.ok) {
+            showMessage(piData.error || "Error creating payment.");
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
+          }
+
+          const clientSecret    = piData.client_secret;
+          const paymentMethodId = "<%= @user.payment_method %>"; // pm_xxx stored on customer
+
+          //
+          // 3) Confirm the PaymentIntent with the SAVED CARD + recollected CVC
+          //
+          const result = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: paymentMethodId,
+            payment_method_options: {
+              card: {
+                cvc: cardCvcElement
+              }
+            }
+          });
+
+          if (result.error) {
+            // Stripe rejected payment (CVC failure, auth failure, etc.)
+            showMessage(result.error.message);
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
+          }
+
+          if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
+            showMessage(
+              "Payment did not succeed. Status: " +
+              (result.paymentIntent && result.paymentIntent.status)
+            );
+            chargeButton.disabled  = false;
+            chargeButton.textContent = "Make Payment";
+            return;
+          }
+          else{
+            window.location = "<%= success_path(id: @user.try(:id)) %>"
+          }
+
+        } catch (err) {
+          console.error(err);
+          showMessage("Unexpected error. Please try again.");
+          chargeButton.disabled  = false;
+          chargeButton.textContent = "Make Payment";
+        }
+      });
+  </script>
+<% end %>
 
 
 <script

@@ -9,11 +9,13 @@
       <% if params[:id].present? && @customer.blank? %>
         <% @customer = Customer.find_by(id: params[:id]) %>
       <% end %>
-      <%= form_with url: add_note_path, method: :post, local: true do |form| %>
-        <%= text_field_tag :note, @customer.try(:note), class: "form-control" %>
-        <%= form.hidden_field :customer_id, value: @customer.try(:id) %>
-        <br/>
-        <%= submit_tag 'Add Note',:class=>"btn btn-block btn-info",:style=>"display:inline;", :id => "submit-button" %>
+      <% if @customer.present? %>
+        <%= form_with url: add_note_path, method: :post, local: true do |form| %>
+          <%= text_field_tag :note, @customer.try(:note), class: "form-control" %>
+          <%= form.hidden_field :customer_id, value: @customer.try(:id) %>
+          <br/>
+          <%= submit_tag 'Add Note',:class=>"btn btn-block btn-info",:style=>"display:inline;", :id => "submit-button" %>
+        <% end %>
       <% end %>
     <% end %>
     <br />

@@ -5,97 +5,193 @@ class CustomersController < ApplicationController
 
   def create_payment_form
     @customer = Customer.find_by(id: params[:id])
-    connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
-    begin
-      @stripe_customer = Stripe::Customer.retrieve(@customer.try(:customer_id),{stripe_account: connected_acct_id})
-    rescue Stripe::CardError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::InvalidRequestError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::RateLimitError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::AuthenticationError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::APIConnectionError => e
+    if @customer.present? && cookies[:transaction_type] == "customer"
+      connected_acct_id = User.find_by(id: @customer.try(:user_id)).try(:stripe_user_id)
+      begin
+        @stripe_customer = Stripe::Customer.retrieve(@customer.try(:customer_id),{stripe_account: connected_acct_id})
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::APIConnectionError => e
 
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue Stripe::StripeError => e
-      flash[:error] = e.message
-      redirect_to authenticated_root_path
-    rescue => e
-      flash[:error] = "System Error"
-      redirect_to authenticated_root_path
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to authenticated_root_path
+      end
+      redirect_to customers_path, alert: "No saved card." and return unless @customer.try(:payment_method).present?
+    else  
+      @user = User.find_by(id: params[:id])
+      begin
+        @stripe_customer = Stripe::Customer.retrieve(@user.try(:vendor_id))
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::InvalidRequestError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::RateLimitError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::AuthenticationError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::APIConnectionError => e
+
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue Stripe::StripeError => e
+        flash[:error] = e.message
+        redirect_to authenticated_root_path
+      rescue => e
+        flash[:error] = "System Error"
+        redirect_to authenticated_root_path
+      end
+      redirect_to authenticated_root_path, alert: "No saved card." and return unless @user.try(:payment_method).present?
     end
-    redirect_to customers_path, alert: "No saved card." and return unless @customer.try(:payment_method).present?
   end
 
   def create_payment
-    @description = params[:description]
-    @customer = Customer.find(params[:id])
-    amount_cents = (BigDecimal(params[:amount]) * 100).to_i
-    connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+    @customer = Customer.find_by(id: params[:id])
+    if @customer.present? && cookies[:transaction_type] == "customer"
+      @description = params[:description]
+      amount_cents = (BigDecimal(params[:amount]) * 100).to_i
+      connected_acct_id = User.find(@customer.user_id).try(:stripe_user_id)
+      begin
+        if params[:authorize_only].present?
+          # --- AUTHORIZE ONLY (manual capture) ---
+          res = Payments::OffSessionAuthorize.call(
+            customer_id:       @customer.customer_id,
+            payment_method_id: @customer.payment_method,
+            amount_cents:      amount_cents,
+            currency:          "usd",
+            idempotency_key:   "auth-#{@customer.id}-#{SecureRandom.uuid}",
+            stripe_account:    connected_acct_id,
+            description:       @description.blank? ? "Authorization for Customer ##{@customer.id}" : @description,
+            force_3ds:         params[:force_3ds].present? ? params[:force_3ds] : nil,
+            shipping_name:     params[:shipping_name],
+            shipping_line1:    params[:shipping_line1],
+            shipping_city:     params[:shipping_city],
+            shipping_state:    params[:shipping_state],
+            shipping_postal_code: params[:shipping_postal_code],
+            shipping_country:  params[:shipping_country]
+          )
 
-    if params[:authorize_only].present?
-      # --- AUTHORIZE ONLY (manual capture) ---
-      res = Payments::OffSessionAuthorize.call(
-        customer_id:       @customer.customer_id,
-        payment_method_id: @customer.payment_method,
-        amount_cents:      amount_cents,
-        currency:          "usd",
-        idempotency_key:   "auth-#{@customer.id}-#{SecureRandom.uuid}",
-        stripe_account:    connected_acct_id,
-        description:       @description.blank? ? "Authorization for Customer ##{@customer.id}" : @description,
-        force_3ds:         params[:force_3ds].present? ? params[:force_3ds] : nil,
-        shipping_name:     params[:shipping_name],
-        shipping_line1:    params[:shipping_line1],
-        shipping_city:     params[:shipping_city],
-        shipping_state:    params[:shipping_state],
-        shipping_postal_code: params[:shipping_postal_code],
-        shipping_country:  params[:shipping_country]
-      )
+          case res.status
+          when "requires_capture"
+            # Store the PI id somewhere you can retrieve to capture later (e.g., on an Order/Payment model).
+            # For demo: show a page with a Capture button.
+            redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @customer.id), notice: "Authorized. Awaiting capture."
+          when "requires_action"
+            @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: connected_acct_id)
+            render "payments/needs_auth"
+          else # failed
+            redirect_to create_payment_form_path(@customer), alert: res.message || "Authorization failed."
+          end
+        else
+          # --- INSTANT CHARGE (automatic capture) ---
+          res = Payments::OffSessionAuthorize.call(
+            customer_id:       @customer.customer_id,
+            payment_method_id: @customer.payment_method,
+            amount_cents:      amount_cents,
+            currency:          "usd",
+            idempotency_key:   "charge-#{@customer.id}-#{SecureRandom.uuid}",
+            stripe_account:    connected_acct_id,
+            description:       @description.blank? ? "Manual charge for Customer ##{@customer.id}" : @description,
+            shipping_name:     params[:shipping_name],
+            shipping_line1:    params[:shipping_line1],
+            shipping_city:     params[:shipping_city],
+            shipping_state:    params[:shipping_state],
+            shipping_postal_code: params[:shipping_postal_code],
+            shipping_country:  params[:shipping_country]
+          )
 
-      case res.status
-      when "requires_capture"
-        # Store the PI id somewhere you can retrieve to capture later (e.g., on an Order/Payment model).
-        # For demo: show a page with a Capture button.
-        redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @customer.id), notice: "Authorized. Awaiting capture."
-      when "requires_action"
-        @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: connected_acct_id)
-        render "payments/needs_auth"
-      else # failed
-        redirect_to create_payment_form_path(@customer), alert: res.message || "Authorization failed."
+          case res.status
+          when "succeeded"        then redirect_to customers_path, notice: "Charged successfully."
+          when "requires_action"  then @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: connected_acct_id); render "payments/needs_auth"
+          when "requires_capture"  then redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @customer.id), notice: "Authorized. Awaiting capture."
+          else                        redirect_to new_payment_method_path(customer_id: @customer.id), alert: "Payment failed. Ask customer to add a new card."
+          end
+        end
+      rescue => e
+        redirect_to create_payment_form_path(@customer), alert: e.message
       end
-    else
-      # --- INSTANT CHARGE (automatic capture) ---
-      res = Payments::OffSessionAuthorize.call(
-        customer_id:       @customer.customer_id,
-        payment_method_id: @customer.payment_method,
-        amount_cents:      amount_cents,
-        currency:          "usd",
-        idempotency_key:   "charge-#{@customer.id}-#{SecureRandom.uuid}",
-        stripe_account:    connected_acct_id,
-        description:       @description.blank? ? "Manual charge for Customer ##{@customer.id}" : @description,
-        shipping_name:     params[:shipping_name],
-        shipping_line1:    params[:shipping_line1],
-        shipping_city:     params[:shipping_city],
-        shipping_state:    params[:shipping_state],
-        shipping_postal_code: params[:shipping_postal_code],
-        shipping_country:  params[:shipping_country]
-      )
+    else  
+      @user = User.find_by(id: params[:id])
+      @description = params[:description]
+      amount_cents = (BigDecimal(params[:amount]) * 100).to_i
+      begin
+        if params[:authorize_only].present?
+          # --- AUTHORIZE ONLY (manual capture) ---
+          res = Payments::OffSessionAuthorize.call(
+            customer_id:       @user.vendor_id,
+            payment_method_id: @user.payment_method,
+            amount_cents:      amount_cents,
+            currency:          "usd",
+            idempotency_key:   "auth-#{@user.id}-#{SecureRandom.uuid}",
+            stripe_account:    nil,
+            description:       @description.blank? ? "Authorization for Customer ##{@user.id}" : @description,
+            force_3ds:         params[:force_3ds].present? ? params[:force_3ds] : nil,
+            shipping_name:     params[:shipping_name],
+            shipping_line1:    params[:shipping_line1],
+            shipping_city:     params[:shipping_city],
+            shipping_state:    params[:shipping_state],
+            shipping_postal_code: params[:shipping_postal_code],
+            shipping_country:  params[:shipping_country]
+          )
 
-      case res.status
-      when "succeeded"        then redirect_to customers_path, notice: "Charged successfully."
-      when "requires_action"  then @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: connected_acct_id); render "payments/needs_auth"
-      when "requires_capture"  then redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @customer.id), notice: "Authorized. Awaiting capture."
-      else                        redirect_to new_payment_method_path(customer_id: @customer.id), alert: "Payment failed. Ask customer to add a new card."
+          case res.status
+          when "requires_capture"
+            # Store the PI id somewhere you can retrieve to capture later (e.g., on an Order/Payment model).
+            # For demo: show a page with a Capture button.
+            redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @user.id), notice: "Authorized. Awaiting capture."
+          when "requires_action"
+            @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: nil)
+            render "payments/needs_auth"
+          else # failed
+            redirect_to create_payment_form_path(@user), alert: res.message || "Authorization failed."
+          end
+        else
+          # --- INSTANT CHARGE (automatic capture) ---
+          res = Payments::OffSessionAuthorize.call(
+            customer_id:       @user.vendor_id,
+            payment_method_id: @user.payment_method,
+            amount_cents:      amount_cents,
+            currency:          "usd",
+            idempotency_key:   "charge-#{@user.id}-#{SecureRandom.uuid}",
+            stripe_account:    nil,
+            description:       @description.blank? ? "Manual charge for Customer ##{@user.id}" : @description,
+            shipping_name:     params[:shipping_name],
+            shipping_line1:    params[:shipping_line1],
+            shipping_city:     params[:shipping_city],
+            shipping_state:    params[:shipping_state],
+            shipping_postal_code: params[:shipping_postal_code],
+            shipping_country:  params[:shipping_country]
+          )
+
+          case res.status
+          when "succeeded"        then redirect_to users_path, notice: "Charged successfully."
+          when "requires_action"  then @auth_url = authenticate_payment_url(client_secret: res.client_secret, acct: nil); render "payments/needs_auth"
+          when "requires_capture"  then redirect_to capture_ui_path(pi_id: res.payment_intent_id, customer_id: @user.id), notice: "Authorized. Awaiting capture."
+          else                        redirect_to new_payment_method_path(customer_id: @user.id), alert: "Payment failed. Ask customer to add a new card."
+          end
+        end
+      rescue => e
+        redirect_to create_payment_form_path(@user), alert: e.message
       end
     end
-  rescue => e
-    redirect_to create_payment_form_path(@customer), alert: e.message
   end
 end

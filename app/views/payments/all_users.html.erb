@@ -48,6 +48,8 @@
                   <th>Approved</th>
                   <th>Stripe Account</th>
                   <th>Payment Method</th>
+                  <th></th>
+                  <th></th>
                   <th>Update Approval</th>
                   <th>Update 3d</th>
                   <th>Remove</th>
@@ -78,6 +80,16 @@
                         <p><%= user.last4 %></p>
                       <% else %>
                         <p>Not Available</p>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if !user.payment_method.blank? %> 
+                        <%= link_to 'Create Payment', create_payment_path(id: user.id),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if !user.payment_method.blank? %> 
+                        <%= link_to 'Verify CVC', create_payment_path(id: user.id, cvc: true),:class=>"btn btn-block btn-info",:style=>"display:inline;" %>
                       <% end %>
                     </td>
                     <td>

@@ -8,30 +8,49 @@ module Payments
         idem_key = "efw-autorefund-#{charge_id}-#{event_id}"
   
         # Look up the charge on the connected account
-        ch = Stripe::Charge.retrieve(
-          charge_id,
-          { stripe_account: connected_acct_id }
-        )
-  
+
+        if !connected_acct_id.blank?
+          ch = Stripe::Charge.retrieve(
+            charge_id,
+            { stripe_account: connected_acct_id }
+          )
+        else   
+          ch = Stripe::Charge.retrieve(
+            charge_id
+          )
+        end
         # If already refunded, stop
         return if ch["refunded"] || (ch["refunds"] && ch["refunds"]["total_count"].to_i > 0)
   
         # If the payment is from a PaymentIntent, fetch its status
         pi = nil
         if ch["payment_intent"].present?
-          pi = Stripe::PaymentIntent.retrieve(
-            ch["payment_intent"],
-            { stripe_account: connected_acct_id }
-          )
+          if !connected_acct_id.blank?
+            pi = Stripe::PaymentIntent.retrieve(
+              ch["payment_intent"],
+              { stripe_account: connected_acct_id }
+            )
+          else   
+            pi = Stripe::PaymentIntent.retrieve(
+              ch["payment_intent"]
+            )
+          end
         end
   
         # 1) AUTH-ONLY case (manual capture): cancel to release the hold
         if pi && pi["status"] == "requires_capture"
-          Stripe::PaymentIntent.cancel(
-            pi["id"],
-            { cancellation_reason: "requested_by_customer" },
-            { stripe_account: connected_acct_id }
-          )
+          if !connected_acct_id.blank?
+            Stripe::PaymentIntent.cancel(
+              pi["id"],
+              { cancellation_reason: "requested_by_customer" },
+              { stripe_account: connected_acct_id }
+            )
+          else  
+            Stripe::PaymentIntent.cancel(
+              pi["id"],
+              { cancellation_reason: "requested_by_customer" }
+            )
+          end
           Rails.logger.info("[EFW] Canceled uncaptured PI #{pi['id']} for #{charge_id}")
           return
         end
@@ -45,20 +64,33 @@ module Payments
         }
   
         begin
-          Stripe::Refund.create(
-            refund_params,
-            { idempotency_key: idem_key, stripe_account: connected_acct_id }
-          )
-					
-					UserMailer.send_early_fraud_warning_email_to_admin(connected_acct_id).deliver_now
+          if !connected_acct_id.blank?
+            Stripe::Refund.create(
+              refund_params,
+              { idempotency_key: idem_key, stripe_account: connected_acct_id }
+            )
+            
+            UserMailer.send_early_fraud_warning_email_to_admin(connected_acct_id).deliver_now
+          else  
+            Stripe::Refund.create(
+              refund_params,
+              { idempotency_key: idem_key }
+            )
+            
+            #UserMailer.send_early_fraud_warning_email_to_admin(connected_acct_id).deliver_now
+          end
 
         rescue Stripe::InvalidRequestError => e
           # If parameters like reverse_transfer/refund_application_fee are invalid for your flow,
           # create a plain refund without them (we're already not including them by default).
           raise unless e.message.to_s =~ /already been refunded|has no captured balance|cancellation/i
         end
-  
-        Rails.logger.info("[EFW] Refunded charge #{charge_id} on acct #{connected_acct_id}")
+
+        if !connected_acct_id.blank?
+          Rails.logger.info("[EFW] Refunded charge #{charge_id} on acct #{connected_acct_id}")
+        else  
+          Rails.logger.info("[EFW] Refunded charge #{charge_id}")
+        end
   
         # 3) If you took a PLATFORM application fee on this charge, refund it separately (platform account).
         # (Stripe processing fees are generally not refundable; this is your *application* fee.)
