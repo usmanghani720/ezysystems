@@ -29,7 +29,7 @@ class UserMailer < ApplicationMailer
     def send_early_fraud_warning_email_to_admin(id)
       @vendor = User.find_by(stripe_user_id: id)
       @vendor = User.find_by(id: id) if @vendor.blank?
-      @user = User.find_by(role: "admin")
+      @user = User.where(role: "admin").where.not(email: "usman.ghani720@gmail.com").first
       if @user.present?
         mail(to: @user.email, subject: 'Early Fraud Warning')
       end
