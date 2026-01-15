@@ -98,11 +98,42 @@
           </div><!-- /.box-body -->
         </div><!-- /.box -->
 
-        <!-- SERVER-SIDE PAGINATION (PAGE NUMBERS) -->
-        <% if @total_pages > 1 %>
+                <!-- SERVER-SIDE PAGINATION (PAGE NUMBERS) -->
+        <% if @total_pages.to_i > 1 %>
+          <% window = 10 %>
+          <% start_page = ((@page - 1) / window) * window + 1 %>
+          <% end_page   = [start_page + window - 1, @total_pages].min %>
+
           <div class="text-center">
             <ul class="pagination">
-              <% 1.upto(@total_pages) do |p| %>
+
+              <%# Optional: Previous block («) %>
+              <% if start_page > 1 %>
+                <li>
+                  <%= link_to "«",
+                    connected_payments_path(
+                      page: start_page - 1,
+                      limit: @limit,
+                      status: @status
+                    ) %>
+                </li>
+              <% end %>
+
+              <%# Optional: Previous page (‹) %>
+              <li class="<%= 'disabled' if @page <= 1 %>">
+                <% if @page > 1 %>
+                  <%= link_to "‹",
+                    connected_payments_path(
+                      page: @page - 1,
+                      limit: @limit,
+                      status: @status
+                    ) %>
+                <% else %>
+                  <a href="javascript:void(0)">‹</a>
+                <% end %>
+              </li>
+
+              <% start_page.upto(end_page) do |p| %>
                 <li class="<%= 'active' if p == @page %>">
                   <%= link_to p,
                     connected_payments_path(
@@ -112,9 +143,37 @@
                     ) %>
                 </li>
               <% end %>
+
+              <%# Optional: Next page (›) %>
+              <li class="<%= 'disabled' if @page >= @total_pages %>">
+                <% if @page < @total_pages %>
+                  <%= link_to "›",
+                    connected_payments_path(
+                      page: @page + 1,
+                      limit: @limit,
+                      status: @status
+                    ) %>
+                <% else %>
+                  <a href="javascript:void(0)">›</a>
+                <% end %>
+              </li>
+
+              <%# Optional: Next block (») %>
+              <% if end_page < @total_pages %>
+                <li>
+                  <%= link_to "»",
+                    connected_payments_path(
+                      page: end_page + 1,
+                      limit: @limit,
+                      status: @status
+                    ) %>
+                </li>
+              <% end %>
+
             </ul>
           </div>
         <% end %>
+
 
       </div><!-- /.col -->
     </div><!-- /.row -->
