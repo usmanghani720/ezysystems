@@ -93,6 +93,10 @@ Rails.application.routes.draw do
 
   get "/connected/payments", to: "connected_payments#index", as: :connected_payments
 
+  resources :connected_payments, only: [:index] do
+    post :refund, on: :member
+  end
+
   # Maintenance fallback route for all unmatched paths
   match "*unmatched", to: "home#maintenance", via: :all
 

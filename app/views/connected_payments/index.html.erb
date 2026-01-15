@@ -47,6 +47,7 @@
                   <th>Description</th>
                   <th>Date</th>
                   <th>Payment ID</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
 
@@ -69,6 +70,19 @@
                     <td><%= row[:description] %></td>
                     <td><%= row[:created_at] %></td>
                     <td><%= row[:id] %></td>
+                    <td>
+                      <% if row[:status] == "succeeded" && row[:charge_id].present? && !row[:refunded] %>
+                        <%= button_to "Refund",
+                          refund_connected_payment_path(row[:id], stripe_account: row[:stripe_account], status: @status, page: @page, limit: @limit),
+                          method: :post,
+                          class: "btn btn-xs btn-danger",
+                          data: { confirm: "Refund this charge in full? This cannot be undone." } %>
+                      <% elsif row[:refunded] %>
+                        <span class="label label-default">Refunded</span>
+                      <% else %>
+                        -
+                      <% end %>
+                    </td>
                   </tr>
                 <% end %>
 

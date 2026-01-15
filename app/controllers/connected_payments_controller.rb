@@ -21,6 +21,94 @@ class ConnectedPaymentsController < ApplicationController
     @has_more = false
   end
 
+  def refund
+    pi_id = params[:id]
+
+    # ------------------------------------------------------------
+    # Resolve connected account context safely
+    # ------------------------------------------------------------
+    acct =
+      if current_user.role == "admin"
+        acct_param = params[:stripe_account].to_s
+        unless acct_param.present? && User.exists?(stripe_user_id: acct_param)
+          raise ActionController::BadRequest, "Invalid connected account"
+        end
+        acct_param
+      else
+        current_user.stripe_user_id.presence || (raise "Connected Stripe account missing")
+      end
+
+    # ------------------------------------------------------------
+    # Retrieve PaymentIntent + Charge
+    # ------------------------------------------------------------
+    pi = Stripe::PaymentIntent.retrieve(
+      {
+        id: pi_id,
+        expand: ["latest_charge"]
+      },
+      { stripe_account: acct }
+    )
+
+    unless pi.status == "succeeded"
+      redirect_back fallback_location: connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                    alert: "Only succeeded transactions can be refunded."
+      return
+    end
+
+    ch = pi.latest_charge
+    unless ch&.id.present?
+      redirect_back fallback_location: connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                    alert: "Charge not found for this transaction."
+      return
+    end
+
+    # Already fully refunded?
+    if ch.refunded || ch.amount_refunded.to_i >= ch.amount.to_i
+      redirect_back fallback_location: connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                    notice: "This transaction is already fully refunded."
+      return
+    end
+
+    # ------------------------------------------------------------
+    # Build refund params:
+    # - Always refund the full charge to the customer
+    # - Refund application fee ONLY if it exists
+    # - Reverse transfer ONLY if a transfer exists
+    # ------------------------------------------------------------
+    refund_params = { charge: ch.id }
+
+    # Refund platform application fee when present (Connect)
+    if ch.respond_to?(:application_fee) && ch.application_fee.present?
+      refund_params[:refund_application_fee] = true
+    end
+
+    # Reverse transfer when present (destination charges / transfers)
+    if ch.respond_to?(:transfer) && ch.transfer.present?
+      refund_params[:reverse_transfer] = true
+    end
+
+    Stripe::Refund.create(
+      refund_params,
+      {
+        stripe_account: acct,
+        # Prevent double refunds on accidental double-click
+        idempotency_key: "refund_full_#{acct}_#{ch.id}"
+      }
+    )
+
+    redirect_to connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                notice: "Refund initiated successfully."
+  rescue ActionController::BadRequest => e
+    redirect_to connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                alert: e.message
+  rescue Stripe::StripeError => e
+    redirect_to connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                alert: "Stripe error: #{e.message}"
+  rescue => e
+    redirect_to connected_payments_path(status: params[:status], page: params[:page], limit: params[:limit]),
+                alert: "Refund failed: #{e.message}"
+  end
+
   private
 
   # ------------------------------------------------------------
@@ -121,7 +209,8 @@ class ConnectedPaymentsController < ApplicationController
   def normalize_pi(pi, acct)
     pm = pi.payment_method
     card = pm&.card
-
+    ch = pi.latest_charge # expanded
+  
     {
       id: pi.id,
       amount: pi.amount,
@@ -132,7 +221,12 @@ class ConnectedPaymentsController < ApplicationController
       customer: pi.customer&.email || "-",
       created: pi.created,
       created_at: Time.at(pi.created).strftime("%b %d, %Y %I:%M %p"),
-      stripe_account: acct
+      stripe_account: acct,
+  
+      # NEW:
+      charge_id: ch&.id,
+      refunded: ch ? (ch.refunded || ch.amount_refunded.to_i > 0) : false,
+      amount_refunded: ch ? ch.amount_refunded.to_i : 0
     }
   end
 end
