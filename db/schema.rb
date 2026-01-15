@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_07_113944) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_15_122257) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,26 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_07_113944) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "connected_transactions", force: :cascade do |t|
+    t.string "stripe_account_id", null: false
+    t.string "payment_intent_id", null: false
+    t.string "charge_id"
+    t.integer "amount"
+    t.string "currency"
+    t.string "status"
+    t.string "customer_email"
+    t.string "payment_method_label"
+    t.integer "amount_refunded", default: 0, null: false
+    t.boolean "refunded", default: false, null: false
+    t.integer "created_at_stripe", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["charge_id"], name: "index_connected_transactions_on_charge_id"
+    t.index ["created_at_stripe"], name: "index_connected_transactions_on_created_at_stripe"
+    t.index ["payment_intent_id"], name: "index_connected_transactions_on_payment_intent_id", unique: true
+    t.index ["stripe_account_id", "created_at_stripe"], name: "idx_on_stripe_account_id_created_at_stripe_fb867a6413"
   end
 
   create_table "customers", force: :cascade do |t|
