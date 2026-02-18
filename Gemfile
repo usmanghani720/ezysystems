@@ -16,7 +16,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
-gem 'devise'
+gem "devise", "~> 4.9"
 gem 'stripe'
 gem "httparty"
 gem 'stripe-rails'
