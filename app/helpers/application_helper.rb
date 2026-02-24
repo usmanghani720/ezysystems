@@ -119,7 +119,7 @@ module ApplicationHelper
       return account_link.url
     rescue Stripe::StripeError => e
       flash[:alert] = "Error creating Stripe account: #{e.message}"
-      return root_path
+      return authenticated_root_path
     end
   end
 
