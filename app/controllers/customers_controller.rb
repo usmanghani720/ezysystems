@@ -60,7 +60,7 @@ class CustomersController < ApplicationController
         flash[:error] = "System Error"
         redirect_to authenticated_root_path
       end
-      redirect_to authenticated_root_path, alert: "No saved card." and return unless @user.try(:payment_method).present?
+      #redirect_to authenticated_root_path, alert: "No saved card." and return unless @user.try(:payment_method).present?
     end
   end
 

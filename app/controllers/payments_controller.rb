@@ -94,9 +94,14 @@ class PaymentsController < ApplicationController
       @acct_id    = User.find(@customer.user_id).try(:stripe_user_id)
       # Fetch latest PI to show amount_capturable
       @pi = Stripe::PaymentIntent.retrieve(@pi_id, { stripe_account: @acct_id })
-    else  
-      @customer   = User.find_by(id: params[:customer_id])
-      @pi = Stripe::PaymentIntent.retrieve(@pi_id)
+    else 
+      if params[:account] == true || params[:account] == "true"
+        @pi = Stripe::PaymentIntent.retrieve(@pi_id, { stripe_account: params[:customer_id] })
+        @customer   = Customer.find_by(customer_id: @pi["customer"])
+      else
+        @customer   = User.find_by(id: params[:customer_id])
+        @pi = Stripe::PaymentIntent.retrieve(@pi_id)
+      end
     end
   end
 

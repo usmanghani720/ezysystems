@@ -64,6 +64,11 @@
                     <td>
                       <span class="label label-<%= row[:status] == 'succeeded' ? 'success' : 'default' %>">
                         <%= row[:status].humanize %>
+                        <% if row[:status].humanize == "Requires capture" %>
+                          <br />
+                          <br />
+                          <%= link_to "Capture", capture_ui_path(pi_id: row[:id], customer_id: row[:stripe_account], account: true) %>
+                        <% end %>
                       </span>
                     </td>
                     <td><%= row[:payment_method] %></td>
