@@ -18,7 +18,7 @@
 !/log/.keep
 !/tmp/.keep
 /log/development.log
-/config/secrets.yml
+/config/database.yml
 /data/*
 
 # Ignore uploaded files in development
