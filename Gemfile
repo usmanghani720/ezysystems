@@ -30,7 +30,6 @@ gem 'activeadmin'
 gem 'bootstrap', '~> 5.2.2'
 gem 'dotenv-rails'
 gem 'nordigen-ruby'
-gem 'stringio', '>= 3.2.0'
 gem "cocoon"
 gem 'devise-two-factor'
 gem 'whenever', require: false

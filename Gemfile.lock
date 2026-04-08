@@ -451,7 +451,6 @@ DEPENDENCIES
   sass-rails
   selenium-webdriver
   spring
-  stringio (>= 3.2.0)
   stripe
   stripe-rails
   turbolinks
